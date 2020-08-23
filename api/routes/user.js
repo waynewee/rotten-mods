@@ -1,13 +1,11 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const router = express.Router();
 
-router.get("/", (req, res, next) => {
-    
-    res.json({
-        message: "Got User!"
-    })
-    
-})
+router.get('/', (req, res) => {
+  res.json({
+    message: 'Got User!',
+  });
+});
 
-module.exports = router
+module.exports = router;
