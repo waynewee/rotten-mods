@@ -1,12 +1,13 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const routes = require('./routes');
+import express = require('express');
+import cors = require('cors');
+import bodyParser = require('body-parser');
+import mongoose = require('mongoose');
+import routes = require('./routes');
+import config = require('./config');
 
 const {
-  MONGO_DB_URL,
-} = require('./config');
+  MONGO_DB_URL
+} = config
 
 const port = process.env.PORT || 80;
 
