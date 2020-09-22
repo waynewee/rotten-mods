@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
-    "allowJs": true,
+    /* Basic Options */
     "target": "es5",
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["./src/**/*"]
+    "module": "commonjs",
+    "outDir": "./dist",
+    /* Strict Type-Checking Options */
+    "strict": true,      
+    "esModuleInterop": true,
+    /* Source Map Options */
+    "sourceRoot": "./src",
+    "inlineSourceMap": true
+  }
 }
