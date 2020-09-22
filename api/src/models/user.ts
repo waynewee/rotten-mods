@@ -1,23 +1,17 @@
 import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
 
-export interface IUser extends Document {
-  name: string;
-}
-
 export const UserSchema = createSchema({
-  name: Type.string({ required: true })
+  name: Type.string(),
+  email: Type.string({ required: true }),
+  schoolStartDate: Type.date(),
+  schoolId: Type.objectId(),
+  courseId: Type.objectId()
 },{
   timestamps: true
 })
 
 export type UserDoc = ExtractDoc<typeof UserSchema> 
 
-const User = typedModel('User', UserSchema, undefined, undefined, {
-
-  testMethod: function(name: string): void {
-    return;
-  }
-
-});
+const User = typedModel('User', UserSchema);
 
 export default User

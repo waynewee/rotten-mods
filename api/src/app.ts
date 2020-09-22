@@ -1,10 +1,11 @@
 import express from "express";
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import * as userController from './controllers/userController'
 import mongoose from 'mongoose'
 
-// Mongoose config 
+import * as userController from './controllers/userController' 
+import * as modController from './controllers/modController'
+
 const uri: string = 'mongodb://127.0.0.1:27017/rotten-mods'
 
 mongoose.connect(uri, (err: any) => {
@@ -15,18 +16,23 @@ mongoose.connect(uri, (err: any) => {
   }
 })
 
-// Our Express APP config
 const app = express();
 app.set("port", process.env.PORT || 8080);
 app.use(bodyParser.json());
 app.use(cors());
 
-// API Endpoints
-app.get("/users", userController.allUsers);
+app.get("/user", userController.allUsers);
 app.get("/user/:id", userController.getUser);
+
 app.put("/user", userController.addUser);
+
 app.delete("/user/:id", userController.deleteUser);
+
 app.post("/user/:id", userController.updateUser);
+
+app.get("/mod", modController.searchMods);
+
+app.put("/mod", modController.addMod)
 
 const server = app.listen(app.get("port"), () => {
   console.log("App is running on http://localhost:%d", app.get("port"));

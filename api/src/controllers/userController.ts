@@ -7,7 +7,6 @@ export let allUsers = (req: Request, res: Response, next: NextFunction) => {
   let users = User.find()
   .then( users => res.send(users))
   .catch(next)
-
 }
 
 export let getUser = (req: Request, res: Response, next: NextFunction) => {
