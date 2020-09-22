@@ -14,3 +14,7 @@
 ## Run the server
 
 1. Run `npm run watch` in one terminal and `npm run start` in another to get started.
+
+## Populating the database
+
+To facilitate testing, run `npm run populate`, which populates the database with random data.
