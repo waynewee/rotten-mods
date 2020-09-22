@@ -3,7 +3,15 @@ import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
 export const ModSchema = createSchema({
   code: Type.string({ required: true }),
   title: Type.string({required: true }),
-  description: Type.string({})
+  acadYear: Type.string(),
+  semester: Type.string(),
+  faculty: Type.string(),
+  department: Type.string(),
+  description: Type.string({}),
+  crossModule: Type.string(),
+  credit: Type.number(),
+  workload: Type.number()
+
 },{
   timestamps: true
 })

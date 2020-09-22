@@ -4,7 +4,7 @@ import * as UserServices from '../services/user'
 
 export let allUsers = (req: Request, res: Response, next: NextFunction) => {
 
-  let users = User.find()
+  User.find()
   .then( users => res.send(users))
   .catch(next)
 }

@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import Mod from '../models/mod'
-import * as UserServices from '../services/user'
 
 export let searchMods = (req: Request, res: Response, next: NextFunction) => {
 

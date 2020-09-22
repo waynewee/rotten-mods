@@ -4,10 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-ts": "tsc -w",
-    "watch-node": "nodemon --delay 2 dist/app.js",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript, Node\" -c \"yello.bold, cyan.bold\" \"npm run watch-ts\" \"npm run watch-node\""
+    "build": "tsc -p .",
+    "watch": "npm run build -- -w",
+    "start": "node ./dist/src/app.js",
+    "populate": "node ./src/utils/populate/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.10.6",
+    "randomstring": "^1.1.5",
     "ts-mongoose": "0.0.21"
   }
 }
