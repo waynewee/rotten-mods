@@ -2,6 +2,8 @@ import express from "express";
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from '../swagger.json'
 
 import * as userController from './controllers/userController' 
 import * as modController from './controllers/modController' 
@@ -21,6 +23,8 @@ const app = express();
 app.set("port", process.env.PORT || 8080);
 app.use(bodyParser.json());
 app.use(cors());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.get("/user", userController.allUsers);
 app.get("/user/:id", userController.getUser);
