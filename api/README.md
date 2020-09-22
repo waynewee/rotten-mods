@@ -18,3 +18,7 @@
 ## Populating the database
 
 To facilitate testing, run `npm run populate`, which populates the database with random data.
+
+## API Docs
+
+API documentation [here](http://localhost:8080/docs)

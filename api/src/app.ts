@@ -24,7 +24,7 @@ app.set("port", process.env.PORT || 8080);
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.get("/user", userController.allUsers);
 app.get("/user/:id", userController.getUser);
