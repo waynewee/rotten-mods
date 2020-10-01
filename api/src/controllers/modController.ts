@@ -4,24 +4,31 @@ import Mod from '../models/mod'
 export let searchMods = (req: Request, res: Response, next: NextFunction) => {
 
   const {
-    title,
-    code,
+    s,
     page,
     limit
-  } = req.query as { title: string, code: string, page: string, limit: string }
+  } = req.query as { s: string, page: string, limit: string }
 
   const _page = parseInt(page)
   const _limit = parseInt(limit)
 
   Mod.find({
     $or: [
-      { title: { $regex: title?title:'', $options: 'i' } },
-      { code: { $regex: code?code:'', $options: 'i' } }
+      { title: { s, $options: 'i' } },
+      { code: { s, $options: 'i' } }
     ]
   })
   .limit(_limit)
   .skip((_page - 1) * _limit)
   .then(mods => res.send(mods))
+  .catch(next)
+
+}
+
+export let deleteMod = (req:Request, res: Response, next: NextFunction) => {
+
+  Mod.deleteOne({ _id: req.params.modId})
+  .then(() => res.sendStatus(200))
   .catch(next)
 
 }
@@ -32,6 +39,14 @@ export let addMod = (req:Request, res:Response, next: NextFunction) => {
 
   mod.save()
   .then(mod => res.send(mod))
+  .catch(next)
+
+}
+
+export let getMod = (req: Request, res: Response, next: NextFunction) => {
+
+  Mod.findOne({ _id: req.params.modId})
+  .then( mod => res.send(mod))
   .catch(next)
 
 }

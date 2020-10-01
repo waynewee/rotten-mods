@@ -25,12 +25,12 @@ export let addReview = (req: Request, res: Response, next: NextFunction) => {
 
 export let deleteReview = (req: Request, res: Response, next: NextFunction) => {
   Review.deleteOne({ _id: req.params.id })
-  .then(()=>res.send(200))
+  .then(()=>res.sendStatus(200))
   .catch(next)
 }
 
 export let updateReview = (req: Request, res: Response, next: NextFunction) => {
   Review.findByIdAndUpdate(req.params.id, req.body)
-  .then(() => res.send(200))
+  .then(() => res.sendStatus(200))
   .catch(next)
 }

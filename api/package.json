@@ -6,23 +6,27 @@
   "scripts": {
     "build": "tsc -p .",
     "watch": "npm run build -- -w",
-    "start": "node ./dist/src/app.js",
+    "start": "nodemon ./dist/src/app.js",
     "populate": "node ./src/utils/populate/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.7",
     "@types/express": "^4.17.8",
     "@types/mongoose": "^5.7.36",
     "@types/swagger-ui-express": "^4.1.2",
+    "@types/uuid": "^8.3.0",
     "body-parser": "^1.19.0",
     "concurrently": "^5.3.0",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.10.6",
     "randomstring": "^1.1.5",
-    "ts-mongoose": "0.0.21"
+    "ts-mongoose": "0.0.21",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "swagger-ui-express": "^4.1.4"

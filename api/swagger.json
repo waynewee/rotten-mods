@@ -25,11 +25,11 @@
   ],
   "paths": {
     "/user": {
-      "post": {
+      "put": {
         "tags": [
           "Users"
         ],
-        "description": "Create new user in system",
+        "summary": "Create new user in system",
         "parameters": [
           {
             "name": "user",
@@ -59,7 +59,7 @@
         "summary": "Get all users in system",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Gets a list of users",
             "schema": {
               "$ref": "#/definitions/Users"
             }
@@ -67,7 +67,7 @@
         }
       }
     },
-    "/users/{userId}": {
+    "/user/{userId}": {
       "parameters": [
         {
           "name": "userId",
@@ -98,14 +98,11 @@
         ],
         "responses": {
           "200": {
-            "description": "User is deleted",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
+            "description": "User is deleted"
           }
         }
       },
-      "put": {
+      "post": {
         "summary": "Update user with give ID",
         "tags": [
           "Users"
@@ -128,6 +125,61 @@
             }
           }
         }
+      }
+    },
+    "/mod": {
+      "put": {
+        "tags": [
+          "Mods"
+        ],
+        "summary": "Create new module in system",
+        "parameters": [
+          {
+            "name": "mod",
+            "in": "body",
+            "description": "Module that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Mod"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New module is created",
+            "schema": {
+              "$ref": "#/definitions/Mod"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Mods"
+        ],
+        "summary": "Gets a list of modules",
+        "parameters": [
+          {
+            "name": "s",
+            "in": "query",
+            "description": "Search term",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Current page of search",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Max number of results we want",
+            "type": "string"
+          }
+        ]
       }
     },
     "/mod/{modId}": {
@@ -161,97 +213,65 @@
         ],
         "responses": {
           "200": {
-            "description": "Mod is deleted",
-            "schema": {
-              "$ref": "#/definitions/Mod"
-            }
+            "description": "Mod is deleted"
           }
         }
-      },
+      }
+    },
+    "/event": {
       "put": {
-        "summary": "Update mod with give ID",
         "tags": [
-          "Mods"
+          "Events"
         ],
+        "summary": "Adds an event",
         "parameters": [
           {
-            "name": "mod",
+            "name": "event",
             "in": "body",
-            "description": "Mod with new values of properties",
+            "description": "Event that we want to create",
             "schema": {
-              "$ref": "#/definitions/Mod"
+              "$ref": "#/definitions/Event"
             }
           }
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
-            "description": "Mod is updated",
+            "description": "New event is created",
             "schema": {
-              "$ref": "#/definitions/Mod"
+              "$ref": "#/definitions/Event"
             }
           }
         }
       }
     },
-    "/events/{eventId}": {
-      "parameters": [
-        {
-          "name": "eventId",
-          "in": "path",
-          "required": true,
-          "description": "ID of event that we want to find",
-          "type": "string"
-        }
-      ],
-      "get": {
+    "/login": {
+      "post": {
         "tags": [
-          "Events"
+          "Login"
         ],
-        "summary": "Get event with given ID",
-        "responses": {
-          "200": {
-            "description": "Event is found",
-            "schema": {
-              "$ref": "#/definitions/Event"
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete event with given ID",
-        "tags": [
-          "Events"
-        ],
-        "responses": {
-          "200": {
-            "description": "Event is deleted",
-            "schema": {
-              "$ref": "#/definitions/Event"
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Update event with give ID",
-        "tags": [
-          "Events"
-        ],
+        "summary": "Logs a user in",
         "parameters": [
           {
-            "name": "event",
+            "name": "login",
             "in": "body",
-            "description": "Event with new values of properties",
+            "description": "Logs a user in",
             "schema": {
-              "$ref": "#/definitions/Event"
+              "$ref": "#/definitions/Login"
             }
           }
         ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
-            "description": "Event is updated",
-            "schema": {
-              "$ref": "#/definitions/Event"
-            }
+            "description": "User verification is successful"
+          },
+          "403": {
+            "description": "User verification is unsuccessful"
           }
         }
       }
@@ -265,23 +285,10 @@
         "title"
       ],
       "properties":{
-        "_id":{
-          "type":"string"
-        },
         "code":{
           "type": "string"
         },
         "title":{
-          "type": "string"
-        }
-      }
-    },
-    "School":{
-      "properties":{
-        "_id":{
-          "type": "string"
-        },
-        "name": {
           "type": "string"
         }
       }
@@ -291,13 +298,12 @@
         "email"
       ],
       "properties": {
-        "_id": {
-          "type": "string",
-          "uniqueItems": true
-        },
         "email": {
           "type": "string",
           "uniqueItems": true
+        },
+        "password": {
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -309,15 +315,27 @@
         "email"
       ],
       "properties": {
-        "_id": {
-          "type": "string",
-          "uniqueItems": true
+        "type": {
+          "type": "string"
         },
+        "userId": {
+          "type": "string"
+        },
+        "modId": {
+          "type": "string"
+        }
+      }
+    },
+    "Login": {
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties":{
         "email": {
-          "type": "string",
-          "uniqueItems": true
+          "type": "string"
         },
-        "name": {
+        "password":{
           "type": "string"
         }
       }

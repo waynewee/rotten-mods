@@ -25,12 +25,12 @@ export let addCourse = (req: Request, res: Response, next: NextFunction) => {
 
 export let deleteCourse = (req: Request, res: Response, next: NextFunction) => {
   Course.deleteOne({ _id: req.params.id })
-  .then(()=>res.send(200))
+  .then(()=>res.sendStatus(200))
   .catch(next)
 }
 
 export let updateCourse = (req: Request, res: Response, next: NextFunction) => {
   Course.findByIdAndUpdate(req.params.id, req.body)
-  .then(() => res.send(200))
+  .then(() => res.sendStatus(200))
   .catch(next)
 }

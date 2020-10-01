@@ -18,12 +18,12 @@ export let addRating = (req: Request, res: Response, next: NextFunction) => {
 
 export let deleteRating = (req: Request, res: Response, next: NextFunction) => {
   Rating.deleteOne({ _id: req.params.id })
-  .then(()=>res.send(200))
+  .then(()=>res.sendStatus(200))
   .catch(next)
 }
 
 export let updateRating = (req: Request, res: Response, next: NextFunction) => {
   Rating.findByIdAndUpdate(req.params.id, req.body)
-  .then(() => res.send(200))
+  .then(() => res.sendStatus(200))
   .catch(next)
 }
