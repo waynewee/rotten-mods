@@ -1,13 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Rating from '../models/rating'
 
-export let getRating = (req: Request, res: Response, next: NextFunction) => {
-
-  Rating.findById(req.params.id)
-  .then(rating => res.send(rating))
-  .catch(next)
-}
-
 export let addRating = (req: Request, res: Response, next: NextFunction) => {
   let rating = new Rating(req.body);
 

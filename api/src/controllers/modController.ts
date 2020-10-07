@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import Mod from '../models/mod'
+import Rating from '../models/rating'
+import SavedModsList from '../models/savedModsList'
+import { Types } from 'mongoose'
+
+const { ObjectId } = Types
 
 export let searchMods = (req: Request, res: Response, next: NextFunction) => {
 
@@ -47,6 +52,60 @@ export let getMod = (req: Request, res: Response, next: NextFunction) => {
 
   Mod.findOne({ _id: req.params.modId})
   .then( mod => res.send(mod))
+  .catch(next)
+
+}
+
+export let getModRating = (req: Request, res: Response, next: NextFunction) => {
+  
+  console.log(req.params.id)
+
+  Rating.aggregate([
+    {
+      $match: {
+        modId: ObjectId(req.params.id)
+      }
+    },
+    {
+      $group: {
+        _id: '$modId',
+        value: { $avg: '$value' }
+      }
+    }
+  ])
+  .then( results => {
+    const result = results[0]
+    res.send(result.value)
+  })
+  .catch(next)
+
+}
+
+export let saveMod = (req: Request, res: Response, next:NextFunction) => {
+
+  SavedModsList.findOne({ userId: req.body.userId })
+  .then( savedModsList => {
+
+    if( !savedModsList ){
+      
+      let _savedModsList = new SavedModsList({ userId: req.body.userId })
+
+      return _savedModsList.save()
+
+    } else {
+      return savedModsList
+    }
+
+  })
+  .then(() => {
+
+    return SavedModsList.findOneAndUpdate(
+      { userId: req.body.userId },
+      { $push: { modIds: req.body.modId }}
+    )
+    
+  })
+  .then(() => res.sendStatus(200))
   .catch(next)
 
 }

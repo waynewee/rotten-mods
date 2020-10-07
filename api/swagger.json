@@ -51,20 +51,6 @@
             }
           }
         }
-      },
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Get all users in system",
-        "responses": {
-          "200": {
-            "description": "Gets a list of users",
-            "schema": {
-              "$ref": "#/definitions/Users"
-            }
-          }
-        }
       }
     },
     "/user/{userId}": {
@@ -122,6 +108,23 @@
             "description": "User is updated",
             "schema": {
               "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/user/saved-mods/{userId}":{
+      "get":{
+        "tags":[
+          "Users",
+          "Mods"
+        ],
+        "summary": "Gets a SavedModsList",
+        "responses": {
+          "200":{
+            "description": "Returns a SavedModsList",
+            "schema":{
+              "$ref": "#/definitions/SavedModsList"
             }
           }
         }
@@ -218,6 +221,54 @@
         }
       }
     },
+    "/mod/rating/{modId}": {
+      "parameters": [
+        {
+          "name": "modId",
+          "in": "path",
+          "required": true,
+          "description": "ID of mod that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Mods"
+        ],
+        "summary": "Get rating for the mod with given ID",
+        "responses": {
+          "200": {
+            "description": "Mod rating is calculated",
+            "schema": {
+              "$ref": "#/definitions/Rating"
+            }
+          }
+        }
+      }
+    },
+    "/mod/save":{
+      "parameters":[
+        {
+          "name": "mod",
+          "in": "body",
+          "description": "Module that we want to create",
+          "schema": {
+            "$ref": "#/definitions/Mod"
+          }
+        }
+      ],
+      "put":{
+        "tags": [
+          "Mods"
+        ],
+        "summary": "Saves a module to a user's SavedModsList",
+        "responses": {
+          "200": {
+            "description": "Mod saved successfully"
+          }
+        }
+      }
+    },
     "/event": {
       "put": {
         "tags": [
@@ -275,6 +326,202 @@
           }
         }
       }
+    },
+    "/rating": {
+      "put": {
+        "tags": [
+          "Rating"
+        ],
+        "summary": "Adds a rating",
+        "parameters": [
+          {
+            "name": "rating",
+            "in": "body",
+            "description": "Adds a rating",
+            "schema": {
+              "$ref": "#/definitions/Rating"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Rating successfully added"
+          },
+          "403": {
+            "description": "Failed to add rating"
+          }
+        }
+      }
+    },
+    "/rating/{ratingId}": {
+      "post": {
+        "tags": [
+          "Rating"
+        ],
+        "summary": "Updates a rating",
+        "parameters": [
+          {
+            "name": "rating",
+            "in": "body",
+            "description": "Updates a rating",
+            "schema": {
+              "$ref": "#/definitions/Rating"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Rating successfully update"
+          },
+          "403": {
+            "description": "Failed to update rating"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete rating with given ID",
+        "tags": [
+          "Rating"
+        ],
+        "responses": {
+          "200": {
+            "description": "Rating is deleted"
+          }
+        }
+      }
+    },
+    "/review": {
+      "put": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Create new review for a module",
+        "parameters": [
+          {
+            "name": "review",
+            "in": "body",
+            "description": "Review that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New review is created",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Gets a list of reviews",
+        "parameters": [
+          {
+            "name": "review",
+            "in": "body",
+            "description": "Review that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        ]
+      }
+    },
+    "/review/{reviewId}":{
+      "parameters": [
+        {
+          "name": "reviewId",
+          "in": "path",
+          "required": true,
+          "description": "ID of review that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Get review with given ID",
+        "responses": {
+          "200": {
+            "description": "Review is found",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete review with given ID",
+        "tags": [
+          "Reviews"
+        ],
+        "responses": {
+          "200": {
+            "description": "Review is deleted"
+          }
+        }
+      },
+      "post": {
+        "summary": "Updates review",
+        "parameters": [
+          {
+            "name": "review",
+            "in": "body",
+            "description": "Review that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        ],
+        "tags": [
+          "Reviews"
+        ],
+        "responses": {
+          "200": {
+            "description": "Review is updated"
+          }
+        }
+      }
+
+    },
+    "/review/replies/{reviewId}": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Gets a list of review replies",
+        "parameters": [
+          {
+            "name": "reviewId",
+            "in": "path",
+            "description": "Review that we wish to get replies for"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of replies",
+            "schema":{
+              "type": "array",
+              "$ref": "#/definitions/ReviewReply"
+            }
+          }
+        }
+      }
     }
   },
   
@@ -326,6 +573,27 @@
         }
       }
     },
+    "Rating":{
+      "required": [
+        "userId",
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "modId": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      }
+    },
     "Login": {
       "required": [
         "email",
@@ -336,6 +604,55 @@
           "type": "string"
         },
         "password":{
+          "type": "string"
+        }
+      }
+    },
+    "SavedModsList":{
+      "properties":{
+        "modIds": {
+          "type": "array",
+          "items":{
+            "type": "string"
+          }
+        },
+        "userId": {
+          "type": "string"
+        }
+      }
+    },
+    "Review": {
+      "required": [
+        "text",
+        "userId",
+        "modId"
+      ],
+      "properties":{
+        "text": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "modId": {
+          "type": "string"
+        }
+      }
+    },
+    "ReviewReply": {
+      "required": [
+        "text",
+        "userId",
+        "reviewId"
+      ],
+      "properties":{
+        "text": {
+          "type": "string"
+        },
+        "reviewId": {
+          "type": "string"
+        },
+        "userId": {
           "type": "string"
         }
       }

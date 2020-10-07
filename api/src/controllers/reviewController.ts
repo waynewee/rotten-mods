@@ -1,7 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import Review from '../models/review'
+import ReviewReply from '../models/reviewReply'
 
-export let allReviews = (req: Request, res: Response, next: NextFunction) => {
+export let getAllReviewReplies = (req: Request, res: Response, next: NextFunction) => {
+
+  ReviewReply.find({reviewId: req.params.id})
+  .then(reviewReplies => res.send(reviewReplies))
+  .catch(next)
+}
+
+export let getAllReviews = (req: Request, res: Response, next: NextFunction) => {
 
   Review.find()
   .then( reviews => res.send(reviews))

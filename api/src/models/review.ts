@@ -4,7 +4,8 @@ import * as validators from '../helpers/validators'
 
 export const ReviewSchema = createSchema({
   userId: Type.objectId({ required: true }),
-  text: Type.string({ required: true, validate: validators.validateString })
+  text: Type.string({ required: true, validate: validators.validateString }),
+  modId: Type.objectId({ required: true})
 },{
   timestamps: true
 })

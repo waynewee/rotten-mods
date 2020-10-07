@@ -11,7 +11,6 @@ export const ModSchema = createSchema({
   crossModule: Type.string(),
   credit: Type.number(),
   workload: Type.number()
-
 },{
   timestamps: true
 })
