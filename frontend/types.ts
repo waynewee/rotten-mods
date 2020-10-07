@@ -1,5 +1,12 @@
 export interface Module {
-  moduleCode: string;
-  moduleName: string;
-  moduleDescription: string;
+  code: string;
+  title: string;
+  description: string;
+}
+
+export interface ModuleMeta extends Module {
+  expectedHours: number;
+  difficulty: number;
+  ratings: number;
+  university: string;
 }

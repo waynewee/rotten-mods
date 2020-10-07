@@ -1,4 +1,4 @@
-const StarIcon = (props) => {
+const HollowStarIcon = (props) => {
   return (
     <svg
       aria-hidden="true"
@@ -16,4 +16,4 @@ const StarIcon = (props) => {
   );
 }
 
-export default StarIcon;
+export default HollowStarIcon;

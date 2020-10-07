@@ -1,31 +1,29 @@
 import { Module } from "../types";
 import Link from "next/link";
 
-import StarIcon from "../components/StarIcon";
+import StarOutlinedIcon from "../icons/StarOutlinedIcon";
 
 interface ModuleListItemProps {
   module: Module
 }
 
 const ModuleListItem: React.FC<ModuleListItemProps> = ({ module }) => {
-  const { moduleCode, moduleName, moduleDescription } = module;
-  const navigateToModule = (code: string) => {
+  const { code, title, description } = module;
 
-  }
   return (
     <Link href="module-review">
-      <div style={styles.container} onClick={() => navigateToModule(moduleCode)}>
+      <div style={styles.container}>
         <div style={styles.moduleCode}>
-          {moduleCode}
+          {code}
         </div>
         <div style={styles.infoContainer}>
           <div style={styles.moduleInfoContainer}>
-            <div style={styles.moduleName}>{moduleName}</div>
-            <div style={styles.moduleDescription}>{moduleDescription}</div>
+            <div style={styles.moduleTitle}>{title}</div>
+            <div style={styles.moduleDescription}>{description}</div>
           </div>
           <div style={styles.reviewStarContainer}>
-            <StarIcon height="30" color="yellow" />
-            <span style={{ marginTop: 15, fontSize: 20 }}>152</span>
+            <StarOutlinedIcon style={styles.starIcon} />
+            <span style={styles.reviewNumber}>4.7</span>
           </div>
         </div>
       </div>
@@ -46,14 +44,15 @@ const styles = {
   },
   moduleCode: {
     backgroundColor: "#2D538C",
-    height: 60,
+    height: 70,
     width: 120,
     position: "absolute" as "absolute", // workaround for TS bug
     borderRadius: 12,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontSize: "23px"
+    fontSize: "23px",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)"
   },
   infoContainer: {
     backgroundColor: "#9CB6BA",
@@ -67,7 +66,7 @@ const styles = {
   moduleInfoContainer: {
     padding: "0px 30px"
   },
-  moduleName: {
+  moduleTitle: {
     fontSize: 30,
     fontWeight: "bold" as "bold"
   },
@@ -81,6 +80,14 @@ const styles = {
     alignItems: "center",
     padding: 15
   },
+  starIcon: {
+    height: 30,
+    color: "#F2E143"
+  },
+  reviewNumber: {
+    marginTop: 15,
+    fontSize: 20
+  }
 }
 
 export default ModuleListItem;
