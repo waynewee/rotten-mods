@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import Navbar from "../components/Navbar";
 import Head from "next/head";
 import Login from "./login";
+import Search from "./search";
 import "../styles/styles.module.css";
 
 const Index: React.FC = () => {
@@ -11,10 +12,7 @@ const Index: React.FC = () => {
       <Head>
         <title>RottenMods</title>
       </Head>
-      <div style={{ padding: "0px 80px" }}>
-        <Navbar />
-        {/* <Login /> */}
-      </div>
+      <Search />
     </>
   );
 };

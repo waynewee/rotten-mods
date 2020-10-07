@@ -9,7 +9,7 @@ if (typeof require !== "undefined") {
   require.extensions[".less"] = (file) => { };
 }
 
-module.exports = withCSS({
+const cssConfig = withCSS({
   cssModules: true,
   cssLoaderOptions: {
     importLoaders: 1,
@@ -23,3 +23,8 @@ module.exports = withCSS({
     })
   ),
 });
+
+module.exports = {
+  ...cssConfig,
+}
+

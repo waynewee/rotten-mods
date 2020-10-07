@@ -2,6 +2,11 @@ export interface AuthState {
   isLoggedIn: boolean;
 }
 
+export interface SearchState {
+  searchTerm: string;
+}
+
 export interface ReduxState {
-  authState: AuthState
+  auth: AuthState;
+  search: SearchState;
 }
