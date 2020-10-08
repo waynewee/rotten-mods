@@ -1,5 +1,5 @@
 import { Module } from "../types";
-import ModuleListItem from "./ModuleListItem";
+import ModuleListCard from "./ModuleListCard";
 
 const ModuleList: React.FC = () => {
   const dummyModuleList: Module[] = [
@@ -17,7 +17,7 @@ const ModuleList: React.FC = () => {
 
   const renderModuleListItems = (modules: Module[]) => {
     return modules.map(module => {
-      return <ModuleListItem module={module} key={module.code} />;
+      return <ModuleListCard module={module} key={module.code} />;
     });
   }
 

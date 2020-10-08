@@ -3,11 +3,11 @@ import Link from "next/link";
 
 import StarOutlinedIcon from "../icons/StarOutlinedIcon";
 
-interface ModuleListItemProps {
+interface ModuleListCardProps {
   module: Module
 }
 
-const ModuleListItem: React.FC<ModuleListItemProps> = ({ module }) => {
+const ModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
   const { code, title, description } = module;
 
   return (
@@ -90,4 +90,4 @@ const styles = {
   }
 }
 
-export default ModuleListItem;
+export default ModuleListCard;

@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { SEARCH_TERM } from "../redux/constants";
 
@@ -39,9 +40,12 @@ const Navbar: NextPage = () => {
         position: "sticky",
       }}
     >
-      <div style={{ flex: 1 }}>
-        <img src="/RottenMods.png" alt="RottenMods Logo" height="30" />
-      </div>
+      <Link href="/">
+        <div style={{ flex: 1, cursor: "pointer" }}>
+          <img src="/RottenMods.png" alt="RottenMods Logo" height="30" />
+        </div>
+      </Link>
+
       <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
         <Search
           placeholder="Search for modules"

@@ -71,7 +71,7 @@ const styles = {
     alignItems: "center",
     fontSize: "26px",
     color: "white",
-    padding: "0px 45px",
+    padding: "0px 30px",
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)"
   },
   moduleSmallDetailsColumn: {
@@ -90,7 +90,7 @@ const styles = {
     backgroundColor: "#9CB6BA",
     marginTop: 10,
     borderRadius: 15,
-    padding: "35px 45px",
+    padding: "20px 30px 30px 30px",
     color: "#fff",
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)"
   },

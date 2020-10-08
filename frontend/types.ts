@@ -10,3 +10,17 @@ export interface ModuleMeta extends Module {
   ratings: number;
   university: string;
 }
+
+export interface Review {
+  userName: string;
+  userDisplayPicture: string;
+  likes: number;
+  comments: Comment[];
+  userReview: string;
+}
+
+export interface Comment {
+  userName: string;
+  userDisplayPicture: string;
+  comment: string;
+}
