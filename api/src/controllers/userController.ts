@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import User from '../models/user'
 import SavedModsList from '../models/savedModsList'
 import * as UserServices from '../services/user'
-import * as PasswordServices from '../services/password'
+import * as SecurityServices from '../services/security'
 
 export let getUser = (req: Request, res: Response, next: NextFunction) => {
 
@@ -13,7 +13,7 @@ export let getUser = (req: Request, res: Response, next: NextFunction) => {
 
 export let addUser = (req: Request, res: Response, next: NextFunction) => {
 
-  PasswordServices.hash(req.body.password)
+  SecurityServices.hash(req.body.password)
   .then( hashedPassword => {
 
     let user = new User({ 

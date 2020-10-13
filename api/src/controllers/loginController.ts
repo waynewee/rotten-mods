@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '../models/user'
-import * as PasswordServices from '../services/password'
+import { encrypt, verify } from '../services/security'
 
 export let login = (req: Request, res: Response, next: NextFunction) =>{
   
@@ -12,9 +12,15 @@ export let login = (req: Request, res: Response, next: NextFunction) =>{
   User.findOne({ email })
   .then( user => {
     if( user ){
-      return PasswordServices.verify(password, user.password)
+      return verify(password, user.password)
       .then( verified => {
         if( verified ){
+          
+          res.cookie('token', encrypt(user._id.toString()), {
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+            httpOnly: true
+          })
+
           res.sendStatus(200)
         } else {
           res.sendStatus(403)
