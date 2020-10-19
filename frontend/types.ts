@@ -21,3 +21,11 @@ export interface Comment {
   userDisplayPicture: string;
   comment: string;
 }
+
+export interface User { 
+  fullName: string;
+  studyStatus: string;
+  studyCourse: string;
+  modulesReviewed: number;
+  modulesTaken: number;
+}
