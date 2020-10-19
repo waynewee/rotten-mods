@@ -1,16 +1,23 @@
 import type { AppProps } from "next/app";
 import { wrapper } from "../redux/store";
+import Head from "next/head";
+
 import NavBar from "../components/Navbar";
 
 const ReduxApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
-    <div style={styles.layout}>
-      <div style={styles.container}>
-        <NavBar />
-        <Component {...pageProps} />
+    <>
+      <Head>
+        <title>RottenMods</title>
+      </Head>
+      <div style={styles.layout}>
+        <div style={styles.container}>
+          <NavBar />
+          <Component {...pageProps} />
+        </div>
       </div>
+    </>
 
-    </div>
   );
 };
 
@@ -20,10 +27,11 @@ const styles = {
     flexDirection: "column" as "column",
     alignContent: "center",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   container: {
     padding: "0px 80px 80px 80px",
+    width: "100vw",
     maxWidth: 1280,
   }
 }

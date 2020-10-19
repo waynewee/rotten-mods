@@ -1,20 +1,26 @@
-import { ModuleMeta, Review } from "../types";
+import { NextPage } from "next";
+import { Module, Review } from "../types";
 
 import { Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import ModuleInformation from "../components/ModuleInformation";
 import ReviewList from "../components/ReviewList";
 
-const ModuleReview = () => {
-  const dummyData: ModuleMeta = {
-    code: "CS3219",
-    title: "Software Engineering Principles and Patterns",
-    description: "This module provides an in-depth, hands-on experience in key aspects of software engineering that accompany the development of software. Based on proven principles and best practices, this module focuses on software architectural design from the perspective of the software process. It covers techniques for requirement elicitation and specification that provide sound base for architectural design. The module covers design decision exploration as well as patterns that explicate principles and best practices in replicable form.",
-    expectedHours: 10,
-    difficulty: 4.7,
-    ratings: 4.7,
-    university: "NUS"
-  }
+interface ModuleReviewProps {
+  module: Module
+}
+
+// const dummyData: ModuleMeta = {
+//   code: "CS3218",
+//   title: "Software Engineering Principles and Patterns",
+//   description: "This module provides an in-depth, hands-on experience in key aspects of software engineering that accompany the development of software. Based on proven principles and best practices, this module focuses on software architectural design from the perspective of the software process. It covers techniques for requirement elicitation and specification that provide sound base for architectural design. The module covers design decision exploration as well as patterns that explicate principles and best practices in replicable form.",
+//   expectedHours: 10,
+//   difficulty: 4.7,
+//   ratings: 4.7,
+//   university: "NUS"
+// }
+
+const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module }) => {
 
   const menu = (
     <Menu>
@@ -44,7 +50,7 @@ const ModuleReview = () => {
 
   return (
     <>
-      <ModuleInformation module={dummyData} />
+      <ModuleInformation module={module} />
       <div style={styles.reviewsHeader}>
         <span style={styles.reviewsHeaderTitle}>Reviews</span>
         <Dropdown overlay={menu}>
@@ -76,4 +82,11 @@ const styles = {
   }
 }
 
-export default ModuleReview;
+ModuleReviewPage.getInitialProps = async ({ query }) => {
+  const moduleString: string = query.module as string;
+  const module = JSON.parse(moduleString);
+  // query for reviews here
+  return { module };
+}
+
+export default ModuleReviewPage;
