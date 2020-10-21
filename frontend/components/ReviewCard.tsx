@@ -1,14 +1,44 @@
-import { Review } from "../types";
+import { useState } from "react";
+import { Comment, Review } from "../types";
 
-import LikeOutlinedIcon from "../icons/LikeOutlinedIcon";
+import AddCommentModal from "./AddCommentModal";
+import Button from "./Button";
+import CommentModal from "./CommentsModal";
 import CommentOutlinedIcon from "../icons/CommentOutlinedIcon";
+import LikeOutlinedIcon from "../icons/LikeOutlinedIcon";
 
 interface ReviewCardProps {
   review: Review;
 }
 
+const dummyComments: Comment[] = [
+  {
+    userName: "Chester Sim",
+    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibend"
+  },
+  {
+    userName: "Jeremy Low",
+    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibend"
+  },
+  {
+    userName: "Chester Sim",
+    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibend"
+  },
+  {
+    userName: "Jeremy Low",
+    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibend"
+  }
+]
+
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
-  const { userName, userDisplayPicture, likes, comments, userReview } = review;
+  const [isCommentsModalVisible, setCommentsModalVisibility] = useState(false);
+  const [isAddCommentModalVisible, setAddCommentModalVisibility] = useState(false);
+
+  const { userName, userDisplayPicture, likes, comments, userReview, id } = review;
+
+  const onLikeReview = () => {
+
+  }
 
   return (
     <div style={styles.container}>
@@ -19,17 +49,33 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
         </div>
         <div style={styles.actionsBar}>
           <div style={styles.action}>
-            <LikeOutlinedIcon style={styles.icon} />
+            <Button onClick={onLikeReview}>
+              <LikeOutlinedIcon style={styles.icon} />
+            </Button>
             <span>{`${likes} Likes`}</span>
           </div>
           <span style={{ margin: "0px 10px" }}>|</span>
           <div style={styles.action}>
-            <CommentOutlinedIcon style={styles.icon} />
-            <span>{`${comments.length} Comments`}</span>
+            <Button onClick={() => setAddCommentModalVisibility(true)}>
+              <CommentOutlinedIcon style={styles.icon} />
+            </Button>
+            <Button onClick={() => setCommentsModalVisibility(true)}>
+              {`${comments.length} Comments`}
+            </Button>
           </div>
         </div>
       </div>
       <div style={styles.review}>{userReview}</div>
+      <AddCommentModal
+        reviewId={""}
+        isModalVisible={isAddCommentModalVisible}
+        setModalVisibility={setAddCommentModalVisibility}
+      />
+      <CommentModal
+        comments={dummyComments}
+        isModalVisible={isCommentsModalVisible}
+        setModalVisibility={setCommentsModalVisibility}
+      />
     </div>
   );
 };

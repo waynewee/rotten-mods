@@ -33,6 +33,7 @@ const styles = {
     padding: "0px 80px 80px 80px",
     width: "100vw",
     maxWidth: 1280,
+    overflowX: "hidden" as "hidden"
   }
 }
 

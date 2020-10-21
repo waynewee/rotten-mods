@@ -1,4 +1,4 @@
-import { ModuleMeta } from "../types";
+import { Module, ModalState } from "../types";
 
 import ModuleSmallDetail from "../components/ModuleSmallDetail";
 import UserClockIcon from "../icons/UserClockIcon";
@@ -10,11 +10,11 @@ import BookmarkOutlinedIcon from "../icons/BookmarkOutlinedIcon";
 import { BookFilled, BookOutlined } from "@ant-design/icons";
 import PenIcon from "../icons/PenIcon";
 
-interface ModuleInformationProps {
-  module: ModuleMeta;
+interface ModuleInformationProps extends ModalState {
+  module: Module;
 }
 
-const ModuleInformation: React.FC<ModuleInformationProps> = ({ module }) => {
+const ModuleInformation: React.FC<ModuleInformationProps> = ({ module, setModalVisibility }) => {
   const {
     code,
     expectedHours,
@@ -57,19 +57,21 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({ module }) => {
         </div>
         <div style={styles.actionsBar}>
           <BookOutlined
-            style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 35 }}
+            style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 25 }}
           />
           <BookmarkOutlinedIcon
             style={{ ...styles.actionIcon, color: "#289FA7" }}
           />
-          <PenIcon style={{ ...styles.actionIcon, color: "#7497CC" }} />
+          <div onClick={() => setModalVisibility(true)}>
+            <PenIcon style={{ ...styles.actionIcon, color: "#7497CC" }} />
+          </div>
         </div>
       </div>
       <div style={styles.infoContainer}>
         <div style={styles.moduleTitle}>{title}</div>
         <div style={styles.moduleDescription}>{description}</div>
       </div>
-    </div>
+    </div >
   );
 };
 
@@ -109,8 +111,9 @@ const styles = {
     display: "flex",
   },
   actionIcon: {
-    height: 35,
+    height: 25,
     margin: "0px 10px",
+    cursor: "pointer"
   },
   infoContainer: {
     backgroundColor: "#9CB6BA",

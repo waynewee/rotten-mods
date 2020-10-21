@@ -7,8 +7,8 @@ interface ReviewListProps {
 }
 
 const ReviewList: React.FC<ReviewListProps> = ({ reviews = [] }) => {
-  const renderReviews = () => reviews.map(review => {
-    return <ReviewCard review={review} />
+  const renderReviews = () => reviews.map((review, index) => {
+    return <ReviewCard review={review} key={index} />
   })
 
   return (

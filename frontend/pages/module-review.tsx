@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { NextPage } from "next";
 import { Module, Review } from "../types";
 
+import AddReviewModal from "../components/AddReviewModal";
 import { Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import ModuleInformation from "../components/ModuleInformation";
@@ -38,6 +40,7 @@ const dummyReviews: Review[] = [
 ]
 
 const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module }) => {
+  const [isAddReviewModalVisible, setAddReviewModalVisibility] = useState(false);
 
   const menu = (
     <Menu>
@@ -50,7 +53,11 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module }) => {
 
   return (
     <>
-      <ModuleInformation module={module} />
+      <ModuleInformation
+        module={module}
+        isModalVisible={isAddReviewModalVisible}
+        setModalVisibility={setAddReviewModalVisibility}
+      />
       <div style={styles.reviewsHeader}>
         <span style={styles.reviewsHeaderTitle}>Reviews</span>
         <Dropdown overlay={menu}>
@@ -63,6 +70,11 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module }) => {
         </Dropdown>
       </div>
       <ReviewList reviews={dummyReviews} />
+      <AddReviewModal
+        code={module.code}
+        isModalVisible={isAddReviewModalVisible}
+        setModalVisibility={setAddReviewModalVisibility}
+      />
     </>
   );
 };

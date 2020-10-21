@@ -12,6 +12,6 @@ export interface ReduxState {
 }
 
 export interface ModuleCompareState {
-  firstModuleCode: string,
-  secondModuleCode: string
+  firstModuleCode: string;
+  secondModuleCode: string;
 }

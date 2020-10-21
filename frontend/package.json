@@ -24,6 +24,7 @@
     "next-redux-wrapper": "^6.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-modal": "^3.11.2",
     "react-redux": "^7.2.1",
     "react-scroll-to": "^3.0.0-beta.6",
     "redux": "^4.0.5"
