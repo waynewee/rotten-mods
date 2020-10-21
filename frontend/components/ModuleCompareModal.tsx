@@ -1,17 +1,22 @@
 import { ModuleCompareState } from "../redux/types";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 import ArrowRightIcon from "../icons/ArrowRightIcon";
 import ModuleCompareCode from "./ModuleCompareCode";
 import { FIRST, SECOND } from "../redux/constants";
 
 const ModuleCompareModal: React.FC = () => {
-  const firstModuleCode = useSelector(state => state.compare.firstModuleCode);
-  const secondModuleCode = useSelector(state => state.compare.secondModuleCode);
+  const router = useRouter();
+  const firstModuleCode: string = useSelector(state => state.compare.firstModuleCode);
+  const secondModuleCode: string = useSelector(state => state.compare.secondModuleCode);
   const hasModuleToCompare = firstModuleCode || secondModuleCode ? "visible" : "hidden";
 
-  const onConfirmComparison = () => {
-
+  const navigateToModuleComparisonPage = () => {
+    router.push({
+      pathname: "/module-comparison",
+      query: { firstModuleCode, secondModuleCode }
+    })
   }
 
   return (
@@ -22,7 +27,7 @@ const ModuleCompareModal: React.FC = () => {
           vs
           {<ModuleCompareCode code={secondModuleCode} order={SECOND} />}
         </div>
-        <div style={styles.actionContainer} onClick={onConfirmComparison}>
+        <div style={styles.actionContainer} onClick={navigateToModuleComparisonPage}>
           <ArrowRightIcon style={styles.arrowIcon} />
         </div>
 
@@ -62,7 +67,8 @@ const styles = {
     width: 40,
     height: "100%",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    cursor: "pointer"
   },
   arrowIcon: {
     height: 25

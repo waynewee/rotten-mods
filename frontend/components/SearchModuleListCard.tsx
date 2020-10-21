@@ -10,7 +10,7 @@ interface ModuleListCardProps {
   module: Module;
 }
 
-const ModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
+const SearchModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { code, title, description } = module;
@@ -126,4 +126,4 @@ const styles = {
   },
 };
 
-export default ModuleListCard;
+export default SearchModuleListCard;

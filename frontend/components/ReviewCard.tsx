@@ -63,6 +63,7 @@ const styles = {
   },
   review: {
     marginTop: 10,
+    textAlign: "justify" as "justify"
   },
 };
 

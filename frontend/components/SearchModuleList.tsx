@@ -1,7 +1,7 @@
 import { Module } from "../types";
 import SearchModuleListCard from "./SearchModuleListCard";
 
-const ModuleList: React.FC = () => {
+const SearchModuleList: React.FC = () => {
   const dummyData: Module[] = [
     {
       code: "CS3219",
@@ -104,4 +104,4 @@ const ModuleList: React.FC = () => {
   return <>{renderModuleListItems(dummyData)}</>;
 };
 
-export default ModuleList;
+export default SearchModuleList;
