@@ -8,9 +8,36 @@ import { DownOutlined } from "@ant-design/icons";
 import LoginButton from "../components/LoginButton";
 import "../styles/antd.less";
 
+import { Modal, Button, Form, Divider } from 'antd';
+import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import LoginModal from "./LoginModal";
+import SignupModal from "./SignupModal";
+
+import Login from "../components/LoginButton";
+
+
+
 const { Search } = Input;
 
 const Navbar: React.FC = () => {
+
+  const [loginModalVisible, setLoginModalVisible] = useState(false);
+  const [signupModalVisible, setSignupModalVisible] = useState(false);
+
+  const toggleLoginModal = () => {
+    setLoginModalVisible(!loginModalVisible);
+  }
+
+  const toggleSignupModal = () => {
+    setSignupModalVisible(!signupModalVisible);
+  }
+
+  const switchModals = () => {
+    setSignupModalVisible(!signupModalVisible);
+    setLoginModalVisible(!loginModalVisible);
+  }
+
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -56,11 +83,28 @@ const Navbar: React.FC = () => {
         </Dropdown>
         <LoginButton isAuthenticated={true} />
       </div>
+
+
+      <Button type="text" onClick={toggleLoginModal}>
+        Log In
+      </Button>
+      <Button type="primary" onClick={toggleSignupModal}>
+        Sign Up
+      </Button>
+
+      {loginModalVisible ? <LoginModal toggles={{toggleLoginModal, switchModals}}/> : null}
+      {signupModalVisible ? <SignupModal toggles={{toggleSignupModal, switchModals}}/> : null}
     </div>
+
   );
 };
 
+
 const styles = {
+  loginFormButton: {
+    width: "100%",
+    backgroundColor: "#2D538C",
+  },
   container: {
     display: "flex",
     flexDirection: "row" as "row",
