@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
-
 import StarOutlinedIcon from "../icons/StarOutlinedIcon";
 import { useReducer } from "react";
 
@@ -59,7 +58,7 @@ const styles = {
   },
   userModuleInfoContainer: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "column" as "column",
     justifyContent: "center",
     marginRight: 40,
     fontSize: 20,
@@ -73,10 +72,8 @@ const styles = {
   },
   moduleInfo: {
     fontSize: 15,
-    textAlign: "center"
+    textAlign: "center" as "center"
   }
-
-
 }
 
 export default ProfileCard;

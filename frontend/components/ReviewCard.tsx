@@ -4,11 +4,12 @@ import LikeOutlinedIcon from "../icons/LikeOutlinedIcon";
 import CommentOutlinedIcon from "../icons/CommentOutlinedIcon";
 
 interface ReviewCardProps {
-  review: Review
+  review: Review;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
   const { userName, userDisplayPicture, likes, comments, userReview } = review;
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -28,12 +29,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
           </div>
         </div>
       </div>
-      <div style={styles.review}>
-        {userReview}
-      </div>
+      <div style={styles.review}>{userReview}</div>
     </div>
-  )
-}
+  );
+};
 
 const styles = {
   container: {
@@ -42,11 +41,11 @@ const styles = {
     color: "#fff",
     borderRadius: 15,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
-    marginBottom: 15
+    marginBottom: 15,
   },
   header: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   userInformation: {
     display: "flex",
@@ -56,15 +55,16 @@ const styles = {
   },
   action: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   icon: {
     height: 20,
-    marginRight: 10
+    marginRight: 10,
   },
   review: {
-    marginTop: 10
-  }
-}
+    marginTop: 10,
+    textAlign: "justify" as "justify"
+  },
+};
 
 export default ReviewCard;

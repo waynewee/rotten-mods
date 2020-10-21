@@ -1,3 +1,7 @@
 export const LOG_USER_IN = "LOG_USER_IN";
 export const LOG_USER_OUT = "LOG_USER_OUT";
 export const SEARCH_TERM = "SEARCH_TERM";
+export const ADD_MODULE_FOR_COMPARISON = "ADD_MODULE_FOR_COMPARISON";
+export const DELETE_MODULE_FOR_COMPARISON = "DELETE_MODULE_FOR_COMPARISON";
+export const FIRST = "FIRST";
+export const SECOND = "SECOND";

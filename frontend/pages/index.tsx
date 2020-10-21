@@ -1,20 +1,9 @@
-import { useEffect, FC } from "react";
-import { useDispatch } from "react-redux";
-import Navbar from "../components/Navbar";
-import Head from "next/head";
-import Login from "./login";
-import Search from "./search";
+import { NextPage } from "next";
+import Home from "./home";
 import "../styles/styles.module.css";
 
 const Index: React.FC = () => {
-  return (
-    <>
-      <Head>
-        <title>RottenMods</title>
-      </Head>
-      <Search />
-    </>
-  );
+  return (<Home />);
 };
 
 export default Index;

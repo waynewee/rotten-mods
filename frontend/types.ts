@@ -2,9 +2,6 @@ export interface Module {
   code: string;
   title: string;
   description: string;
-}
-
-export interface ModuleMeta extends Module {
   expectedHours: number;
   difficulty: number;
   ratings: number;
@@ -15,7 +12,7 @@ export interface Review {
   userName: string;
   userDisplayPicture: string;
   likes: number;
-  comments: Comment[];
+  comments?: Comment[];
   userReview: string;
 }
 
