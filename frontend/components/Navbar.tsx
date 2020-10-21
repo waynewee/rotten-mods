@@ -82,18 +82,16 @@ const Navbar: React.FC = () => {
           </div>
         </Dropdown>
         <LoginButton isAuthenticated={true} />
+        <Button type="text" onClick={toggleLoginModal}>
+          Log In
+        </Button>
+          <Button type="primary" onClick={toggleSignupModal}>
+            Sign Up
+        </Button>
       </div>
 
-
-      <Button type="text" onClick={toggleLoginModal}>
-        Log In
-      </Button>
-      <Button type="primary" onClick={toggleSignupModal}>
-        Sign Up
-      </Button>
-
-      {loginModalVisible ? <LoginModal toggles={{toggleLoginModal, switchModals}}/> : null}
-      {signupModalVisible ? <SignupModal toggles={{toggleSignupModal, switchModals}}/> : null}
+      {loginModalVisible ? <LoginModal toggles={{ toggleLoginModal, switchModals }} /> : null}
+      {signupModalVisible ? <SignupModal toggles={{ toggleSignupModal, switchModals }} /> : null}
     </div>
 
   );
