@@ -25,7 +25,7 @@
   ],
   "paths": {
     "/user": {
-      "put": {
+      "post": {
         "tags": [
           "Users"
         ],
@@ -88,7 +88,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Update user with give ID",
         "tags": [
           "Users"
@@ -131,7 +131,7 @@
       }
     },
     "/school": {
-      "put": {
+      "post": {
         "tags": [
           "Schools"
         ],
@@ -194,7 +194,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Update school with give ID",
         "tags": [
           "Schools"
@@ -220,7 +220,7 @@
       }
     },
     "/course": {
-      "put": {
+      "post": {
         "tags": [
           "Courses"
         ],
@@ -283,7 +283,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Update course with give ID",
         "tags": [
           "Courses"
@@ -309,7 +309,7 @@
       }
     },
     "/mod": {
-      "put": {
+      "post": {
         "tags": [
           "Mods"
         ],
@@ -373,6 +373,30 @@
           "type": "string"
         }
       ],
+      "put": {
+        "summary": "Update mod with given ID",
+        "tags": [
+          "Mods"
+        ],
+        "parameters": [
+          {
+            "name": "mod",
+            "in": "body",
+            "description": "Mod with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Mod"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mod is updated",
+            "schema": {
+              "$ref": "#/definitions/Mod"
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "Mods"
@@ -435,7 +459,7 @@
           }
         }
       ],
-      "put":{
+      "post":{
         "tags": [
           "Mods"
         ],
@@ -448,7 +472,7 @@
       }
     },
     "/event": {
-      "put": {
+      "post": {
         "tags": [
           "Events"
         ],
@@ -506,7 +530,7 @@
       }
     },
     "/rating": {
-      "put": {
+      "post": {
         "tags": [
           "Rating"
         ],
@@ -535,7 +559,7 @@
       }
     },
     "/rating/{ratingId}": {
-      "post": {
+      "put": {
         "tags": [
           "Rating"
         ],
@@ -575,7 +599,7 @@
       }
     },
     "/review": {
-      "put": {
+      "post": {
         "tags": [
           "Reviews"
         ],
@@ -654,7 +678,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Updates review",
         "parameters": [
           {

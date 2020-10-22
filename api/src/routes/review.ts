@@ -11,8 +11,8 @@ import * as reviewController from '../controllers/reviewController'
 router.get("/", reviewController.getAllReviews)
 router.get("/:id", reviewController.getReview)
 router.get("/replies/:id", reviewController.getAllReviewReplies)
-router.put("/", isLoggedIn, reviewController.addReview)
+router.post("/", isLoggedIn, reviewController.addReview)
 router.delete("/:id", reviewController.deleteReview)
-router.post("/:id", reviewController.updateReview)
+router.put("/:id", reviewController.updateReview)
 
 export default router;
