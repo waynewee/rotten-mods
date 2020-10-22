@@ -1,4 +1,5 @@
 import BookmarkIcon from "../icons/BookmarkFilledIcon";
+import { codeBlue } from "../styles/colors";
 
 const BookmarkedModuleCard: React.FC = () => {
     const dummyModuleCodes: string[] = [
@@ -30,7 +31,7 @@ const BookmarkedModuleCard: React.FC = () => {
 const styles = {
     moduleCode: {
         padding: 12,
-        backgroundColor: "#2D538C",
+        backgroundColor: codeBlue,
         color: "#fff",
         borderRadius: 15,
         boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
@@ -38,7 +39,6 @@ const styles = {
     },
     moduleList : {
         display:"flex",
-        flexDirection:"row",
         justifyContent: "flex-start",
     },
     container: {
@@ -53,9 +53,9 @@ const styles = {
         display: "flex",
         justifyContent: "flex-start",
         fontSize: 20,
-        textDecorationLine: "underline",
-        fontWeight: "bold",
-        alignItems: "center",
+        textDecorationLine: "underline" as "underline",
+        fontWeight: "bold" as "bold",
+        alignItems: "center" as "center",
         margin: "-5px 0px 10px 0px"
     },
     actionIcon: {

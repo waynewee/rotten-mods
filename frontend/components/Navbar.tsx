@@ -2,21 +2,18 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { SEARCH_TERM } from "../redux/constants";
+import "../styles/antd.less";
 
 import { Dropdown, Menu, Input } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import LoginButton from "../components/LoginButton";
-import "../styles/antd.less";
-
 import { Modal, Button, Form, Divider } from 'antd';
 import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
-
+import { codeBlue } from "../styles/colors";
 import Login from "../components/LoginButton";
-
-
 
 const { Search } = Input;
 
@@ -49,11 +46,12 @@ const Navbar: React.FC = () => {
     </Menu>
   );
 
-  const submitSearch = (value) => {
-    // Submit search value to search API
-    console.log("Search Bar Value:", value);
-    dispatch({ type: SEARCH_TERM, payload: value });
-    router.push("/search")
+  const submitSearch = (searchTerm) => {
+    dispatch({ type: SEARCH_TERM, payload: searchTerm });
+    router.push({
+      pathname: "/search",
+      query: { s: searchTerm }
+    })
   };
 
   return (
@@ -85,8 +83,8 @@ const Navbar: React.FC = () => {
         <Button type="text" onClick={toggleLoginModal}>
           Log In
         </Button>
-          <Button type="primary" onClick={toggleSignupModal}>
-            Sign Up
+        <Button type="primary" onClick={toggleSignupModal}>
+          Sign Up
         </Button>
       </div>
 
@@ -101,7 +99,7 @@ const Navbar: React.FC = () => {
 const styles = {
   loginFormButton: {
     width: "100%",
-    backgroundColor: "#2D538C",
+    backgroundColor: codeBlue,
   },
   container: {
     display: "flex",

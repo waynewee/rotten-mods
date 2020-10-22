@@ -1,11 +1,24 @@
 import axios from "axios";
-const baseUrl = "/api/mod";
+import queryString from "query-string";
+const baseUrl = "http://localhost:8080/api/mod";
 
-const getModule = (id) => {
-  axios
-    .get(`${baseUrl}/${id}`)
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+const getModule = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`);
+  return response.data;
 };
 
-export default { getModule };
+const searchModule = async (searchTerm) => {
+  const query = {
+    s: searchTerm,
+    page: 1,
+    limit: 10,
+  };
+
+  const response = await axios.get(
+    `${baseUrl}?${queryString.stringify(query)}`
+  );
+  console.log("response:", response);
+  return response.data;
+};
+
+export default { getModule, searchModule };

@@ -1,7 +1,7 @@
 import { Dropdown, Menu, Input } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-
 import { BookFilled, PlusOutlined } from "@ant-design/icons";
+import { codeBlue } from "../styles/colors";
 
 const StudyPlanCard: React.FC = () => {
   const dummyModuleCodes: string[] = [
@@ -50,7 +50,7 @@ const StudyPlanCard: React.FC = () => {
 const styles = {
   moduleCode: {
     padding: 12,
-    backgroundColor: "#2D538C",
+    backgroundColor: codeBlue,
     color: "#fff",
     borderRadius: 15,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",

@@ -1,29 +1,33 @@
-import { Module, ModalState } from "../types";
+import { Dispatch, SetStateAction } from "react";
+import { Module } from "../types";
 
 import ModuleSmallDetail from "../components/ModuleSmallDetail";
 import UserClockIcon from "../icons/UserClockIcon";
 import LayerGroupIcon from "../icons/LayerGroupIcon";
 import StarFilledIcon from "../icons/StarFilledIcon";
+import StarOutlinedIcon from "../icons/StarOutlinedIcon";
 import UniversityIcon from "../icons/UniversityIcon";
 import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
 import BookmarkOutlinedIcon from "../icons/BookmarkOutlinedIcon";
 import { BookFilled, BookOutlined } from "@ant-design/icons";
 import PenIcon from "../icons/PenIcon";
+import Button from "./Button";
+import { codeBlue, descriptionGreen, ratingsYellow } from "../styles/colors";
 
-interface ModuleInformationProps extends ModalState {
+interface ModuleInformationProps {
   module: Module;
+  setAddReviewModalVisibility: Dispatch<SetStateAction<boolean>>;
+  setAddRatingsModalVisibility: Dispatch<SetStateAction<boolean>>;
 }
 
-const ModuleInformation: React.FC<ModuleInformationProps> = ({ module, setModalVisibility }) => {
-  const {
-    code,
-    expectedHours,
-    difficulty,
-    ratings,
-    university,
-    description,
-    title,
-  } = module;
+const ModuleInformation: React.FC<ModuleInformationProps> = ({
+  module,
+  setAddReviewModalVisibility,
+  setAddRatingsModalVisibility
+}) => {
+  const { code, workload, rating, university, description, title } = module;
+  const difficulty = rating?.difficulty?.value || 0;
+  const star = rating?.star?.value || 0;
 
   return (
     <div style={styles.container}>
@@ -33,20 +37,20 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({ module, setModalV
           <div style={styles.moduleSmallDetailsColumn}>
             <ModuleSmallDetail
               Icon={UserClockIcon}
-              text={`Expected Workload/Week: ${expectedHours} hours`}
+              text={`Expected Workload/Week: ${workload} hours`}
               iconStyle={{ color: "#B9B9B9" }}
             />
             <ModuleSmallDetail
               Icon={LayerGroupIcon}
-              text={`Difficulty: ${difficulty}/5`}
+              text={`Difficulty: ${difficulty.toFixed(1)}/5`}
               iconStyle={{ color: "#B9B9B9" }}
             />
           </div>
           <div style={styles.moduleSmallDetailsColumn}>
             <ModuleSmallDetail
               Icon={StarFilledIcon}
-              text={`Ratings: ${ratings}`}
-              iconStyle={{ color: "#F2E143" }}
+              text={`Ratings: ${star.toFixed(1)}`}
+              iconStyle={{ color: ratingsYellow }}
             />
             <ModuleSmallDetail
               Icon={UniversityIcon}
@@ -56,15 +60,24 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({ module, setModalV
           </div>
         </div>
         <div style={styles.actionsBar}>
-          <BookOutlined
-            style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 25 }}
-          />
-          <BookmarkOutlinedIcon
-            style={{ ...styles.actionIcon, color: "#289FA7" }}
-          />
-          <div onClick={() => setModalVisibility(true)}>
+          <Button onClick={() => { }}>
+            <BookOutlined
+              style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 25 }}
+            />
+          </Button>
+          <Button onClick={() => { }}>
+            <BookmarkOutlinedIcon
+              style={{ ...styles.actionIcon, color: "#289FA7" }}
+            />
+          </Button>
+          <Button onClick={() => setAddRatingsModalVisibility(true)}>
+            <StarOutlinedIcon
+              style={{ ...styles.actionIcon, color: ratingsYellow }}
+            />
+          </Button>
+          <Button onClick={() => setAddReviewModalVisibility(true)}>
             <PenIcon style={{ ...styles.actionIcon, color: "#7497CC" }} />
-          </div>
+          </Button>
         </div>
       </div>
       <div style={styles.infoContainer}>
@@ -91,7 +104,7 @@ const styles = {
     justifyContent: "flex-start",
   },
   moduleCode: {
-    backgroundColor: "#2D538C",
+    backgroundColor: codeBlue,
     height: 80,
     borderRadius: 12,
     display: "flex",
@@ -113,10 +126,9 @@ const styles = {
   actionIcon: {
     height: 25,
     margin: "0px 10px",
-    cursor: "pointer"
   },
   infoContainer: {
-    backgroundColor: "#9CB6BA",
+    backgroundColor: descriptionGreen,
     marginTop: 10,
     borderRadius: 15,
     padding: "20px 30px 30px 30px",

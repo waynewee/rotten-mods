@@ -4,19 +4,34 @@ export interface Module {
   code: string;
   title: string;
   description: string;
-  expectedHours: number;
-  difficulty: number;
-  ratings: number;
+  workload: number;
+  rating: {
+    difficulty: Rating;
+    star: Rating;
+  };
   university: string;
+  _id: string;
+}
+
+export interface Rating {
+  count: number;
+  value: number;
 }
 
 export interface Review {
   userName: string;
-  userDisplayPicture: string;
-  likes: number;
+  // userDisplayPicture: string;
+  likes?: number;
   comments?: Comment[];
-  userReview: string;
-  id: string;
+  text: string;
+  yearTaken: number;
+  semesterTaken: 1 | 2;
+  workload: number;
+  rating: {
+    difficulty: number;
+    star: number;
+  };
+  _id: string;
 }
 
 export interface Comment {
@@ -31,7 +46,7 @@ export interface User {
   studyCourse: string;
   modulesReviewed: number;
   modulesTaken: number;
-  id: string;
+  _id: string;
 }
 
 export interface ModalState {

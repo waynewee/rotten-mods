@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import ArrowRightIcon from "../icons/ArrowRightIcon";
 import ModuleCompareCode from "./ModuleCompareCode";
 import { FIRST, SECOND } from "../redux/constants";
+import { compareOrange } from "../styles/colors";
 
 const ModuleCompareModal: React.FC = () => {
   const router = useRouter();
@@ -50,7 +51,7 @@ const styles = {
   modalContainer: {
     width: 360,
     height: 70,
-    backgroundColor: "#F2A966",
+    backgroundColor: compareOrange,
     borderRadius: 12,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
     display: "flex",

@@ -1,9 +1,8 @@
+import { useState } from 'react';
 
 import { Modal, Button, Form, Input, Divider } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useState } from 'react';
-
-
+import { codeBlue } from "../styles/colors";
 
 interface SignupModalProps {
     toggles :{
@@ -105,7 +104,7 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
 const styles = {
     loginFormButton: {
         width: "100%",
-        backgroundColor: "#2D538C",
+        backgroundColor: codeBlue,
     }
 }
 
