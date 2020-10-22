@@ -1,7 +1,9 @@
 export function validateString(str: string): boolean{
-  if( str.length == 0 ){
-    return false;
-  }
+  return str.length > 0
+}
 
-  return true;
+export function validateEmail(email: string): boolean {
+  const arr = email.split("@")[1].split(".")
+  const arr_ = arr.slice(arr.length - 2, arr.length)
+  return arr_[0] == "edu" && arr_[1] == "sg"
 }
