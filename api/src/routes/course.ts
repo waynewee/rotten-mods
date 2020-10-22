@@ -5,6 +5,7 @@ const router = express.Router()
 
 import * as courseController from '../controllers/courseController' 
 
+router.get("/", courseController.allCourses)
 router.get("/:id", courseController.getCourse)
 router.put("/", courseController.addCourse)
 router.delete("/:id", courseController.deleteCourse)
