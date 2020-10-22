@@ -1,12 +1,15 @@
 import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
 
+import { validateEmail } from '../helpers/validators'
+
 export const UserSchema = createSchema({
   name: Type.string(),
   email: Type.string({ required: true, unique: true }),
-  password: Type.string({ required: true }),
+  password: Type.string({ required: true, validate: validateEmail }),
   schoolStartDate: Type.date(),
   schoolId: Type.objectId(),
-  courseId: Type.objectId()
+  courseId: Type.objectId(),
+  yearOfStudy: Type.number({ min: 1, max: 6 })
 },{
   timestamps: true
 })

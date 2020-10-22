@@ -6,8 +6,8 @@
     "description": "RottenMods API",
     "license": {}
   },
-  "host": "localhost:3000",
-  "basePath": "/api/v1",
+  "host": "localhost:8080",
+  "basePath": "/api",
   "tags": [
     {
       "name": "Users",
@@ -125,6 +125,184 @@
             "description": "Returns a SavedModsList",
             "schema":{
               "$ref": "#/definitions/SavedModsList"
+            }
+          }
+        }
+      }
+    },
+    "/school": {
+      "put": {
+        "tags": [
+          "Schools"
+        ],
+        "summary": "Create new school in system",
+        "parameters": [
+          {
+            "name": "school",
+            "in": "body",
+            "description": "School that we want to create",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New school is created",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        }
+      }
+    },
+    "/school/{schoolId}": {
+      "parameters": [
+        {
+          "name": "schoolId",
+          "in": "path",
+          "required": true,
+          "description": "ID of school that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Schools"
+        ],
+        "summary": "Get school with given ID",
+        "responses": {
+          "200": {
+            "description": "School is found",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete school with given ID",
+        "tags": [
+          "Schools"
+        ],
+        "responses": {
+          "200": {
+            "description": "School is deleted"
+          }
+        }
+      },
+      "post": {
+        "summary": "Update school with give ID",
+        "tags": [
+          "Schools"
+        ],
+        "parameters": [
+          {
+            "name": "school",
+            "in": "body",
+            "description": "School with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "School is updated",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        }
+      }
+    },
+    "/course": {
+      "put": {
+        "tags": [
+          "Courses"
+        ],
+        "summary": "Create new course in system",
+        "parameters": [
+          {
+            "name": "course",
+            "in": "body",
+            "description": "Course that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New course is created",
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          }
+        }
+      }
+    },
+    "/course/{courseId}": {
+      "parameters": [
+        {
+          "name": "courseId",
+          "in": "path",
+          "required": true,
+          "description": "ID of course that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Courses"
+        ],
+        "summary": "Get course with given ID",
+        "responses": {
+          "200": {
+            "description": "Course is found",
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete course with given ID",
+        "tags": [
+          "Courses"
+        ],
+        "responses": {
+          "200": {
+            "description": "Course is deleted"
+          }
+        }
+      },
+      "post": {
+        "summary": "Update course with give ID",
+        "tags": [
+          "Courses"
+        ],
+        "parameters": [
+          {
+            "name": "course",
+            "in": "body",
+            "description": "Course with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Course is updated",
+            "schema": {
+              "$ref": "#/definitions/Course"
             }
           }
         }
@@ -540,9 +718,30 @@
         }
       }
     },
+    "School":{
+      "required":[
+        "name"
+      ],
+      "properties":{
+        "name":{
+          "type": "string"
+        }
+      }
+    },
+    "Course":{
+      "required":[
+        "name"
+      ],
+      "properties":{
+        "name":{
+          "type": "string"
+        }
+      }
+    },
     "User": {
       "required": [
-        "email"
+        "email",
+        "password"
       ],
       "properties": {
         "email": {
@@ -554,6 +753,15 @@
         },
         "name": {
           "type": "string"
+        },
+        "schoolId":{
+          "type": "string"
+        },
+        "courseId":{
+          "type": "string"
+        },
+        "yearOfStudy":{
+          "type":"number"
         }
       }
     },

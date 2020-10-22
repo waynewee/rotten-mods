@@ -1,10 +1,10 @@
 import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
 
-import * as validators from '../helpers/validators' 
+import { validateString } from '../helpers/validators' 
 
 export const ReviewSchema = createSchema({
   userId: Type.objectId({ required: true }),
-  text: Type.string({ required: true, validate: validators.validateString }),
+  text: Type.string({ required: true, validate: validateString }),
   modId: Type.objectId({ required: true})
 },{
   timestamps: true
