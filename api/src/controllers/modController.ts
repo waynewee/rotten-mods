@@ -32,7 +32,7 @@ export let searchMods = (req: Request, res: Response, next: NextFunction) => {
 
 export let deleteMod = (req:Request, res: Response, next: NextFunction) => {
 
-  Mod.deleteOne({ _id: req.params.modId})
+  Mod.deleteOne({ _id: req.params.id})
   .then(() => res.sendStatus(200))
   .catch(next)
 
@@ -50,15 +50,13 @@ export let addMod = (req:Request, res:Response, next: NextFunction) => {
 
 export let getMod = (req: Request, res: Response, next: NextFunction) => {
 
-  Mod.findOne({ _id: req.params.modId})
+  Mod.findOne({ _id: req.params.id})
   .then( mod => res.send(mod))
   .catch(next)
 
 }
 
 export let getModRating = (req: Request, res: Response, next: NextFunction) => {
-  
-  console.log(req.params.id)
 
   Rating.aggregate([
     {
