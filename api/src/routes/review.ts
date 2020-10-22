@@ -9,7 +9,7 @@ const router = express.Router()
 import * as reviewController from '../controllers/reviewController' 
 
 router.get("/", reviewController.getAllReviews)
-router.get("/:id", reviewController.getReview)
+router.get("/:modId", reviewController.getReview)
 router.get("/replies/:id", reviewController.getAllReviewReplies)
 router.post("/", isLoggedIn, reviewController.addReview)
 router.delete("/:id", reviewController.deleteReview)

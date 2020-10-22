@@ -739,6 +739,37 @@
         },
         "title":{
           "type": "string"
+        },
+        "acadYear":{
+          "type": "string"
+        },
+        "semester":{
+          "type": "string"
+        },
+        "faculty":{
+          "type":"string"
+        },
+        "department":{
+          "type":"string"
+        },
+        "crossModule":{
+          "type":"string"
+        },
+        "credit":{
+          "type":"number"
+        },
+        "workload":{
+          "type":"number"
+        },
+        "rating":{
+          "properties":{
+            "difficulty":{
+              "$ref": "#/definitions/ModRating"
+            },
+            "star":{
+              "$ref": "#/definitions/ModRating"  
+            }
+          }
         }
       }
     },
@@ -759,6 +790,16 @@
       "properties":{
         "name":{
           "type": "string"
+        }
+      }
+    },
+    "ModRating":{
+      "properties":{
+        "count":{
+          "type": "number"
+        },
+        "value": {
+          "type": "number"
         }
       }
     },
@@ -791,16 +832,21 @@
     },
     "Event": {
       "required": [
-        "email"
+        "type",
+        "userId"
       ],
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": ["likedMod", "viewedMod", "likedReview", "likedReply", "searched"]
         },
         "userId": {
           "type": "string"
         },
         "modId": {
+          "type": "string"
+        },
+        "searchTerm":{
           "type": "string"
         }
       }
@@ -813,7 +859,8 @@
       ],
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": ["difficulty", "star"]
         },
         "userId": {
           "type": "string"
@@ -841,6 +888,9 @@
       }
     },
     "SavedModsList":{
+      "required":[
+        "userId"
+      ],
       "properties":{
         "modIds": {
           "type": "array",
@@ -868,6 +918,15 @@
         },
         "modId": {
           "type": "string"
+        },
+        "semesterTaken":{
+          "type": "number"
+        },
+        "workload":{
+          "type":"number"
+        },
+        "yearTaken":{
+          "type": "number"
         }
       }
     },

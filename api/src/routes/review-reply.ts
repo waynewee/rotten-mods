@@ -6,8 +6,8 @@ const router = express.Router()
 
 import * as reviewReplyController from '../controllers/reviewReplyController' 
 
-router.post("/review-reply", reviewReplyController.addReviewReply)
-router.put("/review-reply", reviewReplyController.updateReviewReply)
-router.delete("/review-reply", reviewReplyController.deleteReviewReply)
+router.post("/", reviewReplyController.addReviewReply)
+router.put("/", reviewReplyController.updateReviewReply)
+router.delete("/", reviewReplyController.deleteReviewReply)
 
 export default router;
