@@ -10,3 +10,8 @@ export interface ReduxState {
   auth: AuthState;
   search: SearchState;
 }
+
+export interface ModuleCompareState {
+  firstModuleCode: string;
+  secondModuleCode: string;
+}

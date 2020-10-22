@@ -6,7 +6,7 @@ import BookmarkedModuleCard from "../components/BookmarkedModuleCard";
 import StudyPlanCard from "../components/StudyPlanCard";
 import { User } from "../types";
 import ReviewedModuleCard from "../components/ReviewedModuleCard";
-import ModuleList from "../components/ModuleList";
+import SearchModuleList from "../components/SearchModuleList";
 
 
 const Profile: React.FC = () => {
@@ -21,22 +21,21 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <ProfileCard user = {dummyProfile} />
-      <BookmarkedModuleCard/>
+      <ProfileCard user={dummyProfile} />
+      <BookmarkedModuleCard />
       <div style={styles.container}>
-        <StudyPlanCard/>
-        <ReviewedModuleCard/>
+        <StudyPlanCard />
+        <ReviewedModuleCard />
       </div>
       <SectionTitle title={`Modules you might be interested in`} />
-      <ModuleList />
-     
+      <SearchModuleList />
     </>
   );
 };
 
 const styles = {
   container: {
-    display:"flex",
+    display: "flex"
   }
 }
 export default Profile;
