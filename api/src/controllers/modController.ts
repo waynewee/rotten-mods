@@ -19,8 +19,8 @@ export let searchMods = (req: Request, res: Response, next: NextFunction) => {
 
   Mod.find({
     $or: [
-      { title: { s, $options: 'i' } },
-      { code: { s, $options: 'i' } }
+      { title: { $regex: s, $options: 'i' } },
+      { code: { $regex: s, $options: 'i' } }
     ]
   })
   .limit(_limit)

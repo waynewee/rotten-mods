@@ -7,6 +7,6 @@ const router = express.Router()
 
 import * as eventController from '../controllers/eventController' 
 
-router.put("/", eventController.addEvent)
+router.post("/", eventController.addEvent)
 
 export default router;

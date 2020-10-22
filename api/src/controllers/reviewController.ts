@@ -18,7 +18,7 @@ export let getAllReviews = (req: Request, res: Response, next: NextFunction) => 
 
 export let getReview = (req: Request, res: Response, next: NextFunction) => {
 
-  Review.findById(req.params.id)
+  Review.findOne({_id: req.params.modId})
   .then(review => res.send(review))
   .catch(next)
 }

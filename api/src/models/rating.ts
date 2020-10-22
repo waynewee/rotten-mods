@@ -2,7 +2,8 @@ import { Types } from 'mongoose';
 import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
 
 export enum ratingTypesEnum {
-  difficulty = 'difficulty'
+  difficulty = 'difficulty',
+  star = 'star'
 }
 
 const ratingTypes = [ ratingTypesEnum.difficulty ]
