@@ -1,3 +1,5 @@
+import { compareOrange } from "../styles/colors";
+
 interface MetaCompareRowProps {
   title: string,
   firstMeta: string,
@@ -58,7 +60,7 @@ const styles = {
     top: 0,
   },
   title: {
-    backgroundColor: "#F2A966",
+    backgroundColor: compareOrange,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
     padding: 10,
     color: "#fff",

@@ -3,6 +3,7 @@ import { ModalState } from "../types";
 
 import FormModal from "./FormModal";
 import FormModalItem from "./FormModalItem";
+import { codeBlue } from "../styles/colors";
 
 const AddModuleModal: React.FC<ModalState> = ({ isModalVisible, setModalVisibility }) => {
   const [code, setCode] = useState("");
@@ -18,7 +19,7 @@ const AddModuleModal: React.FC<ModalState> = ({ isModalVisible, setModalVisibili
 
   return (
     <FormModal
-      backgroundColor="#2D538C"
+      backgroundColor={codeBlue}
       submitColor="#3E59B9"
       title="Add Module"
       isModalVisible={isModalVisible}

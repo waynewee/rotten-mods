@@ -5,7 +5,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 interface FormModalItemProps {
-  type: "input" | "textarea" | "text" | "rate" | "numerical" | "difficulty" | "hours" | "semester" | "university",
+  type: "input" | "textarea" | "text" | "rate" | "numerical" | "difficulty" | "hours" | "semester" | "university" | "year",
   label: string,
   value: string | number,
   setValue?: Dispatch<SetStateAction<any>>
@@ -40,14 +40,25 @@ const FormModalItem: React.FC<FormModalItemProps> = ({ type = "input", label, va
         />
       case "semester":
         return <Select style={styles.inputNumber}>
-          <Option value={1}>Y1S1</Option>
-          <Option value={2}>Y1S2</Option>
-          <Option value={3}>Y2S1</Option>
-          <Option value={4}>Y2S2</Option>
-          <Option value={5}>Y3S1</Option>
-          <Option value={6}>Y3S2</Option>
-          <Option value={7}>Y4S1</Option>
-          <Option value={8}>Y4S2</Option>
+          <Option value={1}>1</Option>
+          <Option value={2}>2</Option>
+        </Select>
+      case "year":
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+        const yearShortform = currentYear % 2000; // eg. 2020 => 20
+        const currentSemester = currentMonth < 6 ? 2 : 1;
+        const currentAYSecondYear = currentSemester === 1 ? yearShortform + 1 : yearShortform; // if current semester is 2, then the second year of the AY is the current year
+        const yearMinusOne = currentAYSecondYear - 1;
+        const yearMinusTwo = currentAYSecondYear - 2;
+        const yearMinusThree = currentAYSecondYear - 3;
+        const yearMinusFour = currentAYSecondYear - 4;
+        return <Select style={styles.inputNumber}>
+          <Option value={currentAYSecondYear}>AY{yearMinusOne}/{currentAYSecondYear}</Option>
+          <Option value={yearMinusOne}>AY{yearMinusTwo}/{yearMinusOne}</Option>
+          <Option value={yearMinusTwo}>AY{yearMinusThree}/{yearMinusTwo}</Option>
+          <Option value={yearMinusThree}>AY{yearMinusFour}/{yearMinusThree}</Option>
         </Select>
       case "university":
         return <Select style={styles.inputNumber}>

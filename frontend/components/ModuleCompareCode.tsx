@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux";
 import { DELETE_MODULE_FOR_COMPARISON } from "../redux/constants";
 
+import { codeBlue, crossRed } from "../styles/colors";
+
 interface ModuleCompareCodeProps {
   code: string,
   order: string
@@ -39,7 +41,7 @@ const styles = {
     position: "relative" as "relative",
     height: 45,
     width: 100,
-    backgroundColor: "#2D538C",
+    backgroundColor: codeBlue,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -51,7 +53,7 @@ const styles = {
     position: "absolute" as "absolute",
     top: -8,
     right: -8,
-    backgroundColor: "#DD7676",
+    backgroundColor: crossRed,
     height: 20,
     width: 20,
     borderRadius: 10,

@@ -1,3 +1,4 @@
+import { codeBlue, descriptionGreen } from "../styles/colors";
 import { Module } from "../types";
 
 interface ModuleInfoComparison {
@@ -55,7 +56,7 @@ const styles = {
   moduleCode: {
     height: 60,
     width: 140,
-    backgroundColor: "#2D538C",
+    backgroundColor: codeBlue,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -74,7 +75,7 @@ const styles = {
   },
   moduleInfo: {
     width: 500,
-    backgroundColor: "#9CBABA",
+    backgroundColor: descriptionGreen,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
     padding: 20,
     borderRadius: 15,

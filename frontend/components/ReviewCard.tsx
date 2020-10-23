@@ -6,9 +6,11 @@ import Button from "./Button";
 import CommentModal from "./CommentsModal";
 import CommentOutlinedIcon from "../icons/CommentOutlinedIcon";
 import LikeOutlinedIcon from "../icons/LikeOutlinedIcon";
+import { reviewBlue } from "../styles/colors";
 
 interface ReviewCardProps {
   review: Review;
+  comments: Comment[];
 }
 
 const dummyComments: Comment[] = [
@@ -30,11 +32,11 @@ const dummyComments: Comment[] = [
   }
 ]
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ review, comments = dummyComments }) => {
   const [isCommentsModalVisible, setCommentsModalVisibility] = useState(false);
   const [isAddCommentModalVisible, setAddCommentModalVisibility] = useState(false);
 
-  const { userName, userDisplayPicture, likes, comments, userReview, id } = review;
+  const { userName, likes, text, _id } = review;
 
   const onLikeReview = () => {
 
@@ -65,7 +67,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
           </div>
         </div>
       </div>
-      <div style={styles.review}>{userReview}</div>
+      <div style={styles.review}>{text}</div>
       <AddCommentModal
         reviewId={""}
         isModalVisible={isAddCommentModalVisible}
@@ -83,7 +85,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
 const styles = {
   container: {
     padding: 30,
-    backgroundColor: "#7497CC",
+    backgroundColor: reviewBlue,
     color: "#fff",
     borderRadius: 15,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",

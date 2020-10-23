@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { ADD_MODULE_FOR_COMPARISON } from "../redux/constants";
 
-import StarOutlinedIcon from "../icons/StarOutlinedIcon";
+import StarFilledIcon from "../icons/StarFilledIcon";
+import { codeBlue, compareOrange, descriptionGreen, ratingsYellow } from "../styles/colors";
 
 interface ModuleListCardProps {
   module: Module;
@@ -38,7 +39,7 @@ const SearchModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
           <div style={styles.moduleDescription}>{description}</div>
         </div>
         <div style={styles.reviewStarContainer}>
-          <StarOutlinedIcon style={styles.starIcon} />
+          <StarFilledIcon style={styles.starIcon} />
           <span style={styles.reviewNumber}>4.7</span>
         </div>
       </div>
@@ -60,7 +61,7 @@ const styles = {
     cursor: "pointer",
   },
   moduleCode: {
-    backgroundColor: "#2D538C",
+    backgroundColor: codeBlue,
     height: 70,
     width: 120,
     position: "absolute" as "absolute", // workaround for TS bug
@@ -80,7 +81,7 @@ const styles = {
     height: 40,
     width: 40,
     borderRadius: 20,
-    backgroundColor: "#F2A966",
+    backgroundColor: compareOrange,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -90,13 +91,14 @@ const styles = {
     fontSize: 18
   },
   infoContainer: {
-    backgroundColor: "#9CB6BA",
+    backgroundColor: descriptionGreen,
     display: "flex",
-    flexDirection: "row" as "row",
+    justifyContent: "space-between",
     borderRadius: 15,
     marginLeft: 60,
     padding: "25px 20px 25px 60px",
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
+    width: "100%"
   },
   moduleInfoContainer: {
     padding: "0px 30px",
@@ -118,7 +120,7 @@ const styles = {
   },
   starIcon: {
     height: 30,
-    color: "#F2E143",
+    color: ratingsYellow,
   },
   reviewNumber: {
     marginTop: 15,

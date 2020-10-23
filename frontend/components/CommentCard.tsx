@@ -1,5 +1,7 @@
 import { Comment } from "../types";
 
+import { commentBlue } from "../styles/colors";
+
 interface CommentCardProps {
   comment: Comment
 }
@@ -20,7 +22,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
 
 const styles = {
   container: {
-    backgroundColor: "#69BBCD",
+    backgroundColor: commentBlue,
     borderRadius: 10,
     width: "100%",
     padding: 15,
