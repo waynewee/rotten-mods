@@ -5,11 +5,12 @@ import express from 'express'
 const router = express.Router()
 
 import * as modController from '../controllers/modController' 
+import { isLoggedIn } from '../middleware'
 
 router.get("/:id", modController.getMod)
-router.delete("/:id", modController.deleteMod)
 router.get("/", modController.searchMods)
-router.post("/", modController.addMod)
-router.put("/:id", modController.updateMod)
+router.delete("/:id", isLoggedIn, modController.deleteMod)
+router.post("/",isLoggedIn, modController.addMod)
+router.put("/:id", isLoggedIn, modController.updateMod)
 
 export default router;

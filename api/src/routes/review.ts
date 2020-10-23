@@ -12,7 +12,7 @@ router.get("/", reviewController.getAllReviews)
 router.get("/:id", reviewController.getReview)
 router.get("/mod/:modId", reviewController.getReviewsByModId)
 router.post("/", isLoggedIn, reviewController.addReview)
-router.delete("/:id", reviewController.deleteReview)
-router.put("/:id", reviewController.updateReview)
+router.delete("/:id", isLoggedIn, reviewController.deleteReview)
+router.put("/:id", isLoggedIn, reviewController.updateReview)
 
 export default router;

@@ -11,7 +11,7 @@ import * as replyController from '../controllers/replyController'
 router.get("/review/:reviewId", replyController.getRepliesByReviewId)
 router.get("/:id", replyController.getReply)
 router.post("/", isLoggedIn, replyController.addReply)
-router.delete("/:id", replyController.deleteReply)
-router.put("/:id", replyController.updateReply)
+router.delete("/:id", isLoggedIn, replyController.deleteReply)
+router.put("/:id", isLoggedIn, replyController.updateReply)
 
 export default router;
