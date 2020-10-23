@@ -9,7 +9,7 @@ export const UserSchema = createSchema({
   schoolStartDate: Type.date(),
   schoolId: Type.objectId(),
   courseId: Type.objectId(),
-  yearOfStudy: Type.number({ min: 1, max: 6 })
+  currentYear: Type.number({ min: 1, max: 8})
 },{
   timestamps: true
 })

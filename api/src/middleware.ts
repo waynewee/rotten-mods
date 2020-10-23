@@ -12,15 +12,22 @@ export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     return res.sendStatus(403)
   }
 
-  const userId = decrypt(token)
+  try {
+    
+    const userId = decrypt(token)
+  
+    User.findOne({ _id: userId })
+    .then(user => {
+      if( user ){
+        next();
+      } else {
+        res.sendStatus(403)
+      }
+    })
 
-  User.findOne({ _id: userId })
-  .then(user => {
-    if( user ){
-      next();
-    } else {
-      res.sendStatus(403)
-    }
-  })
+  } catch( e ){
+    res.sendStatus(403)
+  }
+
 
 }

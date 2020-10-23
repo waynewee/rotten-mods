@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser'
 
 import * as config from '../config'
 import router from './routes'
-import swaggerDocument from '../swagger.json'
+import swaggerDocument from '../docs/swagger.json'
 
 mongoose.connect(config.mongoUri)
 .then(() => console.log("Connected"))

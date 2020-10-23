@@ -1,0 +1,1570 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "RottenMods API",
+    "description": "RottenMods API",
+    "license": {}
+  },
+  "host": "localhost:8080",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "course",
+      "description": "A university course"
+    },
+    {
+      "name": "event",
+      "description": "A site event"
+    },
+    {
+      "name": "login",
+      "description": "The login API"
+    },
+    {
+      "name": "mod",
+      "description": "A university module"
+    },
+    {
+      "name": "rating",
+      "description": "A ranking on a scale given to an object"
+    },
+    {
+      "name": "review",
+      "description": "A review given to an object"
+    },
+    {
+      "name": "school",
+      "description": "A university"
+    },
+    {
+      "name": "user",
+      "description": "A user"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/course":{
+      "get":{
+        "tags": ["course"],
+        "summary": "searches for courses",
+        "description": "Returns a list of appropriate courses",
+        "parameters":[{
+          "in": "query",
+          "name": "s",
+          "description": "Search term - case insensititve course name",
+          "schema": {
+            "type": "string",
+            "example": "Computer Sci"
+          }
+        },{
+          "in": "query",
+          "name": "page",
+          "description": "Page number",
+          "schema":{
+            "type": "integer"
+          }
+        },{
+          "in": "query",
+          "name": "limit",
+          "description":"Maximum number of results returned",
+          "schema": {
+            "type": "Integer"
+          }
+        }]
+      },
+      "post":{
+        "tags": ["course"],
+        "summary": "creates a course",
+        "description": "",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "Course object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/CourseCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/course/{courseId}":{
+      "get":{
+        "tags": ["course"],
+        "summary": "finds a course by OID",
+        "description": "Returns a course",
+        "parameters": [{
+          "name": "courseId",
+          "in": "path",
+          "description": "OID of the course",
+          "required": true,
+          "example": "512345678910111211314151"
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+      },
+      "put":{
+        "tags": ["course"],
+        "summary": "updates a course",
+        "description": "",
+        "parameters": [{
+          "name": "courseId",
+          "in": "path",
+          "description": "OID of the course",
+          "required": true,
+          "example": "512345678910111211314151"
+        },{
+          "name": "body",
+          "in": "body",
+          "description": "Course Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/CourseCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      },
+      "delete":{
+        "tags": ["course"],
+        "summary": "deletes a course by OID",
+        "description": "",
+        "parameters": [{
+          "name": "courseId",
+          "in": "path",
+          "description": "OID of the course",
+          "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/event":{
+      "post" :{
+        "tags": ["event"],
+        "summary":"creates an event",
+        "description":"",
+        "parameters":[{
+          "in": "body",
+          "name": "body",
+          "description": "Event object",
+          "required": "true",
+          "schema": {
+            "$ref": "#/definitions/EventCreate"
+          }
+        },{
+          "in": "body",
+          "name": "sub",
+          "description": "Type of subscriber to the event",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["course", "mod", "review", "school"]
+          }
+        },{
+          "in": "body",
+          "name": "subId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "body",
+          "name": "type",
+          "description": "Type of event",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["like", "view"]
+          }
+        }]
+      }
+    },
+    "/mod":{
+      "get":{
+        "tags": ["mod"],
+        "summary": "searches for modules",
+        "description": "Returns a list of appropriate modules",
+        "parameters":[{
+          "in": "query",
+          "name": "s",
+          "description": "Search term - case insensititve module title or code",
+          "schema": {
+            "type": "string",
+            "example": "Data Structures"
+          }
+        },{
+          "in": "query",
+          "name": "page",
+          "description": "Page number",
+          "schema":{
+            "type": "integer"
+          }
+        },{
+          "in": "query",
+          "name": "limit",
+          "description":"Maximum number of results returned",
+          "schema": {
+            "type": "Integer"
+          }
+        }]
+      },
+      "post":{
+        "tags": ["mod"],
+        "summary": "creates a module",
+        "description": "",
+        "parameters":[{
+          "in": "body",
+          "name": "body",
+          "description": "Module object",
+          "required": "true",
+          "schema": {
+            "$ref": "#/definitions/ModCreate"
+          }
+        }]
+      }
+    },
+    "/mod/{modId}":{
+      "get":{
+        "tags":["mod"],
+        "summary": "finds a module by OID",
+        "description": "Returns a module",
+        "parameters":[{
+          "in": "path",
+          "name": "modId",
+          "description": "OID of the module",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Mod"
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["mod"],
+        "summary": "updates a module",
+        "description": "",
+        "parameters": [{
+          "in": "path",
+          "name": "modId",
+          "description": "OID of the module",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "body",
+          "name": "body",
+          "description": "Module object",
+          "required": "true",
+          "schema": {
+            "$ref": "#/definitions/ModCreate"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      },
+      "delete":{
+        "tags":["mod"],
+        "summary": "delete a module by OID",
+        "description": "",
+        "parameters":[{
+          "in": "path",
+          "name": "modId",
+          "description": "OID of the module",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      }
+    },
+    "/login":{
+      "post":{
+        "tags": ["login"],
+        "summary": "logs an existing user in",
+        "description": "",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Login Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Login"
+          }
+        }],
+        "responses": {
+          "200":{
+            "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          },
+          "403": {
+            "description":"Not authorized"
+          }
+        }
+      }
+    },
+    "/rating":{
+      "post": {
+        "tags": ["rating"],
+        "summary": "creates a rating",
+        "description": "",
+        "parameters":[{
+          "in": "body",
+          "name": "body",
+          "description": "Rating Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/RatingCreate"
+          }
+        },{
+          "in": "body",
+          "name": "sub",
+          "description": "Type of subscriber to the rating",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["mod", "school", "course"]
+          }
+        },{
+          "in": "body",
+          "name": "subId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "body",
+          "name": "type",
+          "description": "Type of rating",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["difficulty", "star"]
+          }
+        },{
+          "in": "body",
+          "name": "value",
+          "description": "Rating number",
+          "required": "true",
+          "schema":{
+            "type": "integer",
+            "example": 4
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      }
+    },
+    "/rating/{ratingId}":{
+      "put": {
+        "tags": ["rating"],
+        "summary": "updates a rating",
+        "description": "",
+        "parameters":[{
+          "in": "path",
+          "name": "ratingId",
+          "description": "OID of the rating",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "body",
+          "name": "body",
+          "description": "Rating Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/RatingCreate"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["rating"],
+        "summary": "delete a rating by OID",
+        "description": "",
+        "parameters":[{
+          "in": "path",
+          "name": "ratingId",
+          "description": "OID of the rating",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      }
+    },
+    "/reply": {
+      "post": {
+        "tags": ["reply"],
+        "summary": "creates a reply",
+        "description": "",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "Reply object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/ReplyCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/reply/{replyId}":{
+      "get": {
+        "tags": ["reply"],
+        "summary": "finds a reply by OID",
+        "description": "Returns a reply",
+        "parameters": [{
+          "name": "replyId",
+          "in": "path",
+          "description": "OID of the reply",
+          "required": true,
+          "example": "512345678910111211314151"
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Reply"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+
+      },
+      "put":{
+        "tags": ["reply"],
+        "summary": "updates a reply",
+        "description": "",
+        "parameters": [{
+          "name": "replyId",
+          "in": "path",
+          "description": "OID of the reply",
+          "required": true,
+          "example": "512345678910111211314151"
+        },{
+          "name": "body",
+          "in": "body",
+          "description": "Reply Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/ReplyCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      },
+      "delete":{
+        "tags": ["reply"],
+        "summary": "deletes a reply by OID",
+        "description": "",
+        "parameters": [{
+          "name": "replyId",
+          "in": "path",
+          "description": "OID of the reply",
+          "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/reply/review/{reviewId}":{
+      "get": {
+        "tags": ["reply"],
+        "summary": "gets all replies for a review",
+        "description": "Returns a list of replies to a review",
+        "parameters": [{
+          "name": "reviewId",
+          "in": "path",
+          "description": "OID of the review",
+          "required": true
+        }],
+        "responses" : {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ReplyArray"
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/review":{
+      "get":{
+        "tags": ["review"],
+        "summary":"gets all reviews",
+        "description":"Returns a list of reviews",
+        "responses": {
+          "200": {
+            "description":"Success",
+            "schema": {
+              "$ref":"#/definitions/ReviewArray"
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
+      "post":{
+        "tags": ["review"],
+        "summary": "creates a review",
+        "description": "",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "Review Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/ReviewCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/review/{reviewId}":{
+      "get": {
+        "tags": ["review"],
+        "summary": "finds a review by OID",
+        "description": "Returns a review",
+        "parameters": [{
+            "name": "reviewId",
+            "in": "path",
+            "description": "OID of the review",
+            "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["review"],
+        "summary": "updates a review",
+        "description": "",
+        "parameters": [{
+          "name": "reviewId",
+          "in": "path",
+          "description": "OID of the review",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "name": "body",
+          "in": "body",
+          "description": "Review Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/ReviewCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      },
+      "delete":{
+        "tags": ["review"],
+        "summary": "deletes a review by OID",
+        "description": "",
+        "parameters": [{
+          "name": "reviewId",
+          "in": "path",
+          "description": "OID of the review",
+          "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/review/mod/{modId}":{
+      "get":{
+        "tags": ["review"],
+        "summary": "paginate reviews for single module",
+        "description": "Returns a list of reviews",
+        "parameters":[{
+          "in": "path",
+          "name": "modId",
+          "description": "OID of the module",
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "page",
+          "description": "Page number",
+          "schema":{
+            "type": "integer"
+          }
+        },{
+          "in": "query",
+          "name": "limit",
+          "description":"Maximum number of results returned",
+          "schema": {
+            "type": "Integer"
+          }
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/school":{
+      "get":{
+        "tags": ["school"],
+        "summary": "searches for schools",
+        "description": "Returns a list of appropriate schools",
+        "parameters":[{
+          "in": "query",
+          "name": "s",
+          "description": "Search term - case insensititve school name",
+          "schema": {
+            "type": "string",
+            "example": "National University"
+          }
+        },{
+          "in": "query",
+          "name": "page",
+          "description": "Page number",
+          "schema":{
+            "type": "integer"
+          }
+        },{
+          "in": "query",
+          "name": "limit",
+          "description":"Maximum number of results returned",
+          "schema": {
+            "type": "Integer"
+          }
+        }]
+      },
+      "post":{
+        "tags": ["school"],
+        "summary": "creates a school",
+        "description": "",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "School Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/SchoolCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/school/{schoolId}":{
+      "get":{
+        "tags": ["school"],
+        "summary": "finds a school by OID",
+        "description": "Returns a school",
+        "parameters": [{
+            "name": "schoolId",
+            "in": "path",
+            "description": "OID of the school",
+            "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["school"],
+        "summary": "updates a school",
+        "description": "",
+        "parameters": [{
+          "name": "schoolId",
+          "in": "path",
+          "description": "OID of the school",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "name": "body",
+          "in": "body",
+          "description": "School Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/SchoolCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["school"],
+        "summary": "deletes a school by OID",
+        "description": "",
+        "parameters": [{
+          "name": "schoolId",
+          "in": "path",
+          "description": "OID of the school",
+          "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/user":{
+      "post": {
+        "tags": ["user"],
+        "summary": "creates a user",
+        "description": "",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "User Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/UserCreate"
+          }
+        },{
+          "name": "email",
+          "in": "body",
+          "description": "Email of the user (only accept .edu emails)",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "example@u.nus.edu"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/user/{userId}":{
+      "get":{
+        "tags": ["user"],
+        "summary": "finds a user by OID",
+        "description": "Returns a user",
+        "parameters": [{
+            "name": "userId",
+            "in": "path",
+            "description": "OID of the user",
+            "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+
+      },
+      "put":{
+        "tags": ["user"],
+        "summary": "updates a user",
+        "description": "",
+        "parameters": [{
+          "name": "userId",
+          "in": "path",
+          "description": "OID of the user",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "name": "body",
+          "in": "body",
+          "description": "User Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/UserCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      },
+      "delete":{
+        "tags": ["user"],
+        "summary": "deletes a user by OID",
+        "description": "",
+        "parameters": [{
+          "name": "userId",
+          "in": "path",
+          "description": "OID of the user",
+          "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+
+      }
+    }
+  },
+  
+  "definitions": {
+    "Course": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "name": {
+          "type": "string",
+          "example": "Computer Science"
+        },
+        "rating": {
+          "$ref": "#/definitions/RatingObj"
+        },
+        "event": {
+          "$ref": "#/definitions/EventObj"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CourseArray": {
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/Course"
+      }
+    },
+    "CourseCreate":{
+      "type": "object",
+      "properties":{
+        "name": {
+          "type": "string",
+          "example": "Computer Science"
+        }
+      }
+    },
+    "EventCreate": {
+      "type": "object",
+      "properties":{
+        "userId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "sub": {
+          "type": "string",
+          "example": "mod"
+        },
+        "subId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "type": {
+          "type": "string",
+          "example": "view"
+        }
+      }
+    },
+    "EventObj":{
+      "type": "object",
+      "properties": {
+        "like":{
+          "$ref":"#/definitions/EventProp"
+        },
+        "view":{
+          "$ref":"#/definitions/EventProp"
+        }
+      }
+    },
+    "EventProp":{
+      "type": "object",
+      "properties":{
+        "count": {
+          "type": "integer",
+          "example": 15
+        }
+      }
+    },
+    "Login":{
+      "type": "object",
+      "properties":{
+        "email": {
+          "type":"string",
+          "example": "john.yeo@u.nus.edu"
+        },
+        "password":{
+          "type":"string",
+          "example": "sOmEpAsSwOrD"
+        }
+      }
+    },
+    "ModCreate": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "CS3219"
+        },
+        "title": {
+          "type": "string",
+          "example": "Software Engineering Principles and Patterns"
+        },
+        "acadYear": {
+          "type": "string",
+          "example": "19/20"
+        },
+        "semester": {
+          "type": "integer",
+          "example": 2
+        },
+        "description": {
+          "type": "string",
+          "example": "This module provides an in-depth, hands-on experience in key aspects of software engineering that accompany the development of software. Based on proven principles and best practices, this module focuses on software architectural design from the perspective of the software process. It covers techniques for requirement elicitation and specification that provide sound base for architectural design. The module covers design decision exploration as well as patterns that explicate principles and best practices in replicable form."
+        },
+        "credit": {
+          "type": "integer",
+          "example": 4
+        },
+        "workload": {
+          "type": "integer",
+          "example": 20
+        }
+      }
+    },
+    "Mod": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "code": {
+          "type": "string",
+          "example": "CS3219"
+        },
+        "title": {
+          "type": "string",
+          "example": "Software Engineering Principles and Patterns"
+        },
+        "acadYear": {
+          "type": "string",
+          "example": "19/20"
+        },
+        "semester": {
+          "type": "integer",
+          "example": 2
+        },
+        "description": {
+          "type": "string",
+          "example": "This module provides an in-depth, hands-on experience in key aspects of software engineering that accompany the development of software. Based on proven principles and best practices, this module focuses on software architectural design from the perspective of the software process. It covers techniques for requirement elicitation and specification that provide sound base for architectural design. The module covers design decision exploration as well as patterns that explicate principles and best practices in replicable form."
+        },
+        "credit": {
+          "type": "integer",
+          "example": 4
+        },
+        "workload": {
+          "type": "integer",
+          "example": 20
+        },
+        "rating": {
+          "$ref": "#/definitions/RatingObj"
+        },
+        "event": {
+          "$ref": "#/definitions/EventObj"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v":{
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "RatingCreate": {
+      "type": "object",
+      "properties":{
+        "userId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "sub": {
+          "type": "string",
+          "example": "mod"
+        },
+        "subId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "type": {
+          "type": "string",
+          "example": "difficulty"
+        },
+        "value": {
+          "type": "integer",
+          "example": 4
+        }
+      }
+    },
+    "RatingObj":{
+      "type": "object",
+      "properties": {
+        "difficulty":{
+          "$ref":"#/definitions/RatingProp"
+        },
+        "star":{
+          "$ref":"#/definitions/RatingProp"
+        }
+      }
+    },
+    "RatingProp":{
+      "type": "object",
+      "properties":{
+        "count": {
+          "type": "integer",
+          "example": 15
+        },
+        "value": {
+          "type": "number",
+          "example": 4.3
+        }
+      }
+    },
+    "Reply": {
+      "type": "object",
+      "properties":{
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "userId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "text": {
+          "type": "string",
+          "example": "I disagree with this review. This guy doesn't know what he's talking about"
+        },
+        "reviewId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "replyId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v":{
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ReplyArray": {
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/Reply"
+      }
+    },
+    "ReplyCreate": {
+      "type": "object",
+      "properties":{
+        "userId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "text": {
+          "type": "string",
+          "example": "I disagree with this review. This guy doesn't know what he's talking about"
+        },
+        "reviewId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "replyId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        }
+      }
+    },
+    "Review": {
+      "type": "object",
+      "properties":{
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "userId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "text": {
+          "type": "string",
+          "example": "I strongly DO NOT recommend this module!"
+        },
+        "modId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "semesterTaken": {
+          "type": "number",
+          "example": 2
+        },
+        "acadYearTaken":{
+          "type": "string",
+          "example": "19/20"
+        },
+        "event": {
+          "$ref": "#/definitions/EventObj"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v":{
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ReviewArray": {
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/Review"
+      }
+    },
+    "ReviewCreate": {
+      "type": "object",
+      "properties":{
+        "userId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "text": {
+          "type": "string",
+          "example": "I strongly DO NOT recommend this module!"
+        },
+        "modId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "semesterTaken": {
+          "type": "number",
+          "example": 2
+        },
+        "acadYearTaken":{
+          "type": "number",
+          "example": "19/20"
+        }
+      }
+    },
+    "School": {
+      "type": "object",
+      "properties":{
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "name":{
+          "type": "string",
+          "example": "National University of Singapore"
+        },
+        "rating": {
+          "$ref": "#/definitions/RatingObj"
+        },
+        "event": {
+          "$ref": "#/definitions/EventObj"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "SchoolArray": {
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/School"
+      }
+    },
+    "SchoolCreate":{
+      "type": "object",
+      "properties": {
+        "name":{
+          "type": "string",
+          "example": "National University of Singapore"
+        }
+      }
+    },
+    "User":{
+      "type": "object",
+      "properties":{
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "name":{
+          "type":"string",
+          "example": "John Yeo"
+        },
+        "email":{
+          "type":"string",
+          "example": "john.yeo@u.nus.edu"
+        },
+        "password":{
+          "type":"string",
+          "example": "sOmEpAsSwOrD"
+        },
+        "schoolStartDate":{
+          "type":"string",
+          "format": "date"
+        },
+        "schoolId":{
+          "type":"string",
+          "example": "512345678910111211314151"
+        },
+        "courseId":{
+          "type":"string",
+          "example": "512345678910111211314151"
+        },
+        "currentYear":{
+          "type":"integer",
+          "example": 4
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "UserCreate":{
+      "type": "object",
+      "properties":{
+        "name":{
+          "type":"string",
+          "example": "John Yeo"
+        },
+        "email":{
+          "type":"string",
+          "example": "john.yeo@u.nus.edu"
+        },
+        "password":{
+          "type":"string",
+          "example": "sOmEpAsSwOrD"
+        },
+        "schoolStartDate":{
+          "type":"string",
+          "format": "date"
+        },
+        "schoolId":{
+          "type":"string",
+          "example": "512345678910111211314151"
+        },
+        "courseId":{
+          "type":"string",
+          "example": "512345678910111211314151"
+        },
+        "currentYear":{
+          "type":"integer",
+          "example": 4
+        }
+      }
+    }
+  }
+}

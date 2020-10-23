@@ -66,6 +66,7 @@ export function decrypt(token: {
   iv: any,
   encryptedData: any
 }) {
+
   let iv = Buffer.from(token.iv, 'hex');
   let encryptedText = Buffer.from(token.encryptedData, 'hex');
   let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);

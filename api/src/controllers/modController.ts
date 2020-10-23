@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Mod from '../models/mod'
 import Rating from '../models/rating'
-import SavedModsList from '../models/savedModsList'
 import { Types } from 'mongoose'
 
 const { ObjectId } = Types
@@ -9,9 +8,9 @@ const { ObjectId } = Types
 export let searchMods = (req: Request, res: Response, next: NextFunction) => {
 
   const {
-    s,
-    page,
-    limit
+    s = "",
+    page = "1",
+    limit = "10"
   } = req.query as { s: string, page: string, limit: string }
 
   const _page = parseInt(page)
@@ -56,6 +55,12 @@ export let getMod = (req: Request, res: Response, next: NextFunction) => {
 
 }
 
+export let updateMod = (req: Request, res: Response, next: NextFunction) => {
+  Mod.findByIdAndUpdate(req.params.id, req.body)
+  .then(()=>res.sendStatus(200))
+  .catch(next)
+}
+
 export let getModRating = (req: Request, res: Response, next: NextFunction) => {
 
   Rating.aggregate([
@@ -75,35 +80,6 @@ export let getModRating = (req: Request, res: Response, next: NextFunction) => {
     const result = results[0]
     res.send(result.value)
   })
-  .catch(next)
-
-}
-
-export let saveMod = (req: Request, res: Response, next:NextFunction) => {
-
-  SavedModsList.findOne({ userId: req.body.userId })
-  .then( savedModsList => {
-
-    if( !savedModsList ){
-      
-      let _savedModsList = new SavedModsList({ userId: req.body.userId })
-
-      return _savedModsList.save()
-
-    } else {
-      return savedModsList
-    }
-
-  })
-  .then(() => {
-
-    return SavedModsList.findOneAndUpdate(
-      { userId: req.body.userId },
-      { $push: { modIds: req.body.modId }}
-    )
-    
-  })
-  .then(() => res.sendStatus(200))
   .catch(next)
 
 }

@@ -10,7 +10,6 @@ router.get("/:id", modController.getMod)
 router.delete("/:id", modController.deleteMod)
 router.get("/", modController.searchMods)
 router.post("/", modController.addMod)
-router.get("/rating/:id", modController.getModRating)
-router.post("/save", modController.saveMod)
+router.put("/:id", modController.updateMod)
 
 export default router;

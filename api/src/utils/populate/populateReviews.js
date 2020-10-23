@@ -4,20 +4,20 @@ const { mongoUri } = require('../../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const { eventTypesEnum } = require('../../../dist/src/models/Event')
-const Event = require('../../../dist/src/models/Event').default
+const Review = require('../../../dist/src/models/review').default
+const User = mongoose.model("User")
 const Mod = mongoose.model("Mod")
-const User = require('../../../dist/src/models/user').default
 
-function populateEvents(eventType){
+function populateReviews(){
 
-  return Event.remove({})
+  return Review.remove({})
   .then(() => {
-    console.log("Populating events")
+
     const promises = []
-  
+
+    console.log("Populating reviews")
     // create views
-    for( let i = 0; i < 500; i++ ){
+    for( let i = 0; i < 100; i++ ){
       
       promises.push(
         User.aggregate([
@@ -43,14 +43,15 @@ function populateEvents(eventType){
             const user = users[0]
             const mod = mods[0]
   
-            const newEvent = new Event({
-              type: eventType,
+            const newReview = new Review({
+              text: "This is a fake review",
               userId: user._id,
-              subId: mod._id,
-              sub: "mod"
+              modId: mod._id,
+              acadYearTaken: 4,
+              semesterTaken: 1
             })
   
-            return newEvent.save()
+            return newReview.save()
   
           })
         })
@@ -60,14 +61,13 @@ function populateEvents(eventType){
     }
 
     return Promise.all(promises)
-
   })
-}
 
-function populateViews(){ return populateEvents( eventTypesEnum.view )}
-function populateLikes(){ return populateEvents(eventTypesEnum.like)}
+}
 
 module.exports = {
-  populateLikes,
-  populateViews
+  populateReviews
 }
+
+
+

@@ -3,6 +3,9 @@ export function validateString(str: string): boolean{
 }
 
 export function validateEmail(email: string): boolean {
-  const arr = email.split("@")[1].split(".")
-  return arr[arr.length - 1] == "edu"
+  
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$/
+
+  return regex.test(email)
+
 }

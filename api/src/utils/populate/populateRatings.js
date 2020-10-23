@@ -4,20 +4,20 @@ const { mongoUri } = require('../../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const { eventTypesEnum } = require('../../../dist/src/models/Event')
-const Event = require('../../../dist/src/models/Event').default
+const { ratingTypesEnum } = require('../../../dist/src/models/Rating')
+const Rating = require('../../../dist/src/models/Rating').default
+const User = mongoose.model("User")
 const Mod = mongoose.model("Mod")
-const User = require('../../../dist/src/models/user').default
 
-function populateEvents(eventType){
+function populateRatings(ratingType){
 
-  return Event.remove({})
+  return Rating.remove({})
   .then(() => {
-    console.log("Populating events")
+    console.log("Populating ratings")
     const promises = []
   
     // create views
-    for( let i = 0; i < 500; i++ ){
+    for( let i = 0; i < 100; i++ ){
       
       promises.push(
         User.aggregate([
@@ -43,14 +43,17 @@ function populateEvents(eventType){
             const user = users[0]
             const mod = mods[0]
   
-            const newEvent = new Event({
-              type: eventType,
+            const value = Math.floor(Math.random() * 5) + 0
+
+            const newRating = new Rating({
+              type: ratingType,
               userId: user._id,
-              subId: mod._id,
-              sub: "mod"
+              value,
+              sub: "mod",
+              subId: mod._id
             })
   
-            return newEvent.save()
+            return newRating.save()
   
           })
         })
@@ -62,12 +65,13 @@ function populateEvents(eventType){
     return Promise.all(promises)
 
   })
+
 }
 
-function populateViews(){ return populateEvents( eventTypesEnum.view )}
-function populateLikes(){ return populateEvents(eventTypesEnum.like)}
+function populateDifficulty(){ return populateRatings( ratingTypesEnum.difficulty )}
+function populateStar(){ return populateRatings(ratingTypesEnum.star)}
 
 module.exports = {
-  populateLikes,
-  populateViews
+  populateStar,
+  populateDifficulty
 }

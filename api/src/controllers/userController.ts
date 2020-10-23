@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '../models/user'
-import SavedModsList from '../models/savedModsList'
-import * as UserServices from '../services/user'
-import * as SecurityServices from '../services/security'
+import { hash } from '../services/security'
 
 export let getUser = (req: Request, res: Response, next: NextFunction) => {
 
@@ -13,7 +11,7 @@ export let getUser = (req: Request, res: Response, next: NextFunction) => {
 
 export let addUser = (req: Request, res: Response, next: NextFunction) => {
 
-  SecurityServices.hash(req.body.password)
+  hash(req.body.password)
   .then( hashedPassword => {
 
     let user = new User({ 
@@ -38,12 +36,4 @@ export let updateUser = (req: Request, res: Response, next: NextFunction) => {
   User.findByIdAndUpdate(req.params.id, req.body)
   .then(() => res.sendStatus(200))
   .catch(next)
-}
-
-export let getUserSavedMods = (req: Request, res: Response, next: NextFunction) => {
-
-  SavedModsList.findOne({ userId: req.params.id })
-  .then( savedModsList => res.send(savedModsList))
-  .catch(next)
-  
 }
