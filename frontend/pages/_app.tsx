@@ -1,16 +1,20 @@
 import type { AppProps } from "next/app";
 import { wrapper } from "../redux/store";
-import Head from "next/head";
 
+import Head from "next/head";
+import Modal from "react-modal";
 import NavBar from "../components/Navbar";
 
 const ReduxApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+
+  Modal.setAppElement("#body");
+
   return (
     <>
       <Head>
         <title>RottenMods</title>
       </Head>
-      <div style={styles.layout}>
+      <div id="body" style={styles.layout}>
         <div style={styles.container}>
           <NavBar />
           <Component {...pageProps} />

@@ -4,6 +4,7 @@ import cssStyle from "../styles/styles.module.css";
 import CommentCard from "./CommentCard";
 import CrossIcon from "../icons/CrossIcon";
 import Modal from "react-modal";
+import { reviewBlue } from "../styles/colors";
 
 interface CommentsModalProps extends ModalState {
   comments: Comment[]
@@ -62,7 +63,7 @@ const styles = {
     borderWidth: 0,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
     padding: "30px 30px 20px 30px",
-    backgroundColor: "#7497CC",
+    backgroundColor: reviewBlue,
   },
   header: {
     display: "flex",

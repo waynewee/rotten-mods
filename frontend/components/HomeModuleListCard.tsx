@@ -4,6 +4,7 @@ import { Module } from "../types";
 import { ADD_MODULE_FOR_COMPARISON } from "../redux/constants";
 
 import StarFilledIcon from "../icons/StarFilledIcon";
+import { codeBlue, compareOrange, ratingsYellow, descriptionGreen } from "../styles/colors";
 
 interface HomeModuleListCardProps {
   module: Module
@@ -13,7 +14,8 @@ const HomeModuleListCard: React.FC<HomeModuleListCardProps> = ({ module }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { code, title, ratings } = module;
+  const { code, title, rating } = module;
+  const star = rating?.star?.value || 0;
 
   const navigateToModuleReviewPage = () => {
     router.push({
@@ -44,7 +46,7 @@ const HomeModuleListCard: React.FC<HomeModuleListCardProps> = ({ module }) => {
           {title}
         </div>
         <div style={styles.ratings}>
-          <StarFilledIcon style={styles.ratingsIcon} /> {ratings}
+          <StarFilledIcon style={styles.ratingsIcon} /> {star}
         </div>
       </div>
     </div>
@@ -55,7 +57,7 @@ const styles = {
   container: {
     flex: 1,
     width: 300,
-    height: 150,
+    height: 170,
     display: "flex",
     flexDirection: "column" as "column",
     alignItems: "center",
@@ -80,7 +82,7 @@ const styles = {
     alignItems: "center",
     height: 40,
     width: 100,
-    backgroundColor: "#2D538C",
+    backgroundColor: codeBlue,
     fontSize: 16,
     borderRadius: 10,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)"
@@ -91,7 +93,7 @@ const styles = {
     height: 30,
     width: 30,
     borderRadius: 15,
-    backgroundColor: "#F2A966",
+    backgroundColor: compareOrange,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -100,11 +102,11 @@ const styles = {
   },
   lowerContainer: {
     width: 300,
-    height: 130,
+    height: 150,
     display: "flex",
     flexDirection: "column" as "column",
     justifyContent: "center",
-    backgroundColor: "#9CB6BA",
+    backgroundColor: descriptionGreen,
     fontFamily: "Roboto",
     borderRadius: 15,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
@@ -118,10 +120,9 @@ const styles = {
     fontWeight: "bold" as "bold",
     fontSize: 20,
     marginTop: 25,
-    padding: "0px 20px",
+    padding: "5px 20px 0px 20px",
   },
   ratings: {
-    // backgroundColor: "red",
     height: 50,
     display: "flex",
     justifyContent: "center",
@@ -130,7 +131,7 @@ const styles = {
   },
   ratingsIcon: {
     height: 20,
-    color: "#F2E143",
+    color: ratingsYellow,
     marginBottom: 4,
     marginRight: 10
   }

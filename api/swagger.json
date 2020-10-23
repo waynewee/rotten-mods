@@ -25,7 +25,7 @@
   ],
   "paths": {
     "/user": {
-      "put": {
+      "post": {
         "tags": [
           "Users"
         ],
@@ -88,7 +88,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Update user with give ID",
         "tags": [
           "Users"
@@ -131,7 +131,7 @@
       }
     },
     "/school": {
-      "put": {
+      "post": {
         "tags": [
           "Schools"
         ],
@@ -194,7 +194,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Update school with give ID",
         "tags": [
           "Schools"
@@ -220,7 +220,7 @@
       }
     },
     "/course": {
-      "put": {
+      "post": {
         "tags": [
           "Courses"
         ],
@@ -283,7 +283,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Update course with give ID",
         "tags": [
           "Courses"
@@ -309,7 +309,7 @@
       }
     },
     "/mod": {
-      "put": {
+      "post": {
         "tags": [
           "Mods"
         ],
@@ -373,6 +373,30 @@
           "type": "string"
         }
       ],
+      "put": {
+        "summary": "Update mod with given ID",
+        "tags": [
+          "Mods"
+        ],
+        "parameters": [
+          {
+            "name": "mod",
+            "in": "body",
+            "description": "Mod with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Mod"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mod is updated",
+            "schema": {
+              "$ref": "#/definitions/Mod"
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "Mods"
@@ -435,7 +459,7 @@
           }
         }
       ],
-      "put":{
+      "post":{
         "tags": [
           "Mods"
         ],
@@ -448,7 +472,7 @@
       }
     },
     "/event": {
-      "put": {
+      "post": {
         "tags": [
           "Events"
         ],
@@ -506,7 +530,7 @@
       }
     },
     "/rating": {
-      "put": {
+      "post": {
         "tags": [
           "Rating"
         ],
@@ -535,7 +559,7 @@
       }
     },
     "/rating/{ratingId}": {
-      "post": {
+      "put": {
         "tags": [
           "Rating"
         ],
@@ -575,7 +599,7 @@
       }
     },
     "/review": {
-      "put": {
+      "post": {
         "tags": [
           "Reviews"
         ],
@@ -654,7 +678,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Updates review",
         "parameters": [
           {
@@ -715,6 +739,37 @@
         },
         "title":{
           "type": "string"
+        },
+        "acadYear":{
+          "type": "string"
+        },
+        "semester":{
+          "type": "string"
+        },
+        "faculty":{
+          "type":"string"
+        },
+        "department":{
+          "type":"string"
+        },
+        "crossModule":{
+          "type":"string"
+        },
+        "credit":{
+          "type":"number"
+        },
+        "workload":{
+          "type":"number"
+        },
+        "rating":{
+          "properties":{
+            "difficulty":{
+              "$ref": "#/definitions/ModRating"
+            },
+            "star":{
+              "$ref": "#/definitions/ModRating"  
+            }
+          }
         }
       }
     },
@@ -735,6 +790,16 @@
       "properties":{
         "name":{
           "type": "string"
+        }
+      }
+    },
+    "ModRating":{
+      "properties":{
+        "count":{
+          "type": "number"
+        },
+        "value": {
+          "type": "number"
         }
       }
     },
@@ -767,16 +832,21 @@
     },
     "Event": {
       "required": [
-        "email"
+        "type",
+        "userId"
       ],
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": ["likedMod", "viewedMod", "likedReview", "likedReply", "searched"]
         },
         "userId": {
           "type": "string"
         },
         "modId": {
+          "type": "string"
+        },
+        "searchTerm":{
           "type": "string"
         }
       }
@@ -789,7 +859,8 @@
       ],
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": ["difficulty", "star"]
         },
         "userId": {
           "type": "string"
@@ -817,6 +888,9 @@
       }
     },
     "SavedModsList":{
+      "required":[
+        "userId"
+      ],
       "properties":{
         "modIds": {
           "type": "array",
@@ -844,6 +918,15 @@
         },
         "modId": {
           "type": "string"
+        },
+        "semesterTaken":{
+          "type": "number"
+        },
+        "workload":{
+          "type":"number"
+        },
+        "yearTaken":{
+          "type": "number"
         }
       }
     },

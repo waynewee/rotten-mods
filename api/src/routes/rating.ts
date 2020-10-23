@@ -6,8 +6,8 @@ const router = express.Router()
 
 import * as ratingController from '../controllers/ratingController' 
 
-router.put("/rating", ratingController.addRating)
-router.delete("/rating/:id", ratingController.deleteRating)
-router.post("/rating/:id", ratingController.updateRating)
+router.post("/", ratingController.addRating)
+router.delete("/:id", ratingController.deleteRating)
+router.put("/:id", ratingController.updateRating)
 
 export default router;

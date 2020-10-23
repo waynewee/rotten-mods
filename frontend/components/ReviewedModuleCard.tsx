@@ -1,5 +1,6 @@
 import BookmarkIcon from "../icons/BookmarkFilledIcon";
 import PenIcon from "../icons/PenIcon";
+import { codeBlue } from "../styles/colors";
 
 const ReviewedModuleCard: React.FC = () => {
   const dummyModuleCodes: string[] = [
@@ -29,7 +30,7 @@ const ReviewedModuleCard: React.FC = () => {
 const styles = {
   moduleCode: {
     padding: 12,
-    backgroundColor: "#2D538C",
+    backgroundColor: codeBlue,
     color: "#fff",
     borderRadius: 15,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",

@@ -5,7 +5,10 @@ import { validateString } from '../helpers/validators'
 export const ReviewSchema = createSchema({
   userId: Type.objectId({ required: true }),
   text: Type.string({ required: true, validate: validateString }),
-  modId: Type.objectId({ required: true})
+  modId: Type.objectId({ required: true}),
+  semesterTaken: Type.number(),
+  workload: Type.number(),
+  yearTaken: Type.number()
 },{
   timestamps: true
 })

@@ -1,7 +1,8 @@
+import { useState } from 'react';
 
 import { Modal, Button, Form, Input, Divider, Select, ConfigProvider } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined, LaptopOutlined, CalendarOutlined, PlusOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { codeBlue } from "../styles/colors";
 
 import axios from 'axios';
 
@@ -211,10 +212,10 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
 };
 
 const styles = {
-  loginFormButton: {
-    width: "100%",
-    backgroundColor: "#2D538C",
-  }
+    loginFormButton: {
+        width: "100%",
+        backgroundColor: codeBlue,
+    }
 }
 
 
