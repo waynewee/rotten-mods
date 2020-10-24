@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Review from '../models/review'
+import User from '../models/user'
 
 export let getAllReviews = (req: Request, res: Response, next: NextFunction) => {
 
@@ -21,7 +22,20 @@ export let getReviewsByModId = (req: Request, res: Response, next: NextFunction)
   Review.find({modId: req.params.modId})
   .limit(_limit)
   .skip((_page - 1) * _limit)
-  .then(reviews => res.send(reviews))
+  .then(reviews => {
+    
+    return Promise.all(
+      reviews.map( review => {
+        return User.findAndSanitize({ _id: review.userId })
+        .then( user => {
+          let reviewObj = review.toJSON()
+          reviewObj.user = user?.toJSON()
+          return reviewObj 
+        })
+      })
+    )
+    .then( reviews => res.send(reviews))
+  })
   .catch(next)
 }
 

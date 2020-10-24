@@ -16,6 +16,12 @@ export const UserSchema = createSchema({
 
 export type UserDoc = ExtractDoc<typeof UserSchema> 
 
-const User = typedModel('User', UserSchema);
+const User = typedModel('User', UserSchema, undefined, undefined, {
+  findAndSanitize(query: Object){
+    return User.findOne(query,{
+      password: 0
+    })
+  }
+});
 
 export default User
