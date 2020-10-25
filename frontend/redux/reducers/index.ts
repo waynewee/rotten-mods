@@ -6,7 +6,7 @@ import compareReducer from "./compareReducer";
 const reducer = combineReducers({
   auth: authReducer,
   search: searchReducer,
-  compare: compareReducer
+  compare: compareReducer,
 });
 
 export default reducer;

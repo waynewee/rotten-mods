@@ -11,6 +11,8 @@ export interface Module {
   };
   university: string;
   _id: string;
+  credit: number;
+  semester: number[];
 }
 
 export interface Rating {

@@ -36,7 +36,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, comments = dummyComment
   const [isCommentsModalVisible, setCommentsModalVisibility] = useState(false);
   const [isAddCommentModalVisible, setAddCommentModalVisibility] = useState(false);
 
-  const { userName, likes, text, _id } = review;
+  const { userName, likes = 0, text, _id } = review;
 
   const onLikeReview = () => {
 
@@ -90,6 +90,7 @@ const styles = {
     borderRadius: 15,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
     marginBottom: 15,
+    width: "100%"
   },
   header: {
     display: "flex",

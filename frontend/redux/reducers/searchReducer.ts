@@ -12,7 +12,6 @@ const searchReducer = (
 ) => {
   switch (action.type) {
     case SEARCH_TERM:
-      console.log("Searching Term");
       return { ...state, searchTerm: action.payload };
     default:
       return state;

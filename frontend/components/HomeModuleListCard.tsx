@@ -14,20 +14,23 @@ const HomeModuleListCard: React.FC<HomeModuleListCardProps> = ({ module }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { code, title, rating } = module;
+  const { code, title, rating, _id } = module;
   const star = rating?.star?.value || 0;
 
   const navigateToModuleReviewPage = () => {
     router.push({
       pathname: "/module-review",
-      query: { module: JSON.stringify(module) }
+      query: { id: _id }
     })
   }
 
   const onCompare = () => {
     dispatch({
       type: ADD_MODULE_FOR_COMPARISON,
-      payload: code
+      payload: {
+        id: _id,
+        code
+      }
     })
   }
 

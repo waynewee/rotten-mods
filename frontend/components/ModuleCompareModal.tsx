@@ -1,4 +1,3 @@
-import { ModuleCompareState } from "../redux/types";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
@@ -9,15 +8,19 @@ import { compareOrange } from "../styles/colors";
 
 const ModuleCompareModal: React.FC = () => {
   const router = useRouter();
+  const firstModuleId: string = useSelector(state => state.compare.firstModuleId);
   const firstModuleCode: string = useSelector(state => state.compare.firstModuleCode);
+  const secondModuleId: string = useSelector(state => state.compare.secondModuleId);
   const secondModuleCode: string = useSelector(state => state.compare.secondModuleCode);
-  const hasModuleToCompare = firstModuleCode || secondModuleCode ? "visible" : "hidden";
+  const hasModuleToCompare = firstModuleId || secondModuleId ? "visible" : "hidden";
 
   const navigateToModuleComparisonPage = () => {
-    router.push({
-      pathname: "/module-comparison",
-      query: { firstModuleCode, secondModuleCode }
-    })
+    if (firstModuleId && secondModuleId) {
+      router.push({
+        pathname: "/module-comparison",
+        query: { firstModuleId, secondModuleId }
+      })
+    }
   }
 
   return (

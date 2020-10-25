@@ -17,7 +17,6 @@ const searchModule = async (searchTerm) => {
   const response = await axios.get(
     `${baseUrl}?${queryString.stringify(query)}`
   );
-  console.log("response:", response);
   return response.data;
 };
 

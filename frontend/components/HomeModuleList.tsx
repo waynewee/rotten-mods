@@ -16,7 +16,8 @@ const HomeModuleList: FC = () => {
       difficulty: 4.7,
       ratings: 4.8,
       workload: 10,
-      university: "NUS"
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3518"
     },
     {
       code: "CS3203",
@@ -26,7 +27,8 @@ const HomeModuleList: FC = () => {
       difficulty: 5,
       ratings: 4.7,
       workload: 20,
-      university: "NUS"
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3513"
     },
     {
       code: "CS2103T",
@@ -36,7 +38,8 @@ const HomeModuleList: FC = () => {
       difficulty: 4.5,
       ratings: 4.3,
       workload: 10,
-      university: "NUS"
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3505"
     },
     {
       code: "CS3219",
@@ -46,7 +49,8 @@ const HomeModuleList: FC = () => {
       difficulty: 4.7,
       ratings: 4.8,
       workload: 10,
-      university: "NUS"
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3518"
     },
     {
       code: "CS3203",
@@ -56,7 +60,8 @@ const HomeModuleList: FC = () => {
       difficulty: 5,
       ratings: 4.7,
       workload: 20,
-      university: "NUS"
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3513"
     },
     {
       code: "CS2103T",
@@ -66,7 +71,8 @@ const HomeModuleList: FC = () => {
       difficulty: 4.5,
       ratings: 4.3,
       workload: 10,
-      university: "NUS"
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3505"
     },
     {
       code: "CS3219",
@@ -76,7 +82,9 @@ const HomeModuleList: FC = () => {
       difficulty: 4.7,
       ratings: 4.8,
       workload: 10,
-      university: "NUS"
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3518"
+
     },
     {
       code: "CS3203",
@@ -86,18 +94,20 @@ const HomeModuleList: FC = () => {
       difficulty: 5,
       ratings: 4.7,
       workload: 20,
-      university: "NUS"
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3513"
     },
-    // {
-    //   code: "CS2103T",
-    //   title: "Software Engineering2",
-    //   description:
-    //     "This module introduces the necessary conceptual and analytical tools for systematic and rigorous development of software systems. It covers four main areas of software development, namely object-oriented system analysis, object-oriented system modelling and design, implementation, and testing, with emphasis on system modelling and design and implementation of software modules that work cooperatively to fulfill the requirements of the system. Tools and techniques for software development, such as Unified Modelling Language (UML), program specification, and testing methods, will be taught. Major software engineering issues such as modularisation criteria, program correctness, and software quality will also be covered.",
-    //   difficulty: 4.5,
-    //   ratings: 4.3,
-    //   expectedHours: 10,
-    //   university: "NUS"
-    // },
+    {
+      code: "CS2103T",
+      title: "Software Engineering2",
+      description:
+        "This module introduces the necessary conceptual and analytical tools for systematic and rigorous development of software systems. It covers four main areas of software development, namely object-oriented system analysis, object-oriented system modelling and design, implementation, and testing, with emphasis on system modelling and design and implementation of software modules that work cooperatively to fulfill the requirements of the system. Tools and techniques for software development, such as Unified Modelling Language (UML), program specification, and testing methods, will be taught. Major software engineering issues such as modularisation criteria, program correctness, and software quality will also be covered.",
+      difficulty: 4.5,
+      ratings: 4.3,
+      expectedHours: 10,
+      university: "NUS",
+      _id: "5f93fe299a31d12bf74a3505"
+    },
   ];
 
   const allModuleCards = dummyData.map((module, index) => <HomeModuleListCard module={module} key={index} />);

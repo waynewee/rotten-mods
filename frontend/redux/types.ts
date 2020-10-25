@@ -6,12 +6,15 @@ export interface SearchState {
   searchTerm: string;
 }
 
+export interface ModuleCompareState {
+  firstModuleId: string;
+  secondModuleId: string;
+  firstModuleCode: string;
+  secondModuleCode: string;
+}
+
 export interface ReduxState {
   auth: AuthState;
   search: SearchState;
-}
-
-export interface ModuleCompareState {
-  firstModuleCode: string;
-  secondModuleCode: string;
+  compare: ModuleCompareState;
 }

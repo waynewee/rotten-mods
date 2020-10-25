@@ -8,7 +8,9 @@ import {
 import { ModuleCompareState } from "../types";
 
 const initialState: ModuleCompareState = {
-  firstModuleCode: "", // TODO: To set to empty string
+  firstModuleId: "",
+  firstModuleCode: "",
+  secondModuleId: "",
   secondModuleCode: "",
 };
 
@@ -18,21 +20,23 @@ const compareReducer = (
 ) => {
   switch (action.type) {
     case ADD_MODULE_FOR_COMPARISON:
+      const { id, code } = action.payload;
+
       // if modules to compare are the same, return state
-      if (state.firstModuleCode == action.payload) {
+      if (state.firstModuleId == id) {
         return state;
       }
 
-      if (!state.firstModuleCode) {
-        return { ...state, firstModuleCode: action.payload };
+      if (!state.firstModuleId) {
+        return { ...state, firstModuleId: id, firstModuleCode: code };
       }
 
-      return { ...state, secondModuleCode: action.payload };
+      return { ...state, secondModuleId: id, secondModuleCode: code };
     case DELETE_MODULE_FOR_COMPARISON:
       if (action.payload == FIRST) {
-        return { ...state, firstModuleCode: "" };
+        return { ...state, firstModuleId: "", firstModuleCode: "" };
       } else if (action.payload == SECOND) {
-        return { ...state, secondModuleCode: "" };
+        return { ...state, secondModuleId: "", secondModuleCode: "" };
       } else {
         return state;
       }

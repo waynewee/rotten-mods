@@ -12,7 +12,7 @@ interface ReviewToSubmit {
 }
 
 const getReviewsOfModule = async (modId) => {
-  const response = await axios.get(`${reviewBaseUrl}/${modId}`);
+  const response = await axios.get(`${reviewBaseUrl}/mod/${modId}`);
   return response.data;
 };
 

@@ -3,6 +3,8 @@ import { Module } from "../types";
 
 import ModuleSmallDetail from "../components/ModuleSmallDetail";
 import UserClockIcon from "../icons/UserClockIcon";
+import CoinsFilledIcon from "../icons/CoinsFilledIcon";
+import HourGlassHalfFilledIcon from "../icons/HourGlassHalfFilledIcon";
 import LayerGroupIcon from "../icons/LayerGroupIcon";
 import StarFilledIcon from "../icons/StarFilledIcon";
 import StarOutlinedIcon from "../icons/StarOutlinedIcon";
@@ -25,7 +27,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
   setAddReviewModalVisibility,
   setAddRatingsModalVisibility
 }) => {
-  const { code, workload, rating, university, description, title } = module;
+  const { code, workload = 10, rating, university, description, title, credit = 4, semester = [1, 2] } = module;
   const difficulty = rating?.difficulty?.value || 0;
   const star = rating?.star?.value || 0;
 
@@ -38,12 +40,24 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
             <ModuleSmallDetail
               Icon={UserClockIcon}
               text={`Expected Workload/Week: ${workload} hours`}
-              iconStyle={{ color: "#B9B9B9" }}
+              iconStyle={styles.iconStyle}
             />
             <ModuleSmallDetail
               Icon={LayerGroupIcon}
               text={`Difficulty: ${difficulty.toFixed(1)}/5`}
-              iconStyle={{ color: "#B9B9B9" }}
+              iconStyle={styles.iconStyle}
+            />
+          </div>
+          <div style={styles.moduleSmallDetailsColumn}>
+            <ModuleSmallDetail
+              Icon={CoinsFilledIcon}
+              text={`Credit: ${credit}`}
+              iconStyle={styles.iconStyle}
+            />
+            <ModuleSmallDetail
+              Icon={HourGlassHalfFilledIcon}
+              text={`Semester(s) offered: ${semester.sort().join(", ")}`}
+              iconStyle={styles.iconStyle}
             />
           </div>
           <div style={styles.moduleSmallDetailsColumn}>
@@ -55,7 +69,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
             <ModuleSmallDetail
               Icon={UniversityIcon}
               text={`University: ${university}`}
-              iconStyle={{ color: "#B9B9B9" }}
+              iconStyle={styles.iconStyle}
             />
           </div>
         </div>
@@ -143,6 +157,9 @@ const styles = {
     textAlign: "justify" as "justify",
     fontWeight: 300,
   },
+  iconStyle: {
+    color: "#B9B9B9"
+  }
 };
 
 export default ModuleInformation;

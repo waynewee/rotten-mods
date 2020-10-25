@@ -14,7 +14,7 @@ interface ModuleListCardProps {
 const SearchModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { code, title, description } = module;
+  const { code, title, description, _id } = module;
 
   const navigateToModuleReviewPage = () => {
     router.push({
@@ -26,7 +26,10 @@ const SearchModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
   const onCompare = () => {
     dispatch({
       type: ADD_MODULE_FOR_COMPARISON,
-      payload: code
+      payload: {
+        id: _id,
+        code
+      }
     })
   }
 
