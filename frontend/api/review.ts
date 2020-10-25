@@ -29,6 +29,8 @@ const addReviewOfModule = async (
     semesterTaken,
     yearTaken,
     workload,
+  },{
+    withCredentials:true
   });
 
   console.log(`Post Review:`, response.status);
@@ -46,6 +48,8 @@ const addRatingOfModule = async (
     userId,
     modId,
     value,
+  }, {
+    withCredentials: true
   });
 
   console.log(`${type}:`, response.status);

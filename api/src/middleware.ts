@@ -26,6 +26,7 @@ export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     })
 
   } catch( e ){
+    console.log(e)
     res.sendStatus(403)
   }
 

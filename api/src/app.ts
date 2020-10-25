@@ -13,18 +13,17 @@ mongoose.connect(config.mongoUri)
 .then(() => console.log("Connected"))
 .catch(err => console.log(err.message))
 
-const corsOpts = {
-  origin: [
-    //add allowed origins here
-  ]
-}
-
 const app = express();
 
 app.set("port", process.env.PORT || 8080);
 app.use(bodyParser.json());
 //add corsOpts here
-app.use(cors());
+app.use(cors({ 
+  origin: "http://localhost:3000", 
+  credentials: true, 
+  methods: ['GET', 'PUT', 'POST', 'DELETE'], 
+  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"] 
+}));
 app.use(cookieParser());
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))

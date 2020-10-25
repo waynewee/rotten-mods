@@ -11,8 +11,10 @@ const Home: NextPage = ({ }) => {
   // Mock Login API call
   useEffect(() => {
     axios.post("http://localhost:8080/api/login", {
-      email: "xnZZLvmrjsqrNFJd@email.edu",
+      email: "1BpyBFZa0XlvyxZx@email.edu",
       password: "12345"
+    }, {
+      withCredentials: true
     }).then(res => {
       console.log("res:", res)
     })
