@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Module } from "../types";
+import bookmarkApi from "../api/bookmark";
 
 import ModuleSmallDetail from "../components/ModuleSmallDetail";
 import UserClockIcon from "../icons/UserClockIcon";
@@ -12,7 +13,7 @@ import UniversityIcon from "../icons/UniversityIcon";
 import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
 import BookmarkOutlinedIcon from "../icons/BookmarkOutlinedIcon";
 import { BookFilled, BookOutlined } from "@ant-design/icons";
-import PenIcon from "../icons/PenIcon";
+import PenFilledIcon from "../icons/PenFilledIcon";
 import Button from "./Button";
 import { codeBlue, descriptionGreen, ratingsYellow } from "../styles/colors";
 
@@ -27,9 +28,35 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
   setAddReviewModalVisibility,
   setAddRatingsModalVisibility
 }) => {
-  const { code, workload = 10, rating, university, description, title, credit = 4, semester = [1, 2] } = module;
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isPlanned, setIsPlanned] = useState(false);
+
+  const { code, workload = 10, rating, university, description, title, credit = 4, semester = [1, 2], _id } = module;
   const difficulty = rating?.difficulty?.value || 0;
   const star = rating?.star?.value || 0;
+
+  // TODO: Get whether is it bookmarked
+  // TODO: Get whether is it in study planner
+  // TODO: useSelector(userId)
+
+  const toggleBookmark = async () => {
+    if (isBookmarked) {
+      // await bookmarkApi.addBookmark(userId, _id);
+    } else {
+      // await bookmarkApi.deleteBookmark(bookmarkId);
+    }
+
+    setIsBookmarked(!isBookmarked);
+  }
+
+  const togglePlanner = async () => {
+    if (isPlanned) {
+      // await plannerApi.addToPlanner(userId, modId, semester)
+    } else {
+      // await plannerApi.remoteFromPlanner(plannerId) 
+    }
+    setIsPlanned(!isPlanned);
+  }
 
   return (
     <div style={styles.container}>
@@ -74,15 +101,23 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
           </div>
         </div>
         <div style={styles.actionsBar}>
-          <Button onClick={() => { }}>
-            <BookOutlined
-              style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 25 }}
-            />
+          <Button onClick={togglePlanner}>
+            {isPlanned
+              ? (<BookFilled
+                style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 25 }}
+              />)
+              : (<BookOutlined
+                style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 25 }}
+              />)}
           </Button>
-          <Button onClick={() => { }}>
-            <BookmarkOutlinedIcon
-              style={{ ...styles.actionIcon, color: "#289FA7" }}
-            />
+          <Button onClick={toggleBookmark}>
+            {isBookmarked
+              ? (<BookmarkFilledIcon
+                style={{ ...styles.actionIcon, color: "#289FA7" }}
+              />)
+              : (<BookmarkOutlinedIcon
+                style={{ ...styles.actionIcon, color: "#289FA7" }}
+              />)}
           </Button>
           <Button onClick={() => setAddRatingsModalVisibility(true)}>
             <StarOutlinedIcon
@@ -90,7 +125,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
             />
           </Button>
           <Button onClick={() => setAddReviewModalVisibility(true)}>
-            <PenIcon style={{ ...styles.actionIcon, color: "#7497CC" }} />
+            <PenFilledIcon style={{ ...styles.actionIcon, color: "#7497CC" }} />
           </Button>
         </div>
       </div>

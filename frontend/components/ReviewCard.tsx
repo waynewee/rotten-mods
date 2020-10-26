@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Comment, Review } from "../types";
+import { useState, useEffect } from "react";
+import { Review } from "../types";
+import eventApi from "../api/event";
+import commentApi from "../api/comment";
 
 import AddCommentModal from "./AddCommentModal";
 import Button from "./Button";
@@ -9,52 +11,55 @@ import LikeOutlinedIcon from "../icons/LikeOutlinedIcon";
 import { reviewBlue } from "../styles/colors";
 
 interface ReviewCardProps {
-  review: Review;
-  comments: Comment[];
+  review: Review & { user: { name: string, _id: string } };
+  updateReviews: () => void;
+  showActions?: boolean;
 }
 
-const dummyComments: Comment[] = [
-  {
-    userName: "Chester Sim",
-    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibend"
-  },
-  {
-    userName: "Jeremy Low",
-    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibend"
-  },
-  {
-    userName: "Chester Sim",
-    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibend"
-  },
-  {
-    userName: "Jeremy Low",
-    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibend"
-  }
-]
-
-const ReviewCard: React.FC<ReviewCardProps> = ({ review, comments = dummyComments }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ review, updateReviews, showActions = true }) => {
   const [isCommentsModalVisible, setCommentsModalVisibility] = useState(false);
   const [isAddCommentModalVisible, setAddCommentModalVisibility] = useState(false);
+  const [comments, setComments] = useState([]);
 
-  const { userName, likes = 0, text, _id } = review;
+  const { user, text, acadYearTaken, semesterTaken, event, _id } = review;
+  const { name } = user;
+  const like = event?.like?.count ?? 0;
 
-  const onLikeReview = () => {
+  useEffect(() => {
+    fetchComments();
+  }, [])
 
+  const fetchComments = async () => {
+    const fetchedComments = await commentApi.getCommentsOfReview(review._id);
+    setComments(fetchedComments);
+  }
+
+  const onLikeReview = async () => {
+    // TODO: Uncomment
+    // if (userId == user._id) return;
+
+    await eventApi.addEvent(user._id, "review", _id, "like");
+    updateReviews();
   }
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <div style={styles.userInformation}>
-          <div>Img</div>
-          <div>{userName}</div>
+          <span>{name}</span>
+          <span style={styles.divider}>|</span>
+          <span>AY{acadYearTaken}, Sem {semesterTaken}</span>
+          <span style={styles.divider}>|</span>
+          <span>Difficulty: </span>
+          <span style={styles.divider}>|</span>
+          <span>Rating: </span>
         </div>
-        <div style={styles.actionsBar}>
+        {showActions && (<div style={styles.actionsBar}>
           <div style={styles.action}>
             <Button onClick={onLikeReview}>
               <LikeOutlinedIcon style={styles.icon} />
             </Button>
-            <span>{`${likes} Likes`}</span>
+            <span>{`${like} Likes`}</span>
           </div>
           <span style={{ margin: "0px 10px" }}>|</span>
           <div style={styles.action}>
@@ -65,16 +70,17 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, comments = dummyComment
               {`${comments.length} Comments`}
             </Button>
           </div>
-        </div>
+        </div>)}
       </div>
       <div style={styles.review}>{text}</div>
       <AddCommentModal
-        reviewId={""}
+        fetchComments={fetchComments}
+        reviewId={_id}
         isModalVisible={isAddCommentModalVisible}
         setModalVisibility={setAddCommentModalVisibility}
       />
       <CommentModal
-        comments={dummyComments}
+        comments={comments}
         isModalVisible={isCommentsModalVisible}
         setModalVisibility={setCommentsModalVisibility}
       />
@@ -98,9 +104,11 @@ const styles = {
   },
   userInformation: {
     display: "flex",
+    flexWrap: "wrap"
   },
   actionsBar: {
     display: "flex",
+    flexWrap: "wrap"
   },
   action: {
     display: "flex",
@@ -114,6 +122,9 @@ const styles = {
     marginTop: 10,
     textAlign: "justify" as "justify"
   },
+  divider: {
+    margin: "0px 10px"
+  }
 };
 
 export default ReviewCard;

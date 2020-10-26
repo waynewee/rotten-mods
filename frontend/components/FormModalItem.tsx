@@ -27,11 +27,16 @@ const FormModalItem: React.FC<FormModalItemProps> = ({ type = "input", label, va
       case "text":
         return <span style={styles.text}>{value}</span>
       case "rate":
-        return <Rate />
+        return <Rate defaultValue={value as number} onChange={setValue} />
       case "difficulty":
-        return <Rate style={styles.rateObjects} character={({ index }) => {
-          return <span style={{ marginRight: 9 }}>{index + 1}</span>;
-        }} />
+        return <Rate
+          defaultValue={value as number}
+          style={styles.rateObjects}
+          onChange={setValue}
+          character={({ index }) => {
+            return <span style={{ marginRight: 9 }}>{index + 1}</span>;
+          }}
+        />
       case "hours":
         return <InputNumber
           style={styles.inputNumber}
@@ -39,7 +44,7 @@ const FormModalItem: React.FC<FormModalItemProps> = ({ type = "input", label, va
           onChange={e => setValue(e as string)}
         />
       case "semester":
-        return <Select style={styles.inputNumber}>
+        return <Select style={styles.inputNumber} onChange={setValue} defaultValue={value}>
           <Option value={1}>1</Option>
           <Option value={2}>2</Option>
         </Select>
@@ -54,15 +59,15 @@ const FormModalItem: React.FC<FormModalItemProps> = ({ type = "input", label, va
         const yearMinusTwo = currentAYSecondYear - 2;
         const yearMinusThree = currentAYSecondYear - 3;
         const yearMinusFour = currentAYSecondYear - 4;
-        return <Select style={styles.inputNumber}>
+        return <Select style={styles.inputNumber} onChange={setValue} defaultValue={value}>
           <Option value={`${yearMinusOne}/${currentAYSecondYear}`}>AY{yearMinusOne}/{currentAYSecondYear}</Option>
           <Option value={`${yearMinusTwo}/${yearMinusOne}`}>AY{yearMinusTwo}/{yearMinusOne}</Option>
           <Option value={`${yearMinusThree}/${yearMinusTwo}`}>AY{yearMinusThree}/{yearMinusTwo}</Option>
           <Option value={`${yearMinusFour}/${yearMinusThree}`}>AY{yearMinusFour}/{yearMinusThree}</Option>
         </Select>
       case "university":
-        return <Select style={styles.inputNumber}>
-          <Option value="NUS">NUS</Option>
+        return <Select style={styles.inputNumber} onChange={setValue} defaultValue={value}>
+          <Option value={"NUS"}>NUS</Option>
           <Option value={"NTU"}>NTU</Option>
           <Option value={"SMU"}>SMU</Option>
         </Select>

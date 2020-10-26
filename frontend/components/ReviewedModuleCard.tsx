@@ -1,5 +1,5 @@
 import BookmarkIcon from "../icons/BookmarkFilledIcon";
-import PenIcon from "../icons/PenIcon";
+import PenIcon from "../icons/PenFilledIcon";
 import { codeBlue } from "../styles/colors";
 
 const ReviewedModuleCard: React.FC = () => {

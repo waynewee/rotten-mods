@@ -26,20 +26,27 @@ export interface Review {
   likes?: number;
   comments?: Comment[];
   text: string;
-  yearTaken: number;
+  acadYearTaken: number;
   semesterTaken: 1 | 2;
   workload: number;
   rating: {
     difficulty: number;
     star: number;
   };
+  event: {
+    like: {
+      count: number;
+    };
+    view: {
+      count: number;
+    };
+  };
   _id: string;
 }
 
 export interface Comment {
-  userName: string;
-  userDisplayPicture?: string;
-  comment: string;
+  userId: string;
+  text: string;
 }
 
 export interface User {
@@ -54,4 +61,16 @@ export interface User {
 export interface ModalState {
   isModalVisible: boolean;
   setModalVisibility: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface Bookmark {
+  modId: string;
+  userId: string;
+  _id: string;
+}
+
+export interface PlannedMods {
+  modId: string;
+  code: string;
+  semester: number;
 }
