@@ -55,10 +55,10 @@ const FormModalItem: React.FC<FormModalItemProps> = ({ type = "input", label, va
         const yearMinusThree = currentAYSecondYear - 3;
         const yearMinusFour = currentAYSecondYear - 4;
         return <Select style={styles.inputNumber}>
-          <Option value={currentAYSecondYear}>AY{yearMinusOne}/{currentAYSecondYear}</Option>
-          <Option value={yearMinusOne}>AY{yearMinusTwo}/{yearMinusOne}</Option>
-          <Option value={yearMinusTwo}>AY{yearMinusThree}/{yearMinusTwo}</Option>
-          <Option value={yearMinusThree}>AY{yearMinusFour}/{yearMinusThree}</Option>
+          <Option value={`${yearMinusOne}/${currentAYSecondYear}`}>AY{yearMinusOne}/{currentAYSecondYear}</Option>
+          <Option value={`${yearMinusTwo}/${yearMinusOne}`}>AY{yearMinusTwo}/{yearMinusOne}</Option>
+          <Option value={`${yearMinusThree}/${yearMinusTwo}`}>AY{yearMinusThree}/{yearMinusTwo}</Option>
+          <Option value={`${yearMinusFour}/${yearMinusThree}`}>AY{yearMinusFour}/{yearMinusThree}</Option>
         </Select>
       case "university":
         return <Select style={styles.inputNumber}>

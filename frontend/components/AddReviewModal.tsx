@@ -12,7 +12,7 @@ interface AddReviewModalProps extends ModalState {
 }
 
 const AddReviewModal: React.FC<AddReviewModalProps> = ({ code, modId, isModalVisible, setModalVisibility }) => {
-  const userId = "5f90feff1821cd195259020f";
+  const userId = "5f93fe299a31d12bf74a3101";
   // const userId = useSelector(state => state.auth.id) // TODO: wait for implementation of user redux state
 
   const [text, setText] = useState("");
@@ -29,6 +29,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({ code, modId, isModalVis
       yearTaken: year,
       workload
     }
+    console.log("Review:", reviewToSubmit);
     const reviewPromise = reviewApi.addReviewOfModule(reviewToSubmit, modId, userId);
     const difficultyPromise = reviewApi.addRatingOfModule(difficulty, "difficulty", userId, modId);
     const starPromise = reviewApi.addRatingOfModule(ratings, "star", userId, modId);

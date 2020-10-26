@@ -38,20 +38,8 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
           <div style={styles.moduleCode}>{code}</div>
           <div style={styles.moduleSmallDetailsColumn}>
             <ModuleSmallDetail
-              Icon={UserClockIcon}
-              text={`Expected Workload/Week: ${workload} hours`}
-              iconStyle={styles.iconStyle}
-            />
-            <ModuleSmallDetail
-              Icon={LayerGroupIcon}
-              text={`Difficulty: ${difficulty.toFixed(1)}/5`}
-              iconStyle={styles.iconStyle}
-            />
-          </div>
-          <div style={styles.moduleSmallDetailsColumn}>
-            <ModuleSmallDetail
-              Icon={CoinsFilledIcon}
-              text={`Credit: ${credit}`}
+              Icon={UniversityIcon}
+              text={`University: ${university}`}
               iconStyle={styles.iconStyle}
             />
             <ModuleSmallDetail
@@ -62,13 +50,25 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
           </div>
           <div style={styles.moduleSmallDetailsColumn}>
             <ModuleSmallDetail
+              Icon={CoinsFilledIcon}
+              text={`Credit: ${credit}`}
+              iconStyle={styles.iconStyle}
+            />
+            <ModuleSmallDetail
+              Icon={UserClockIcon}
+              text={`Workload/Week: ${workload} hours`}
+              iconStyle={styles.iconStyle}
+            />
+          </div>
+          <div style={styles.moduleSmallDetailsColumn}>
+            <ModuleSmallDetail
               Icon={StarFilledIcon}
               text={`Ratings: ${star.toFixed(1)}`}
               iconStyle={{ color: ratingsYellow }}
             />
             <ModuleSmallDetail
-              Icon={UniversityIcon}
-              text={`University: ${university}`}
+              Icon={LayerGroupIcon}
+              text={`Difficulty: ${difficulty.toFixed(1)}/5`}
               iconStyle={styles.iconStyle}
             />
           </div>
