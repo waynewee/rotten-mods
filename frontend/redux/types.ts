@@ -1,5 +1,6 @@
 export interface AuthState {
   isLoggedIn: boolean;
+  userId: string;
 }
 
 export interface SearchState {

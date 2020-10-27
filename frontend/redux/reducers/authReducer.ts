@@ -7,10 +7,11 @@ const initialState: AuthState = {
 };
 
 const authReducer = (state: AuthState = initialState, action: AnyAction) => {
+  console.log("authreducer called");
   switch (action.type) {
     case LOG_USER_IN:
       console.log("Logging in");
-      return { ...state, isLoggedIn: true };
+      return { ...state, isLoggedIn: true, userId: action.userId};
     case LOG_USER_OUT:
       return { ...state, isLoggedIn: false };
     default:
