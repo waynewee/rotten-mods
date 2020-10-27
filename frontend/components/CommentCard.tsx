@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Comment } from "../types";
+import userApi from "../api/user";
 
 import { commentBlue } from "../styles/colors";
 
@@ -7,14 +9,24 @@ interface CommentCardProps {
 }
 
 const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    getUserName();
+  }, [])
+
+  const getUserName = async () => {
+    const user = await userApi.getUser(comment.userId);
+    setName(user.name);
+  }
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        {comment.userName}
+        {name}
       </div>
       <div style={styles.comment}>
-        {comment.comment}
+        {comment.text}
       </div>
     </div>
   )

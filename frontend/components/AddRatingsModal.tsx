@@ -12,12 +12,13 @@ interface AddRatingsModalProps extends ModalState {
 }
 
 const AddRatingsModal: React.FC<AddRatingsModalProps> = ({ code, modId, isModalVisible, setModalVisibility }) => {
+  const userId = "5f93fe299a31d12bf74a3101"; // TODO: Change to useSelector
 
-  const [text, setText] = useState("");
   const [ratings, setRatings] = useState(1);
 
-  const onSubmit = () => {
-
+  const onSubmit = async () => {
+    await reviewApi.addRatingOfModule(ratings, "star", userId, modId, "mod");
+    setModalVisibility(false);
   }
 
   return (

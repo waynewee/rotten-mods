@@ -1,5 +1,8 @@
-import { codeBlue, descriptionGreen } from "../styles/colors";
 import { Module } from "../types";
+import { useRouter } from "next/router";
+
+import Button from "./Button";
+import { codeBlue, descriptionGreen } from "../styles/colors";
 
 interface ModuleInfoComparison {
   firstModule: Module,
@@ -7,15 +10,24 @@ interface ModuleInfoComparison {
 }
 
 const ModuleInfoComparison: React.FC<ModuleInfoComparison> = ({ firstModule, secondModule }) => {
+  const router = useRouter();
+
+  const navigateToModuleReviewPage = (modId) => {
+    router.push({
+      pathname: "/module-review",
+      query: { id: modId }
+    })
+  }
+
   return (
     <div style={styles.container}>
       <div style={styles.moduleInfoContainer}>
-        <div style={styles.moduleCode}>
+        <Button style={styles.moduleCode} onClick={() => navigateToModuleReviewPage(firstModule._id)} >
           {firstModule.code}
-        </div>
-        <div style={styles.moduleCode}>
+        </Button>
+        <Button style={styles.moduleCode} onClick={() => navigateToModuleReviewPage(secondModule._id)} >
           {secondModule.code}
-        </div>
+        </Button>
         <div style={styles.vsContainer}>
           vs
         </div>

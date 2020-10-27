@@ -13,7 +13,8 @@ export const ModSchema = createSchema({
   credit: Type.number(),
   workload: Type.number(),
   rating: RatingObjSchema,
-  event: EventObjSchema
+  event: EventObjSchema,
+  prereqs: Type.array().of(Type.objectId())
 },{
   timestamps: true
 })

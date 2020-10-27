@@ -7,14 +7,15 @@ import Modal from "react-modal";
 import { reviewBlue } from "../styles/colors";
 
 interface CommentsModalProps extends ModalState {
-  comments: Comment[]
+  comments: Comment[];
 }
 
 const CommentsModal: React.FC<CommentsModalProps> = ({
-  comments = [],
+  comments,
   isModalVisible,
   setModalVisibility
 }) => {
+
 
   const renderComments = () => comments.map((comment, index) => {
     return <CommentCard comment={comment} key={index} />

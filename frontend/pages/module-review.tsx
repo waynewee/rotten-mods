@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { Module, Review } from "../types";
 import moduleApi from "../api/module";
 import reviewApi from "../api/review";
+import eventApi from "../api/event";
 
 import AddReviewModal from "../components/AddReviewModal";
 import AddRatingsModal from "../components/AddRatingsModal";
@@ -17,8 +18,19 @@ interface ModuleReviewProps {
 }
 
 const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
+  const [reviewsList, setReviewsList] = useState(reviews);
   const [isAddReviewModalVisible, setAddReviewModalVisibility] = useState(false);
   const [isAddRatingsModalVisible, setAddRatingsModalVisibility] = useState(false);
+
+  // Analytics TODO: Remove comments, add useSelector
+  // useEffect(() => {
+  //   await eventApi.addEvent(userId, "mod", module._id, "view");
+  // }, []);
+
+  const updateReviews = async () => {
+    const newReviews = await reviewApi.getReviewsOfModule(module._id);
+    setReviewsList(newReviews);
+  }
 
   const menu = (
     <Menu>
@@ -49,10 +61,11 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
               </div>
             </Dropdown>
           </div>
-          <ReviewList reviews={reviews} />
+          <ReviewList updateReviews={updateReviews} reviews={reviewsList} />
           <AddReviewModal
             code={module.code}
             modId={module._id}
+            updateReviews={updateReviews}
             isModalVisible={isAddReviewModalVisible}
             setModalVisibility={setAddReviewModalVisibility}
           />

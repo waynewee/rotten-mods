@@ -3,12 +3,14 @@ import { Review } from "../types";
 import ReviewCard from "./ReviewCard";
 
 interface ReviewListProps {
-  reviews: Review[]
+  reviews: Review[];
+  updateReviews: () => void;
+  showActions?: boolean;
 }
 
-const ReviewList: React.FC<ReviewListProps> = ({ reviews = [] }) => {
+const ReviewList: React.FC<ReviewListProps> = ({ reviews = [], updateReviews, showActions }) => {
   const renderReviews = () => reviews.map((review, index) => {
-    return <ReviewCard review={review} key={index} />
+    return <ReviewCard review={review} key={index} updateReviews={updateReviews} showActions={showActions} />
   })
 
   return (
