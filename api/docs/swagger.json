@@ -10,6 +10,10 @@
   "basePath": "/api",
   "tags": [
     {
+      "name": "bookmark",
+      "description": "A saved reference to a module"
+    },
+    {
       "name": "course",
       "description": "A university course"
     },
@@ -24,6 +28,10 @@
     {
       "name": "mod",
       "description": "A university module"
+    },
+    {
+      "name": "planned mod",
+      "description": "A module in a user's study plan"
     },
     {
       "name": "rating",
@@ -52,6 +60,90 @@
     "application/json"
   ],
   "paths": {
+    "/bookmark":{
+      "post":{
+        "tags": ["bookmark"],
+        "summary": "creates a bookmark",
+        "description": "",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "Bookmark object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/BookmarkCreate"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/bookmark/{bookmarkId}":{
+      "delete":{
+        "tags": ["bookmark"],
+        "summary": "deletes a bookmark by OID",
+        "description": "",
+        "parameters": [{
+          "name": "bookmarkId",
+          "in": "path",
+          "description": "OID of the bookmark",
+          "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          },
+          "403":{
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/bookmark/user/{userId}":{
+      "get":{
+        "tags":["bookmark"],
+        "summary": "gets all bookmarks for a user",
+        "description": "Returns a list of appropriate bookmarks",
+        "parameters":[{
+          "in": "query",
+          "name": "page",
+          "description": "Page number",
+          "schema":{
+            "type": "integer"
+          }
+        },{
+          "in": "query",
+          "name": "limit",
+          "description":"Maximum number of results returned",
+          "schema": {
+            "type": "Integer"
+          }
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success",
+            "schema":{
+              "$ref": "#/definitions/BookmarkArray"
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
     "/course":{
       "get":{
         "tags": ["course"],
@@ -255,7 +347,18 @@
           "schema": {
             "type": "Integer"
           }
-        }]
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema":{
+              "$ref":"#/definitions/ModArray"
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
       },
       "post":{
         "tags": ["mod"],
@@ -269,7 +372,18 @@
           "schema": {
             "$ref": "#/definitions/ModCreate"
           }
-        }]
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403": {
+            "description": "Not authorized"
+          }
+        }
       }
     },
     "/mod/{modId}":{
@@ -358,6 +472,121 @@
             "description":"Not authorized"
           }
         }
+      }
+    },
+    "/planned-mod":{
+      "post":{
+        "tags": ["planned mod"],
+        "summary": "adds a module to a user's study plan",
+        "description": "",
+        "parameters":[{
+          "in": "body",
+          "name": "body",
+          "description": "Login Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/PlannedMod"
+          }
+        }]
+      },
+      "responses": {
+        "200": {
+          "description": "Success"
+        },
+        "500": {
+          "description": "Error"
+        },
+        "403":{
+          "description":"Not authorized"
+        }
+      }
+    },
+    "/planned-mod/{plannedModId}":{
+      "put": {
+        "tags": ["planned mod"],
+        "summary": "updates a planned module",
+        "description": "",
+        "parameters": [{
+          "in": "path",
+          "name": "plannedModId",
+          "description": "OID of the planned module",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "body",
+          "name": "body",
+          "description": "Planned Module object",
+          "required": "true",
+          "schema": {
+            "$ref": "#/definitions/PlannedModCreate"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      },
+      "delete":{
+        "tags":["planned mod"],
+        "summary": "delete a planned mod by OID",
+        "description": "",
+        "parameters":[{
+          "in": "path",
+          "name": "plannedModId",
+          "description": "OID of the planned module",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      }
+    },
+    "/planned-mod/user/{userId}":{
+      "get": {
+        "tags": ["planned mod"],
+        "summary": "finds a planned mod by userId",
+        "description": "Returns a planned mod",
+        "parameters": [{
+          "name": "userId",
+          "in": "path",
+          "description": "OID of the user",
+          "required": true,
+          "example": "512345678910111211314151"
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ModWithPlannedModArray"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+
       }
     },
     "/login":{
@@ -966,7 +1195,8 @@
         }],
         "responses" : {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "$ref":"#/definitions/User"
           },
           "500": {
             "description": "Error"
@@ -1062,6 +1292,54 @@
   },
   
   "definitions": {
+    "Bookmark":{
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "userId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "modId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "BookmarkArray": {
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/Bookmark"
+      }
+    },
+    "BookmarkCreate":{
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "modId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        }
+      }
+    },
     "Course": {
       "type": "object",
       "properties": {
@@ -1230,6 +1508,10 @@
           "type": "integer",
           "example": 20
         },
+        "prereqs":{
+          "type": "array",
+          "example": ["512345678910111211314151", "512345678910111211314151"]
+        },
         "rating": {
           "$ref": "#/definitions/RatingObj"
         },
@@ -1247,6 +1529,130 @@
         "_v":{
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "ModArray": {
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/Mod"
+      }
+    },
+    "ModWithPlannedMod":{
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "code": {
+          "type": "string",
+          "example": "CS3219"
+        },
+        "title": {
+          "type": "string",
+          "example": "Software Engineering Principles and Patterns"
+        },
+        "acadYear": {
+          "type": "string",
+          "example": "19/20"
+        },
+        "semester": {
+          "type": "integer",
+          "example": 2
+        },
+        "description": {
+          "type": "string",
+          "example": "This module provides an in-depth, hands-on experience in key aspects of software engineering that accompany the development of software. Based on proven principles and best practices, this module focuses on software architectural design from the perspective of the software process. It covers techniques for requirement elicitation and specification that provide sound base for architectural design. The module covers design decision exploration as well as patterns that explicate principles and best practices in replicable form."
+        },
+        "credit": {
+          "type": "integer",
+          "example": 4
+        },
+        "workload": {
+          "type": "integer",
+          "example": 20
+        },
+        "prereqs":{
+          "type": "array",
+          "example": ["512345678910111211314151", "512345678910111211314151"]
+        },
+        "rating": {
+          "$ref": "#/definitions/RatingObj"
+        },
+        "event": {
+          "$ref": "#/definitions/EventObj"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v":{
+          "type": "integer",
+          "format": "int32"
+        },
+        "plannedMod":{
+          "$ref": "#/definitions/PlannedMod"
+        }
+      }
+    },
+    "ModWithPlannedModArray":{
+      "type":"array",
+      "items": {
+        "$ref": "#/definitions/ModWithPlannedMod"
+      }
+    },
+    "PlannedMod":{
+      "type": "object",
+      "properties":{
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "modId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "userId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "semester":{
+          "type": "integer",
+          "example": 2
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v":{
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "PlannedModCreate":{
+      "type": "object",
+      "properties":{
+        "modId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "userId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "semester":{
+          "type": "integer",
+          "example": 2
         }
       }
     },
