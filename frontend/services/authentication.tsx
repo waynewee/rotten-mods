@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { LOG_USER_IN } from "../redux/constants";
+import { User } from "../types";
 
-import {store} from "../redux/store.ts";
 
 
 function signUp(values) {
@@ -80,9 +80,17 @@ function logIn(values, dispatch) {
     .then(function (response) {
         console.log("login is successful");
         console.log(response);
+
+        const user: User = {
+            fullName: response.data.name,
+            yearOfStudy: response.data.currentYear,
+            studyCourse: response.data.courseId,
+            _id: response.data._id,
+        }
+        console.log(user);
         dispatch({
             type: LOG_USER_IN,
-            userId: "testing"
+            payload: user
         });
     })
     .catch(function (error) {

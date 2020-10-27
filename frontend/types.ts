@@ -51,10 +51,8 @@ export interface Comment {
 
 export interface User {
   fullName: string;
-  studyStatus: string;
+  yearOfStudy: number;
   studyCourse: string;
-  modulesReviewed: number;
-  modulesTaken: number;
   _id: string;
 }
 

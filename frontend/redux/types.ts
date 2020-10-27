@@ -1,8 +1,8 @@
-import { Bookmark, PlannedMods, Review } from "../types";
+import { Bookmark, PlannedMods, Review, User } from "../types";
 
 export interface AuthState {
   isLoggedIn: boolean;
-  userId: string;
+  user: User;
 }
 
 export interface SearchState {

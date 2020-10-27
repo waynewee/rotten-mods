@@ -19,7 +19,7 @@ const LoginModal: React.FC<LoginModalProps> = (toggles) => {
   const dispatch = useDispatch();
 
   const onFormFinish = loginValues => {
-    console.log(loginValues);
+    //console.log(loginValues);
     authService.logIn(loginValues, dispatch);
     
   }

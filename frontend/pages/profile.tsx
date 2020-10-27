@@ -13,10 +13,10 @@ const Profile: React.FC = () => {
 
   const dummyProfile: User = {
     fullName: "Chester Sim",
-    studyStatus: "Year 4 Undergraduate in NUS",
     studyCourse: "Computer Science",
-    modulesReviewed: 3,
-    modulesTaken: 10
+    yearOfStudy: 3,
+    _id: "string"
+
   }
 
   return (
