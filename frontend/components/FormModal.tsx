@@ -9,7 +9,8 @@ interface FormModalProps {
   isModalVisible: boolean,
   setModalVisibility: Dispatch<SetStateAction<boolean>>,
   submitColor: string,
-  onSubmit: () => void
+  onSubmit: () => void,
+  submitText?: string
 }
 
 const FormModal: React.FC<FormModalProps> = ({
@@ -19,7 +20,8 @@ const FormModal: React.FC<FormModalProps> = ({
   isModalVisible,
   setModalVisibility,
   submitColor,
-  onSubmit
+  onSubmit,
+  submitText = "Submit"
 }) => {
 
   return (
@@ -37,11 +39,11 @@ const FormModal: React.FC<FormModalProps> = ({
         </div>
       </div>
       {children}
-      <div 
+      <div
         style={{ ...styles.submitButton, backgroundColor: submitColor }}
         onClick={onSubmit}
       >
-        Submit
+        {submitText}
       </div>
     </Modal>
   )

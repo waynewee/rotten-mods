@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { LOG_USER_IN } from "../redux/constants";
 import { User } from "../types";
-
-
+import authApi from "../api/auth";
 
 function signUp(values) {
     console.log("Sign Up Service received");
@@ -10,10 +9,10 @@ function signUp(values) {
     let createUserConfig = {
         method: 'post',
         url: 'http://localhost:8080/api/user',
-        headers: { 
-          'Content-Type': 'application/json'
+        headers: {
+            'Content-Type': 'application/json'
         },
-        data : {
+        data: {
             "name": values.fullname,
             "email": values.emailaddress,
             "password": values.userpassword,
@@ -26,10 +25,10 @@ function signUp(values) {
     let createSchoolConfig = {
         method: 'post',
         url: 'http://localhost:8080/api/school',
-        headers: { 
-          'Content-Type': 'application/json'
+        headers: {
+            'Content-Type': 'application/json'
         },
-        data : {
+        data: {
             "name": values.fullname,
         }
     };
@@ -37,67 +36,49 @@ function signUp(values) {
     let createCourseConfig = {
         method: 'post',
         url: 'http://localhost:8080/api/course',
-        headers: { 
-          'Content-Type': 'application/json'
+        headers: {
+            'Content-Type': 'application/json'
         },
-        data : {
+        data: {
             "name": values.fullname,
         }
     };
 
 
-      // if schoolId is user created, then create a new school in the system
+    // if schoolId is user created, then create a new school in the system
 
     if (values.course !== "userCreated" && values.school !== "userCreated") {
         axios(createUserConfig)
-        .then(function (response) {
-            console.log("post is successful");
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+            .then(function (response) {
+                console.log("post is successful");
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
 }
 
 
-function logIn(values, dispatch) {
-    console.log("LogIn Service received");
-    let logInUserConfig = {
-        method: 'post',
-        url: 'http://localhost:8080/api/login',
-        headers: { 
-          'Content-Type': 'application/json',
-        },
-        data : {
-            "email": values.emailaddress,
-            "password": values.password,
-        }
-    };
+async function logIn(values, dispatch) {
+    const { emailaddress, password } = values;
+    const data = await authApi.logIn(emailaddress, password);
+    const { name, currentYear, courseId, _id } = data;
+    const user: User = {
+        fullName: name,
+        yearOfStudy: currentYear,
+        studyCourse: courseId,
+        _id
+    }
 
-    axios(logInUserConfig)
-    .then(function (response) {
-        console.log("login is successful");
-        console.log(response);
+    window.localStorage.setItem("ROTTENMODS_EMAIL", emailaddress);
+    window.localStorage.setItem("ROTTENMODS_PASSWORD", password);
 
-        const user: User = {
-            fullName: response.data.name,
-            yearOfStudy: response.data.currentYear,
-            studyCourse: response.data.courseId,
-            _id: response.data._id,
-        }
-        console.log(user);
-        dispatch({
-            type: LOG_USER_IN,
-            payload: user
-        });
-    })
-    .catch(function (error) {
-        console.log(error);
+    dispatch({
+        type: LOG_USER_IN,
+        payload: user
     });
-
-    
 }
 
 export default {

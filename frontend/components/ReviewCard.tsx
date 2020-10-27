@@ -35,9 +35,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, updateReviews, showActi
   }
 
   const onLikeReview = async () => {
-    // TODO: Uncomment
-    // if (userId == user._id) return;
-
     await eventApi.addEvent(user._id, "review", _id, "like");
     updateReviews();
   }
@@ -104,11 +101,10 @@ const styles = {
   },
   userInformation: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap" as "wrap"
   },
   actionsBar: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: "flex"
   },
   action: {
     display: "flex",

@@ -5,7 +5,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 interface FormModalItemProps {
-  type: "input" | "textarea" | "text" | "rate" | "numerical" | "difficulty" | "hours" | "semester" | "university" | "year",
+  type: "input" | "textarea" | "text" | "rate" | "numerical" | "difficulty" | "hours" | "semester" | "university" | "year" | "annualYear",
   label: string,
   value: string | number,
   setValue?: Dispatch<SetStateAction<any>>
@@ -43,12 +43,19 @@ const FormModalItem: React.FC<FormModalItemProps> = ({ type = "input", label, va
           value={value as unknown as number}
           onChange={e => setValue(e as string)}
         />
+      case "year":
+        return <Select style={styles.inputNumber} onChange={setValue} defaultValue={value}>
+          <Option value={1}>1</Option>
+          <Option value={2}>2</Option>
+          <Option value={3}>3</Option>
+          <Option value={4}>4</Option>
+        </Select>
       case "semester":
         return <Select style={styles.inputNumber} onChange={setValue} defaultValue={value}>
           <Option value={1}>1</Option>
           <Option value={2}>2</Option>
         </Select>
-      case "year":
+      case "annualYear":
         const today = new Date();
         const currentYear = today.getFullYear();
         const currentMonth = today.getMonth();

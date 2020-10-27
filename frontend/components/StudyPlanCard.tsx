@@ -1,16 +1,12 @@
-import { Dropdown, Menu, Input } from "antd";
+import { PlannedMods } from "../types";
+import { useSelector } from "react-redux";
+
+import { Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { BookFilled, PlusOutlined } from "@ant-design/icons";
-import { codeBlue } from "../styles/colors";
+import ModulePill from "./ModulePill";
 
 const StudyPlanCard: React.FC = () => {
-  const dummyModuleCodes: string[] = [
-    "CS1101s",
-    "CS2030",
-    "CS2040",
-    "CS1231",
-    "CS3219",
-  ];
 
   const dummyModuleCodeMenu = (
     <Menu>
@@ -20,9 +16,11 @@ const StudyPlanCard: React.FC = () => {
     </Menu>
   );
 
+  const plannedMods = useSelector(state => state.personalModules.plannedMods);
+
   const renderModuleCodes = () =>
-    dummyModuleCodes.map((moduleCode) => {
-      return <div style={styles.moduleCode}>{moduleCode}</div>;
+    plannedMods.map(plannedMod => {
+      return <ModulePill modId={plannedMod?.plannedMod?.modId} key={plannedMod._id} />;
     });
 
   return (
@@ -48,14 +46,6 @@ const StudyPlanCard: React.FC = () => {
 };
 
 const styles = {
-  moduleCode: {
-    padding: 12,
-    backgroundColor: codeBlue,
-    color: "#fff",
-    borderRadius: 15,
-    boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
-    margin: 5,
-  },
   moduleList: {
     display: "flex",
     justifyContent: "flex-start",

@@ -42,6 +42,7 @@ export interface Review {
     };
   };
   _id: string;
+  modId: string;
 }
 
 export interface Comment {
@@ -71,4 +72,5 @@ export interface PlannedMods {
   modId: string;
   code: string;
   semester: number;
+  _id: string;
 }

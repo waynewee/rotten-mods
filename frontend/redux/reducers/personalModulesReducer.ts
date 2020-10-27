@@ -1,14 +1,14 @@
 import { AnyAction } from "redux";
 import {
   FETCH_BOOKMARKS,
-  FETCH_PLANNER,
+  FETCH_PLANNED_MODS,
   FETCH_PERSONAL_REVIEWS,
 } from "../constants";
 import { PersonalModulesState } from "../types";
 
 const initialState: PersonalModulesState = {
   bookmarks: [],
-  planner: [],
+  plannedMods: [],
   reviews: [],
 };
 
@@ -19,8 +19,8 @@ const personalModulesReducer = (
   switch (action.type) {
     case FETCH_BOOKMARKS:
       return { ...state, bookmarks: action.payload };
-    case FETCH_PLANNER:
-      return { ...state, planner: action.payload };
+    case FETCH_PLANNED_MODS:
+      return { ...state, plannedMods: action.payload };
     case FETCH_PERSONAL_REVIEWS:
       return { ...state, reviews: action.payload };
     default:

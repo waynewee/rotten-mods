@@ -18,7 +18,7 @@ export interface ModuleCompareState {
 
 export interface PersonalModulesState {
   bookmarks: Bookmark[];
-  planner: PlannedMods[];
+  plannedMods: PlannedMods[];
   reviews: Review[];
 }
 

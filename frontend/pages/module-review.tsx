@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { NextPage } from "next";
 import { Module, Review } from "../types";
 import moduleApi from "../api/module";
@@ -21,11 +22,12 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
   const [reviewsList, setReviewsList] = useState(reviews);
   const [isAddReviewModalVisible, setAddReviewModalVisibility] = useState(false);
   const [isAddRatingsModalVisible, setAddRatingsModalVisibility] = useState(false);
+  const userId = useSelector(state => state.auth.user?._id);
 
-  // Analytics TODO: Remove comments, add useSelector
-  // useEffect(() => {
-  //   await eventApi.addEvent(userId, "mod", module._id, "view");
-  // }, []);
+  // Analytics
+  useEffect(() => {
+    eventApi.addEvent(userId, "mod", module._id, "view");
+  }, []);
 
   const updateReviews = async () => {
     const newReviews = await reviewApi.getReviewsOfModule(module._id);
@@ -113,7 +115,6 @@ ModuleReviewPage.getInitialProps = async ({ query }) => {
   const moduleId: string = query.id as string;
 
   try {
-    // const module = await moduleApi.getModule(query.id);
     const module = await moduleApi.getModule(moduleId);
 
     // TODO: retrieve description and university from API
