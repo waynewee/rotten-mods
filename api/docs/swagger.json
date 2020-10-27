@@ -605,7 +605,10 @@
         }],
         "responses": {
           "200":{
-            "description": "Success"
+            "description": "Success",
+            "schema":{
+              "$ref":"#/definitions/User"
+            }
           },
           "500":{
             "description": "Error"

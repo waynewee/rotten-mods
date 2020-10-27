@@ -21,7 +21,7 @@ export let login = (req: Request, res: Response, next: NextFunction) =>{
             httpOnly: true
           })
 
-          res.sendStatus(200)
+          res.send(user)
         } else {
           res.sendStatus(403)
         }
