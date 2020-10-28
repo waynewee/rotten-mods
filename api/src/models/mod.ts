@@ -6,7 +6,7 @@ import { acadSemType } from './types';
 
 export const ModSchema = createSchema({
   code: Type.string({ required: true }),
-  schoolId: Type.objectId({required: true}),
+  schoolId: Type.objectId(),
   title: Type.string({required: true }),
   acadYear: Type.string(),
   semester: Type.array().of(acadSemType),
