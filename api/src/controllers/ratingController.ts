@@ -16,10 +16,25 @@ export let addRating = (req: Request, res: Response, next: NextFunction) => {
 }
 
 export let deleteRating = (req: Request, res: Response, next: NextFunction) => {
-  Rating.deleteOne({ _id: req.params.id })
+
+  const {
+    userId,
+    sub,
+    subId,
+    type
+  } = req.body
+
+  Rating.findOneAndDelete({ 
+    $and: [
+      { userId },
+      { sub },
+      { subId },
+      { type }
+    ]
+   })
   .then(rating =>{
-    return RatingPublisher.notify(rating)
-    .then(() => res.send(rating))
+    return RatingPublisher.notifyOfDeletion(rating)
+    .then(() => res.sendStatus(200))
   })
   .catch(next)
 }
@@ -38,14 +53,16 @@ export let findRating = (req: Request, res: Response, next: NextFunction) => {
   const {
     userId,
     type,
-    sub
-  } = req.query as { userId: string, type: string, sub: string }
+    sub,
+    subId
+  } = req.query as { userId: string, type: string, sub: string, subId: string }
 
   Rating.findOne({
     $and: [
       { userId: ObjectId(userId)},
       { type: { $regex: type } },
-      { sub: { $regex: sub } }
+      { sub: { $regex: sub } },
+      { subId: ObjectId(subId)}
     ]
   })
   .then( rating => {

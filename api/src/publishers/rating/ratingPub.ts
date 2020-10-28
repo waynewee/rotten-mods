@@ -66,6 +66,38 @@ class RatingPub {
 
   }
 
+  static notifyOfDeletion(rating: any){
+
+    let promises:any = []
+
+    for (let i = 0; i < ratingSubs.length; i++ ){
+
+      const sub:any = ratingSubs[i]
+      const ratingSubType = ratingSubTypes[i]
+
+      if(rating.sub == ratingSubType){
+
+        sub.findOne({ _id: rating.subId})
+        .then( (subObj: any) => {
+          
+          const ratingType = rating.type
+
+          subObj.rating[ratingType].count -= 1
+
+          const count = subObj.rating[ratingType].count
+
+          subObj.rating[ratingType].value = ((subObj.rating[ratingType].value * (count + 1)) - rating.value)/count
+
+          promises.push(subObj.save())
+
+        })
+      }
+    }
+
+    return Promise.all(promises)
+
+  }
+
 }
 
 export default RatingPub

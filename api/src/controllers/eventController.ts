@@ -16,19 +16,45 @@ export let addEvent = (req: Request, res: Response, next: NextFunction) => {
   .catch(next)
 }
 
+export let deleteEvent = (req: Request, res: Response, next: NextFunction) => {
+
+  const {
+    userId,
+    sub,
+    subId,
+    type
+  } = req.body
+
+  Event.findOneAndDelete({ 
+    $and: [
+      { userId },
+      { sub },
+      { subId },
+      { type }
+    ]
+   })
+  .then((event) =>{
+    return EventPublisher.notifyOfDeletion(event)
+    .then(() => res.sendStatus(200))
+  })
+  .catch(next)
+}
+
 export let findEvent = (req: Request, res: Response, next: NextFunction) => {
  
   const {
     userId,
     type,
-    sub
-  } = req.query as { userId: string, type: string, sub: string }
+    sub,
+    subId
+  } = req.query as { userId: string, type: string, sub: string, subId: string }
 
   Event.findOne({
     $and: [
       { userId: ObjectId(userId)},
       { type: { $regex: type } },
-      { sub: { $regex: sub } }
+      { sub: { $regex: sub } },
+      { subId: ObjectId(subId) }
     ]
   })
   .then( event => {

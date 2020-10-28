@@ -34,6 +34,8 @@ export let getSchool = (req: Request, res: Response, next: NextFunction) => {
 export let addSchool = (req: Request, res: Response, next: NextFunction) => {
   let school = new School(req.body);
 
+  school.shortName = School.getShortName(school.name)
+
   school.save()
   .then(() => res.send(school))
   .catch(next)
@@ -46,7 +48,10 @@ export let deleteSchool = (req: Request, res: Response, next: NextFunction) => {
 }
 
 export let updateSchool = (req: Request, res: Response, next: NextFunction) => {
-  School.findByIdAndUpdate(req.params.id, req.body)
+  School.findByIdAndUpdate(req.params.id, {
+    ...req.body,
+    shortName: School.getShortName(req.body.name)
+  })
   .then(() => res.sendStatus(200))
   .catch(next)
 }
