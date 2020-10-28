@@ -1,39 +1,24 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SEARCH_TERM } from "../redux/constants";
 import "../styles/antd.less";
 
 import { Dropdown, Menu, Input } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import LoginButton from "../components/LoginButton";
+import LoginButton from "./ProfileButton";
 import { Modal, Button, Form, Divider } from 'antd';
 import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 import { codeBlue } from "../styles/colors";
-import Login from "../components/LoginButton";
+import ProfileButton from "./ProfileButton";
 
 const { Search } = Input;
 
 const Navbar: React.FC = () => {
 
-  const [loginModalVisible, setLoginModalVisible] = useState(false);
-  const [signupModalVisible, setSignupModalVisible] = useState(false);
-
-  const toggleLoginModal = () => {
-    setLoginModalVisible(!loginModalVisible);
-  }
-
-  const toggleSignupModal = () => {
-    setSignupModalVisible(!signupModalVisible);
-  }
-
-  const switchModals = () => {
-    setSignupModalVisible(!signupModalVisible);
-    setLoginModalVisible(!loginModalVisible);
-  }
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -79,17 +64,8 @@ const Navbar: React.FC = () => {
             <DownOutlined />
           </div>
         </Dropdown>
-        <LoginButton isAuthenticated={true} />
-        <Button type="text" onClick={toggleLoginModal}>
-          Log In
-        </Button>
-        <Button type="primary" onClick={toggleSignupModal}>
-          Sign Up
-        </Button>
+        <ProfileButton isAuthenticated={true} />
       </div>
-
-      {loginModalVisible ? <LoginModal toggles={{ toggleLoginModal, switchModals }} /> : null}
-      {signupModalVisible ? <SignupModal toggles={{ toggleSignupModal, switchModals }} /> : null}
     </div>
 
   );

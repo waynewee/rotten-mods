@@ -1,7 +1,9 @@
 
 import { Modal, Button, Form, Input, Divider } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+
+import authService from '../services/authentication';
+import { useDispatch } from "react-redux";
 
 
 
@@ -14,8 +16,12 @@ interface LoginModalProps {
 
 const LoginModal: React.FC<LoginModalProps> = (toggles) => {
 
-  const onFormFinish = () => {
-    // do something when the form has been finished.
+  const dispatch = useDispatch();
+
+  const onFormFinish = loginValues => {
+    //console.log(loginValues);
+    authService.logIn(loginValues, dispatch);
+    
   }
 
   return (
@@ -36,7 +42,7 @@ const LoginModal: React.FC<LoginModalProps> = (toggles) => {
           initialValues={{}}
           onFinish={onFormFinish}>
           <Form.Item
-            name="username"
+            name="emailaddress"
             rules={[{ required: true, message: 'Please enter an email address!' }]}
           >
             <Input prefix={<MailOutlined />} placeholder="Email Address" />

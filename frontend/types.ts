@@ -42,6 +42,7 @@ export interface Review {
     };
   };
   _id: string;
+  modId: string;
 }
 
 export interface Comment {
@@ -51,10 +52,8 @@ export interface Comment {
 
 export interface User {
   fullName: string;
-  studyStatus: string;
+  yearOfStudy: number;
   studyCourse: string;
-  modulesReviewed: number;
-  modulesTaken: number;
   _id: string;
 }
 
@@ -73,4 +72,5 @@ export interface PlannedMods {
   modId: string;
   code: string;
   semester: number;
+  _id: string;
 }

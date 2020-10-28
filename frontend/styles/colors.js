@@ -5,3 +5,5 @@ export const compareOrange = "#F2A966";
 export const ratingsYellow = "#F2E143";
 export const commentBlue = "#69BBCD";
 export const crossRed = "#DD7676";
+export const submitBlue = "#3E59B9";
+export const plannedModGreen = "#76CCB7";

@@ -11,7 +11,7 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
-  const { fullName, studyStatus, studyCourse, modulesReviewed, modulesTaken } = user;
+  const { fullName, studyCourse, yearOfStudy } = user;
 
   return (
     <div style={styles.container}>
@@ -21,15 +21,15 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
         </div>   
         <div style={styles.userInfoContainer}> 
           <div style={styles.fullName}> {fullName}</div>
-          <div style={styles.study}> {studyStatus}</div>
+          <div style={styles.study}> Year {yearOfStudy} Student </div>
           <div style={styles.study}> {studyCourse}</div>
         </div>
       </div>
 
-      <div style={styles.userModuleInfoContainer}> 
+      {/* <div style={styles.userModuleInfoContainer}> 
           <div style={styles.moduleInfo}> Modules Reviewed: {modulesReviewed}</div>
           <div style={styles.moduleInfo}> Modules Taken: {modulesTaken}</div>
-      </div>
+      </div> */}
       
     </div>
   );

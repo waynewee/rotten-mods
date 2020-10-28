@@ -64,8 +64,16 @@ const addRatingOfModule = async (
   return response.status;
 };
 
+const fetchPersonalReviews = async (userId) => {
+  const response = await axios.get(`${reviewBaseUrl}/user/${userId}`, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
 export default {
   getReviewsOfModule,
   addReviewOfModule,
   addRatingOfModule,
+  fetchPersonalReviews,
 };

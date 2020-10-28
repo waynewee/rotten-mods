@@ -1,7 +1,8 @@
-import { Bookmark, PlannedMods, Review } from "../types";
+import { Bookmark, PlannedMods, Review, User } from "../types";
 
 export interface AuthState {
   isLoggedIn: boolean;
+  user: User;
 }
 
 export interface SearchState {
@@ -17,7 +18,7 @@ export interface ModuleCompareState {
 
 export interface PersonalModulesState {
   bookmarks: Bookmark[];
-  planner: PlannedMods[];
+  plannedMods: PlannedMods[];
   reviews: Review[];
 }
 
