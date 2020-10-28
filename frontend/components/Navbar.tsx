@@ -1,25 +1,23 @@
+import { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { SEARCH_TERM } from "../redux/constants";
 import "../styles/antd.less";
 
 import { Dropdown, Menu, Input } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import LoginButton from "./ProfileButton";
-import { Modal, Button, Form, Divider } from 'antd';
-import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
-import LoginModal from "./LoginModal";
-import SignupModal from "./SignupModal";
 import { codeBlue } from "../styles/colors";
 import ProfileButton from "./ProfileButton";
+import Button from "./Button";
 
 const { Search } = Input;
 
-const Navbar: React.FC = () => {
+interface NavBarProps {
+  setAddModuleModalVisibility: Dispatch<SetStateAction<boolean>>
+}
 
-
+const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -64,13 +62,15 @@ const Navbar: React.FC = () => {
             <DownOutlined />
           </div>
         </Dropdown>
+        <Button style={styles.addModuleButton} onClick={() => setAddModuleModalVisibility(true)}>
+          Add Module
+        </Button>
         <ProfileButton isAuthenticated={true} />
       </div>
     </div>
 
   );
 };
-
 
 const styles = {
   loginFormButton: {
@@ -103,6 +103,15 @@ const styles = {
     display: "flex",
     flex: 1,
     justifyContent: "flex-end"
+  },
+  addModuleButton: {
+    display: "flex",
+    alignItems: "center",
+    margin: "0px 10px",
+    padding: 10,
+    backgroundColor: codeBlue,
+    color: "#fff",
+    borderRadius: 8
   }
 }
 

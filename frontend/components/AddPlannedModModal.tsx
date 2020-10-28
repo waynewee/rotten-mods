@@ -18,8 +18,15 @@ const AddPlannedModModal: React.FC<AddPlannedModModalProps> = ({ userId, modId, 
   const [semester, setSemester] = useState(1);
 
   const onSubmit = async () => {
-    const numberOfSemesters = (year - 1) + semester;
-    await plannedModApi.addPlannedMod(userId, modId, numberOfSemesters);
+    const numberOfSemesters = (year - 1) * 2 + semester;
+
+    if (plannedModId) {
+      // Exists already, so update it instead
+      await plannedModApi.updatePlannedMod(plannedModId, userId, modId, numberOfSemesters);
+    } else {
+      await plannedModApi.addPlannedMod(userId, modId, numberOfSemesters);
+    }
+
     updatedPersonalPlannedModules(userId);
     setModalVisibility(false);
   }
@@ -33,7 +40,7 @@ const AddPlannedModModal: React.FC<AddPlannedModModalProps> = ({ userId, modId, 
       submitColor={submitBlue}
       onSubmit={onSubmit}
     >
-      <FormModalItem label="Year" type="year" value={semester} setValue={setYear} />
+      <FormModalItem label="Year" type="year" value={year} setValue={setYear} />
       <FormModalItem label="Semester" type="semester" value={semester} setValue={setSemester} />
     </FormModal>
   )

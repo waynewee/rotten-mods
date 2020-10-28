@@ -38,7 +38,7 @@ const ModuleInfoComparison: React.FC<ModuleInfoComparison> = ({ firstModule, sec
             {firstModule.title}
           </div>
           <div style={styles.moduleDescription}>
-            {firstModule.description}
+            {firstModule.description || "This module does not have any description."}
           </div>
         </div>
         <div style={styles.moduleInfo}>
@@ -46,7 +46,7 @@ const ModuleInfoComparison: React.FC<ModuleInfoComparison> = ({ firstModule, sec
             {secondModule.title}
           </div>
           <div style={styles.moduleDescription}>
-            {secondModule.description}
+            {secondModule.description || "This module does not have any description."}
           </div>
         </div>
       </div>

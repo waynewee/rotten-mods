@@ -20,19 +20,35 @@ interface ModuleReviewProps {
 
 const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
   const [reviewsList, setReviewsList] = useState(reviews);
-  const [isAddReviewModalVisible, setAddReviewModalVisibility] = useState(false);
-  const [isAddRatingsModalVisible, setAddRatingsModalVisibility] = useState(false);
-  const userId = useSelector(state => state.auth.user?._id);
+  const [isAddReviewModalVisible, setAddReviewModalVisibility] = useState(
+    false
+  );
+  const [isAddRatingsModalVisible, setAddRatingsModalVisibility] = useState(
+    false
+  );
+  const [ratingByUser, setRatingByUser] = useState(null);
+  const userId = useSelector((state) => state.auth.user?._id);
+  const reviewByUser = reviewsList.find((review) => review.userId === userId);
 
   // Analytics
   useEffect(() => {
+    checkIsRatedByUser();
     eventApi.addEvent(userId, "mod", module._id, "view");
   }, []);
 
   const updateReviews = async () => {
     const newReviews = await reviewApi.getReviewsOfModule(module._id);
     setReviewsList(newReviews);
-  }
+  };
+
+  const checkIsRatedByUser = async () => {
+    try {
+      const rating = await reviewApi.getRating("mod", userId, "star");
+      setRatingByUser(rating);
+    } catch (err) {
+      setRatingByUser(null);
+    }
+  };
 
   const menu = (
     <Menu>
@@ -44,47 +60,47 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
   );
 
   const renderPage = () => {
-    return module
-      ? (
-        <>
-          <ModuleInformation
-            module={module}
-            setAddReviewModalVisibility={setAddReviewModalVisibility}
-            setAddRatingsModalVisibility={setAddRatingsModalVisibility}
-          />
-          <div style={styles.reviewsHeader}>
-            <span style={styles.reviewsHeaderTitle}>Reviews</span>
-            <Dropdown overlay={menu}>
-              <div style={{ marginRight: 20 }}>
-                <a style={{ color: "#595959", marginRight: 6, fontSize: 18 }}>
-                  Sort
-                </a>
-                <DownOutlined />
-              </div>
-            </Dropdown>
-          </div>
-          <ReviewList updateReviews={updateReviews} reviews={reviewsList} />
-          <AddReviewModal
-            code={module.code}
-            modId={module._id}
-            updateReviews={updateReviews}
-            isModalVisible={isAddReviewModalVisible}
-            setModalVisibility={setAddReviewModalVisibility}
-          />
-          <AddRatingsModal
-            code={module.code}
-            modId={module._id}
-            isModalVisible={isAddRatingsModalVisible}
-            setModalVisibility={setAddRatingsModalVisibility}
-          />
-        </>
-      )
-      : (
-        <div style={styles.moduleNotFoundPage}>
-          <span style={{}}>Module not found!</span>
+    return module ? (
+      <>
+        <ModuleInformation
+          module={module}
+          setAddReviewModalVisibility={setAddReviewModalVisibility}
+          setAddRatingsModalVisibility={setAddRatingsModalVisibility}
+        />
+        <div style={styles.reviewsHeader}>
+          <span style={styles.reviewsHeaderTitle}>Reviews</span>
+          <Dropdown overlay={menu}>
+            <div style={{ marginRight: 20 }}>
+              <a style={{ color: "#595959", marginRight: 6, fontSize: 18 }}>
+                Sort
+              </a>
+              <DownOutlined />
+            </div>
+          </Dropdown>
         </div>
-      )
-  }
+        <ReviewList updateReviews={updateReviews} reviews={reviewsList} />
+        <AddReviewModal
+          code={module.code}
+          modId={module._id}
+          updateReviews={updateReviews}
+          isModalVisible={isAddReviewModalVisible}
+          setModalVisibility={setAddReviewModalVisibility}
+          reviewByUser={reviewByUser}
+        />
+        <AddRatingsModal
+          code={module.code}
+          modId={module._id}
+          isModalVisible={isAddRatingsModalVisible}
+          setModalVisibility={setAddRatingsModalVisibility}
+          ratingsByUser={ratingByUser}
+        />
+      </>
+    ) : (
+      <div style={styles.moduleNotFoundPage}>
+        <span style={{}}>Module not found!</span>
+      </div>
+    );
+  };
 
   return renderPage();
 };
@@ -97,29 +113,31 @@ const styles = {
     alignItems: "center",
     padding: "0px 10px",
     fontFamily: "Mukta",
-    color: "#838383"
+    color: "#838383",
   },
   reviewsHeaderTitle: {
-    fontSize: "26px"
+    fontSize: "26px",
   },
   moduleNotFoundPage: {
     display: "flex",
     height: "80vh",
     width: "100%",
     justifyContent: "center",
-    alignItems: "center"
-  }
-}
+    alignItems: "center",
+  },
+};
 
 ModuleReviewPage.getInitialProps = async ({ query }) => {
   const moduleId: string = query.id as string;
-
   try {
     const module = await moduleApi.getModule(moduleId);
-
-    // TODO: retrieve description and university from API
-    module.description = "This module provides an in-depth, hands-on experience in key aspects of software engineering that accompany the development of software. Based on proven principles and best practices, this module focuses on software architectural design from the perspective of the software process. It covers techniques for requirement elicitation and specification that provide sound base for architectural design. The module covers design decision exploration as well as patterns that explicate principles and best practices in replicable form.";
-    module.university = "NUS";
+    const prereqs = await Promise.all(
+      module.prereqs.map(async (prereqId) => {
+        const mod = await moduleApi.getModule(prereqId);
+        return mod.code;
+      })
+    );
+    module.prereqs = prereqs;
 
     const reviews = await reviewApi.getReviewsOfModule(module._id);
 
@@ -127,7 +145,7 @@ ModuleReviewPage.getInitialProps = async ({ query }) => {
   } catch (err) {
     return { module: null, reviews: [] };
   }
-}
+};
 
 export default ModuleReviewPage;
 

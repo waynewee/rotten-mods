@@ -17,7 +17,7 @@ const HomeModuleList: FC = () => {
       ratings: 4.8,
       workload: 10,
       university: "NUS",
-      _id: "5f93fe299a31d12bf74a3518"
+      _id: "5f98f92ff079a408f5c98b06"
     },
     {
       code: "CS3203",
@@ -28,7 +28,7 @@ const HomeModuleList: FC = () => {
       ratings: 4.7,
       workload: 20,
       university: "NUS",
-      _id: "5f93fe299a31d12bf74a3513"
+      _id: "5f98f92ff079a408f5c98b01"
     },
     {
       code: "CS2103T",
@@ -39,7 +39,7 @@ const HomeModuleList: FC = () => {
       ratings: 4.3,
       workload: 10,
       university: "NUS",
-      _id: "5f93fe299a31d12bf74a3505"
+      _id: "5f98f92ff079a408f5c98af3"
     },
     {
       code: "CS3219",
@@ -50,7 +50,7 @@ const HomeModuleList: FC = () => {
       ratings: 4.8,
       workload: 10,
       university: "NUS",
-      _id: "5f93fe299a31d12bf74a3518"
+      _id: "5f98f92ff079a408f5c98b06"
     },
     {
       code: "CS3203",
@@ -61,7 +61,7 @@ const HomeModuleList: FC = () => {
       ratings: 4.7,
       workload: 20,
       university: "NUS",
-      _id: "5f93fe299a31d12bf74a3513"
+      _id: "5f98f92ff079a408f5c98b01"
     },
     {
       code: "CS2103T",
@@ -72,7 +72,7 @@ const HomeModuleList: FC = () => {
       ratings: 4.3,
       workload: 10,
       university: "NUS",
-      _id: "5f93fe299a31d12bf74a3505"
+      _id: "5f98f92ff079a408f5c98af3"
     },
     {
       code: "CS3219",
@@ -83,7 +83,7 @@ const HomeModuleList: FC = () => {
       ratings: 4.8,
       workload: 10,
       university: "NUS",
-      _id: "5f93fe299a31d12bf74a3518"
+      _id: "5f98f92ff079a408f5c98b06"
 
     },
     {
@@ -95,18 +95,16 @@ const HomeModuleList: FC = () => {
       ratings: 4.7,
       workload: 20,
       university: "NUS",
-      _id: "5f93fe299a31d12bf74a3513"
+      _id: "5f98f92ff079a408f5c98b01"
     },
     {
       code: "CS2103T",
       title: "Software Engineering2",
       description:
         "This module introduces the necessary conceptual and analytical tools for systematic and rigorous development of software systems. It covers four main areas of software development, namely object-oriented system analysis, object-oriented system modelling and design, implementation, and testing, with emphasis on system modelling and design and implementation of software modules that work cooperatively to fulfill the requirements of the system. Tools and techniques for software development, such as Unified Modelling Language (UML), program specification, and testing methods, will be taught. Major software engineering issues such as modularisation criteria, program correctness, and software quality will also be covered.",
-      difficulty: 4.5,
-      ratings: 4.3,
       expectedHours: 10,
-      university: "NUS",
-      _id: "5f93fe299a31d12bf74a3505"
+      workload: "NUS",
+      _id: "5f98f92ff079a408f5c98af3"
     },
   ];
 

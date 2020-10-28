@@ -1,26 +1,96 @@
-import { PlannedMods } from "../types";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { PlannedMods } from "../types";
 
 import { Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { BookFilled, PlusOutlined } from "@ant-design/icons";
 import ModulePill from "./ModulePill";
+import Button from "./Button";
+
+const semesterToYSMap = [
+  "",
+  "Y1S1",
+  "Y1S2",
+  "Y2S1",
+  "Y2S2",
+  "Y3S1",
+  "Y3S2",
+  "Y4S1",
+  "Y4S2",
+]; // Starts with empty so the index corresponds to semester
 
 const StudyPlanCard: React.FC = () => {
+  const [selectedSemester, setSelectedSemester] = useState(1);
+  const plannedMods: PlannedMods[] = useSelector(
+    (state) => state.personalModules.plannedMods
+  );
+  const [viewablePlannedMods, setViewablePlannedMods] = useState(
+    plannedMods.filter((plannedMod) => plannedMod.semester === selectedSemester)
+  );
 
-  const dummyModuleCodeMenu = (
+  useEffect(() => {
+    setViewablePlannedMods(
+      plannedMods.filter(
+        (plannedMod) => plannedMod.semester === selectedSemester
+      )
+    );
+  }, [selectedSemester]);
+
+  console.log(viewablePlannedMods);
+
+  const menu = (
     <Menu>
-      <Menu.Item>CS3203</Menu.Item>
-      <Menu.Item>LAK1001</Menu.Item>
-      <Menu.Item>GER1000</Menu.Item>
+      <Menu.Item key={1}>
+        <Button onClick={() => setSelectedSemester(1)}>
+          {semesterToYSMap[1]}
+        </Button>
+      </Menu.Item>
+      <Menu.Item key={2}>
+        <Button onClick={() => setSelectedSemester(2)}>
+          {semesterToYSMap[2]}
+        </Button>
+      </Menu.Item>
+      <Menu.Item key={3}>
+        <Button onClick={() => setSelectedSemester(3)}>
+          {semesterToYSMap[3]}
+        </Button>
+      </Menu.Item>
+      <Menu.Item key={4}>
+        <Button onClick={() => setSelectedSemester(4)}>
+          {semesterToYSMap[4]}
+        </Button>
+      </Menu.Item>
+      <Menu.Item key={5}>
+        <Button onClick={() => setSelectedSemester(5)}>
+          {semesterToYSMap[5]}
+        </Button>
+      </Menu.Item>
+      <Menu.Item key={6}>
+        <Button onClick={() => setSelectedSemester(6)}>
+          {semesterToYSMap[6]}
+        </Button>
+      </Menu.Item>
+      <Menu.Item key={7}>
+        <Button onClick={() => setSelectedSemester(7)}>
+          {semesterToYSMap[7]}
+        </Button>
+      </Menu.Item>
+      <Menu.Item key={8}>
+        <Button onClick={() => setSelectedSemester(8)}>
+          {semesterToYSMap[8]}
+        </Button>
+      </Menu.Item>
     </Menu>
   );
 
-  const plannedMods = useSelector(state => state.personalModules.plannedMods);
-
   const renderModuleCodes = () =>
-    plannedMods.map(plannedMod => {
-      return <ModulePill modId={plannedMod?.plannedMod?.modId} key={plannedMod._id} />;
+    viewablePlannedMods.map((plannedMod) => {
+      return <ModulePill 
+        modId={plannedMod.modId} 
+        key={plannedMod._id} 
+        missingPrereqs={plannedMod.missingPrereqs}
+      />;
     });
 
   return (
@@ -31,9 +101,9 @@ const StudyPlanCard: React.FC = () => {
           StudyPlan
         </div>
         <div style={styles.selector}>
-          <Dropdown overlay={dummyModuleCodeMenu}>
-            <div>
-              Y1S1
+          <Dropdown overlay={menu}>
+            <div style={{ cursor: "pointer" }}>
+              {semesterToYSMap[selectedSemester]}
               <DownOutlined />
             </div>
           </Dropdown>
@@ -62,6 +132,7 @@ const styles = {
     marginRight: 10,
     display: "flex",
     flexDirection: "column" as "column",
+    minHeight: 150,
   },
   header: {
     display: "flex",

@@ -9,10 +9,11 @@ export interface Module {
     difficulty: Rating;
     star: Rating;
   };
-  university: string;
+  schoolId: string;
   _id: string;
   credit: number;
   semester: number[];
+  prereqs: string[];
 }
 
 export interface Rating {
@@ -22,7 +23,6 @@ export interface Rating {
 
 export interface Review {
   userName: string;
-  // userDisplayPicture: string;
   likes?: number;
   comments?: Comment[];
   text: string;
@@ -43,6 +43,11 @@ export interface Review {
   };
   _id: string;
   modId: string;
+  userId: string;
+  user?: {
+    name: string;
+    _id: string;
+  };
 }
 
 export interface Comment {
@@ -73,4 +78,10 @@ export interface PlannedMods {
   code: string;
   semester: number;
   _id: string;
+  missingPrereqs: Module[];
+}
+
+export interface School {
+  _id: string;
+  name: string;
 }

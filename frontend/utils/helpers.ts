@@ -22,7 +22,6 @@ export const updatedPersonalPlannedModules = async (userId) => {
   if (!userId) return;
 
   const data = await plannedModApi.fetchPlannedMods(userId);
-  console.log("Planned Mods:", data);
   store.dispatch({
     type: FETCH_PLANNED_MODS,
     payload: data,
@@ -32,7 +31,7 @@ export const updatedPersonalPlannedModules = async (userId) => {
 export const updatePersonalReviews = async (userId) => {
   if (!userId) return;
 
-  const data = await reviewApi.fetchPersonalReviews(userId);
+  const data = await reviewApi.getReviewsOfUser(userId);
   store.dispatch({
     type: FETCH_PERSONAL_REVIEWS,
     payload: data,

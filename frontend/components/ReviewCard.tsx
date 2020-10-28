@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Review } from "../types";
 import eventApi from "../api/event";
 import commentApi from "../api/comment";
@@ -8,18 +9,26 @@ import Button from "./Button";
 import CommentModal from "./CommentsModal";
 import CommentOutlinedIcon from "../icons/CommentOutlinedIcon";
 import LikeOutlinedIcon from "../icons/LikeOutlinedIcon";
-import { reviewBlue } from "../styles/colors";
+import { reviewBlue, ratingsYellow } from "../styles/colors";
 
 interface ReviewCardProps {
-  review: Review & { user: { name: string, _id: string } };
+  review: Review;
   updateReviews: () => void;
   showActions?: boolean;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ review, updateReviews, showActions = true }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({
+  review,
+  updateReviews,
+  showActions = true,
+}) => {
   const [isCommentsModalVisible, setCommentsModalVisibility] = useState(false);
-  const [isAddCommentModalVisible, setAddCommentModalVisibility] = useState(false);
+  const [isAddCommentModalVisible, setAddCommentModalVisibility] = useState(
+    false
+  );
   const [comments, setComments] = useState([]);
+  const userId = useSelector((state) => state.auth.user?._id);
+  const [isLikedByUser, setIsLikedByUser] = useState(false);
 
   const { user, text, acadYearTaken, semesterTaken, event, _id } = review;
   const { name } = user;
@@ -27,17 +36,35 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, updateReviews, showActi
 
   useEffect(() => {
     fetchComments();
-  }, [])
+    checkIsLikedByUser();
+  }, []);
 
   const fetchComments = async () => {
     const fetchedComments = await commentApi.getCommentsOfReview(review._id);
     setComments(fetchedComments);
-  }
+  };
+
+  const checkIsLikedByUser = async () => {
+    try {
+      const event = await eventApi.getEvent("review", _id, userId, "like");
+      console.log(event);
+      setIsLikedByUser(true);
+    } catch (err) {
+      setIsLikedByUser(false);
+    }
+  };
 
   const onLikeReview = async () => {
-    await eventApi.addEvent(user._id, "review", _id, "like");
-    updateReviews();
-  }
+    if (!isLikedByUser) {
+      await eventApi.addEvent(user._id, "review", _id, "like");
+      updateReviews();
+      checkIsLikedByUser();
+    } else {
+      await eventApi.deleteEvent(user._id, "review", _id, "like");
+      updateReviews();
+      checkIsLikedByUser();
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -45,29 +72,38 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, updateReviews, showActi
         <div style={styles.userInformation}>
           <span>{name}</span>
           <span style={styles.divider}>|</span>
-          <span>AY{acadYearTaken}, Sem {semesterTaken}</span>
+          <span>
+            AY{acadYearTaken}, Sem {semesterTaken}
+          </span>
           <span style={styles.divider}>|</span>
           <span>Difficulty: </span>
           <span style={styles.divider}>|</span>
           <span>Rating: </span>
         </div>
-        {showActions && (<div style={styles.actionsBar}>
-          <div style={styles.action}>
-            <Button onClick={onLikeReview}>
-              <LikeOutlinedIcon style={styles.icon} />
-            </Button>
-            <span>{`${like} Likes`}</span>
+        {showActions && (
+          <div style={styles.actionsBar}>
+            <div style={styles.action}>
+              <Button onClick={onLikeReview}>
+                <LikeOutlinedIcon
+                  style={{
+                    ...styles.icon,
+                    color: isLikedByUser ? ratingsYellow : "#fff",
+                  }}
+                />
+              </Button>
+              <span>{`${like} Likes`}</span>
+            </div>
+            <span style={{ margin: "0px 10px" }}>|</span>
+            <div style={styles.action}>
+              <Button onClick={() => setAddCommentModalVisibility(true)}>
+                <CommentOutlinedIcon style={styles.icon} />
+              </Button>
+              <Button onClick={() => setCommentsModalVisibility(true)}>
+                {`${comments.length} Comments`}
+              </Button>
+            </div>
           </div>
-          <span style={{ margin: "0px 10px" }}>|</span>
-          <div style={styles.action}>
-            <Button onClick={() => setAddCommentModalVisibility(true)}>
-              <CommentOutlinedIcon style={styles.icon} />
-            </Button>
-            <Button onClick={() => setCommentsModalVisibility(true)}>
-              {`${comments.length} Comments`}
-            </Button>
-          </div>
-        </div>)}
+        )}
       </div>
       <div style={styles.review}>{text}</div>
       <AddCommentModal
@@ -93,7 +129,7 @@ const styles = {
     borderRadius: 15,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
     marginBottom: 15,
-    width: "100%"
+    width: "100%",
   },
   header: {
     display: "flex",
@@ -101,10 +137,10 @@ const styles = {
   },
   userInformation: {
     display: "flex",
-    flexWrap: "wrap" as "wrap"
+    flexWrap: "wrap" as "wrap",
   },
   actionsBar: {
-    display: "flex"
+    display: "flex",
   },
   action: {
     display: "flex",
@@ -116,11 +152,11 @@ const styles = {
   },
   review: {
     marginTop: 10,
-    textAlign: "justify" as "justify"
+    textAlign: "justify" as "justify",
   },
   divider: {
-    margin: "0px 10px"
-  }
+    margin: "0px 10px",
+  },
 };
 
 export default ReviewCard;

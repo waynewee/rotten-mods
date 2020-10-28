@@ -8,20 +8,29 @@ import { compareOrange } from "../styles/colors";
 
 const ModuleCompareModal: React.FC = () => {
   const router = useRouter();
-  const firstModuleId: string = useSelector(state => state.compare.firstModuleId);
-  const firstModuleCode: string = useSelector(state => state.compare.firstModuleCode);
-  const secondModuleId: string = useSelector(state => state.compare.secondModuleId);
-  const secondModuleCode: string = useSelector(state => state.compare.secondModuleCode);
-  const hasModuleToCompare = firstModuleId || secondModuleId ? "visible" : "hidden";
+  const firstModuleId: string = useSelector(
+    (state) => state.compare.firstModuleId
+  );
+  const firstModuleCode: string = useSelector(
+    (state) => state.compare.firstModuleCode
+  );
+  const secondModuleId: string = useSelector(
+    (state) => state.compare.secondModuleId
+  );
+  const secondModuleCode: string = useSelector(
+    (state) => state.compare.secondModuleCode
+  );
+  const hasModuleToCompare =
+    firstModuleId || secondModuleId ? "visible" : "hidden";
 
   const navigateToModuleComparisonPage = () => {
     if (firstModuleId && secondModuleId) {
       router.push({
         pathname: "/module-comparison",
-        query: { firstModuleId, secondModuleId }
-      })
+        query: { firstModuleId, secondModuleId },
+      });
     }
-  }
+  };
 
   return (
     <div style={{ visibility: `${hasModuleToCompare}`, ...styles.container }}>
@@ -31,14 +40,16 @@ const ModuleCompareModal: React.FC = () => {
           vs
           {<ModuleCompareCode code={secondModuleCode} order={SECOND} />}
         </div>
-        <div style={styles.actionContainer} onClick={navigateToModuleComparisonPage}>
+        <div
+          style={styles.actionContainer}
+          onClick={navigateToModuleComparisonPage}
+        >
           <ArrowRightIcon style={styles.arrowIcon} />
         </div>
-
       </div>
     </div>
   );
-}
+};
 
 const styles = {
   container: {
@@ -49,7 +60,7 @@ const styles = {
     zIndex: 2,
     display: "flex",
     justifyContent: "center",
-    color: "#fff"
+    color: "#fff",
   },
   modalContainer: {
     width: 360,
@@ -65,18 +76,18 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0px 20px",
-    fontSize: 20
+    fontSize: 20,
   },
   actionContainer: {
     width: 40,
     height: "100%",
     display: "flex",
     alignItems: "center",
-    cursor: "pointer"
+    cursor: "pointer",
   },
   arrowIcon: {
-    height: 25
-  }
+    height: 25,
+  },
 };
 
 export default ModuleCompareModal;

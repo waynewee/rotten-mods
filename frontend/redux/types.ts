@@ -1,4 +1,4 @@
-import { Bookmark, PlannedMods, Review, User } from "../types";
+import { Bookmark, PlannedMods, Review, User, School } from "../types";
 
 export interface AuthState {
   isLoggedIn: boolean;
@@ -30,4 +30,5 @@ export interface ReduxState {
   search: SearchState;
   compare: ModuleCompareState;
   personalModules: PersonalModulesState;
+  schools: School[];
 }

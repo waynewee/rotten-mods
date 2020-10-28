@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from 'react';
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
-import { codeBlue } from "../styles/colors";
+import { reviewBlue } from "../styles/colors";
 import { User } from "../types";
 import CustomButton from "./Button";
 
@@ -73,7 +73,12 @@ const ProfileButton: React.FC<Props> = ({ isAuthenticated }) => {
 const styles = {
   container: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    margin: "0px 10px",
+    padding: 10,
+    backgroundColor: reviewBlue,
+    color: "#fff",
+    borderRadius: 8
   },
   userName: {
     alignItems: "flex-end",

@@ -2,7 +2,6 @@ import axios from "axios";
 const baseUrl = "http://localhost:8080/api/planned-mod";
 
 const addPlannedMod = async (userId, modId, semester) => {
-  console.log(userId, modId, semester);
   await axios.post(
     baseUrl,
     {
@@ -40,6 +39,7 @@ const fetchPlannedMods = async (userId) => {
   const response = await axios.get(`${baseUrl}/user/${userId}`, {
     withCredentials: true,
   });
+
   return response.data;
 };
 
