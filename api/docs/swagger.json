@@ -26,6 +26,10 @@
       "description": "The login API"
     },
     {
+      "name": "logout",
+      "description": "The logout API"
+    },
+    {
       "name": "mod",
       "description": "A university module"
     },
@@ -278,6 +282,50 @@
       }
     },
     "/event":{
+      "get":{
+        "tags": ["event"],
+        "summary": "checks for an event",
+        "description": "Checks if an event exists for a user, an event type and a sub type",
+        "parameters":[{
+          "in": "query",
+          "name": "sub",
+          "description": "Type of subscriber to the event",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["course", "mod", "review", "school"]
+          }
+        },{
+          "in": "query",
+          "name": "userId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "type",
+          "description": "Type of event",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["like", "view"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Event found"
+          },
+          "404":{
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
       "post" :{
         "tags": ["event"],
         "summary":"creates an event",
@@ -317,7 +365,15 @@
             "type": "string",
             "enum": ["like", "view"]
           }
-        }]
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
       }
     },
     "/mod":{
@@ -375,7 +431,7 @@
         }],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Success"
           },
           "500": {
             "description": "Error"
@@ -482,10 +538,10 @@
         "parameters":[{
           "in": "body",
           "name": "body",
-          "description": "Login Object",
+          "description": "PlannedMod Object",
           "required": true,
           "schema": {
-            "$ref": "#/definitions/PlannedMod"
+            "$ref": "#/definitions/PlannedModCreate"
           }
         }]
       },
@@ -566,8 +622,8 @@
     "/planned-mod/user/{userId}":{
       "get": {
         "tags": ["planned mod"],
-        "summary": "finds a planned mod by userId",
-        "description": "Returns a planned mod",
+        "summary": "finds a all planned mods by userId",
+        "description": "Returns a list of planned mods",
         "parameters": [{
           "name": "userId",
           "in": "path",
@@ -579,7 +635,7 @@
           "200":{
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/ModWithPlannedModArray"
+              "$ref": "#/definitions/PlannedModArray"
             }
           },
           "500":{
@@ -587,6 +643,18 @@
           }
         }
 
+      }
+    },
+    "/logout":{
+      "get":{
+        "tags": ["logout"],
+        "summary": "logs an existing user out",
+        "description": "",
+        "responses": {
+          "200":{
+            "description": "Success"
+          }
+        }
       }
     },
     "/login":{
@@ -620,6 +688,50 @@
       }
     },
     "/rating":{
+      "get":{
+        "tags": ["rating"],
+        "summary": "checks for an rating",
+        "description": "Checks if an rating exists for a user, an rating type and a sub type",
+        "parameters":[{
+          "in": "query",
+          "name": "sub",
+          "description": "Type of subscriber to the rating",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["mod", "school", "course"]
+          }
+        },{
+          "in": "query",
+          "name": "userId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "type",
+          "description": "Type of rating",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["difficulty", "star"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Rating found"
+          },
+          "404":{
+            "description": "Rating not found"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
       "post": {
         "tags": ["rating"],
         "summary": "creates a rating",
@@ -1454,6 +1566,10 @@
           "type": "string",
           "example": "Software Engineering Principles and Patterns"
         },
+        "schoolId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
         "acadYear": {
           "type": "string",
           "example": "19/20"
@@ -1490,6 +1606,10 @@
         "title": {
           "type": "string",
           "example": "Software Engineering Principles and Patterns"
+        },
+        "schoolId":{
+          "type": "string",
+          "example": "512345678910111211314151"
         },
         "acadYear": {
           "type": "string",
@@ -1541,74 +1661,6 @@
         "$ref": "#/definitions/Mod"
       }
     },
-    "ModWithPlannedMod":{
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string",
-          "example": "512345678910111211314151"
-        },
-        "code": {
-          "type": "string",
-          "example": "CS3219"
-        },
-        "title": {
-          "type": "string",
-          "example": "Software Engineering Principles and Patterns"
-        },
-        "acadYear": {
-          "type": "string",
-          "example": "19/20"
-        },
-        "semester": {
-          "type": "integer",
-          "example": 2
-        },
-        "description": {
-          "type": "string",
-          "example": "This module provides an in-depth, hands-on experience in key aspects of software engineering that accompany the development of software. Based on proven principles and best practices, this module focuses on software architectural design from the perspective of the software process. It covers techniques for requirement elicitation and specification that provide sound base for architectural design. The module covers design decision exploration as well as patterns that explicate principles and best practices in replicable form."
-        },
-        "credit": {
-          "type": "integer",
-          "example": 4
-        },
-        "workload": {
-          "type": "integer",
-          "example": 20
-        },
-        "prereqs":{
-          "type": "array",
-          "example": ["512345678910111211314151", "512345678910111211314151"]
-        },
-        "rating": {
-          "$ref": "#/definitions/RatingObj"
-        },
-        "event": {
-          "$ref": "#/definitions/EventObj"
-        },
-        "createdAt" : {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "_v":{
-          "type": "integer",
-          "format": "int32"
-        },
-        "plannedMod":{
-          "$ref": "#/definitions/PlannedMod"
-        }
-      }
-    },
-    "ModWithPlannedModArray":{
-      "type":"array",
-      "items": {
-        "$ref": "#/definitions/ModWithPlannedMod"
-      }
-    },
     "PlannedMod":{
       "type": "object",
       "properties":{
@@ -1627,6 +1679,19 @@
         "semester":{
           "type": "integer",
           "example": 2
+        },
+        "mod":{
+          "$ref":"#/definitions/Mod"
+        },
+        "missingPrereqs":{
+          "type":"array",
+          "items":{
+            "$ref":"#/definitions/ModArray"
+          }
+        },
+        "allPrereqsPresent": {
+          "type": "boolean",
+          "example": true
         },
         "createdAt" : {
           "type": "string",
@@ -1657,6 +1722,12 @@
           "type": "integer",
           "example": 2
         }
+      }
+    },
+    "PlannedModArray":{
+      "type": "array",
+      "items":{
+        "$ref": "#/definitions/PlannedMod"
       }
     },
     "RatingCreate": {
@@ -1801,6 +1872,9 @@
         },
         "event": {
           "$ref": "#/definitions/EventObj"
+        },
+        "rating":{
+          "$ref": "#/definitions/RatingObj"
         },
         "createdAt" : {
           "type": "string",

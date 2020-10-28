@@ -16,11 +16,19 @@ export let getPlannedMods = (req: Request, res: Response, next: NextFunction) =>
         $or: plannedMods.map( plannedMod => ({ _id: plannedMod.modId }))
       })
       .then( mods => {
-        console.log(mods.length)
-        const modList = PlannedMod.checkForPreReqs(mods, plannedMods)
-        
-        res.send(modList)
 
+        const preReqIds = Mod.getPreReqDetails(mods)
+
+        return Mod.find({
+          $or: preReqIds.map( preReqId => ({ _id: preReqId }))
+        })
+        .then( preReqMods => {
+          
+          const modList = PlannedMod.checkForPreReqs(mods, plannedMods, preReqMods)
+          
+          res.send(modList)
+
+        })
       })
     }
   })

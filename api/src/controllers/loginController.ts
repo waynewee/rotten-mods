@@ -2,6 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import User from '../models/user'
 import { encrypt, verify } from '../services/security'
 
+export let logout = (req:Request, res:Response, next: NextFunction) => {
+  res.clearCookie('token',{
+    httpOnly: true
+  })
+
+  res.send(200)
+}
+
 export let login = (req: Request, res: Response, next: NextFunction) =>{
   
   const {

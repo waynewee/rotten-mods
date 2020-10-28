@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import Rating from '../models/rating'
 import RatingPublisher from '../publishers/rating/ratingPub'
+import { Types } from 'mongoose'
+
+const { ObjectId } = Types
 
 export let addRating = (req: Request, res: Response, next: NextFunction) => {
   let rating = new Rating(req.body);
@@ -28,4 +31,30 @@ export let updateRating = (req: Request, res: Response, next: NextFunction) => {
     .then(()=>res.sendStatus(200))
   })
   .catch(next)
+}
+
+export let findRating = (req: Request, res: Response, next: NextFunction) => {
+  
+  const {
+    userId,
+    type,
+    sub
+  } = req.query as { userId: string, type: string, sub: string }
+
+  Rating.findOne({
+    $and: [
+      { userId: ObjectId(userId)},
+      { type: { $regex: type } },
+      { sub: { $regex: sub } }
+    ]
+  })
+  .then( rating => {
+    if( rating ){
+      res.sendStatus(200)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+  .catch(next)
+
 }

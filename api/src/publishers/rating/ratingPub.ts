@@ -1,23 +1,27 @@
 import Mod from '../../models/mod'
 import School from '../../models/school'
 import Course from '../../models/course'
+import Review from '../../models/review'
 
 enum ratingSubTypesEnum {
   mod = "mod",
   school = "school",
-  course = "course"
+  course = "course",
+  review = "review"
 }
 
 export const ratingSubTypes = [
   ratingSubTypesEnum.mod, 
   ratingSubTypesEnum.school, 
-  ratingSubTypesEnum.course
+  ratingSubTypesEnum.course,
+  ratingSubTypesEnum.review
 ]
 
 const ratingSubs = [
   Mod, 
   School, 
-  Course
+  Course,
+  Review
 ]
 
 class RatingPub {

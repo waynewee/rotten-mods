@@ -10,5 +10,6 @@ import { isLoggedIn } from '../middleware'
 router.post("/", isLoggedIn, ratingController.addRating)
 router.delete("/:id", isLoggedIn, ratingController.deleteRating)
 router.put("/:id", isLoggedIn, ratingController.updateRating)
+router.get("/", ratingController.findRating)
 
 export default router;

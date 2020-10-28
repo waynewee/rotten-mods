@@ -2,6 +2,7 @@ import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
 
 import { validateString } from '../helpers/validators' 
 import { EventObjSchema } from '../publishers/event/eventPubSchema'
+import {RatingObjSchema} from '../publishers/rating/ratingPubSchema'
 import { acadSemType } from './types';
 
 export const ReviewSchema = createSchema({
@@ -10,7 +11,8 @@ export const ReviewSchema = createSchema({
   modId: Type.objectId({ required: true}),
   acadYearTaken: Type.string(),
   semesterTaken: acadSemType,
-  event: EventObjSchema
+  event: EventObjSchema,
+  rating: RatingObjSchema,
 },{
   timestamps: true
 })
