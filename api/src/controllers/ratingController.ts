@@ -67,7 +67,7 @@ export let findRating = (req: Request, res: Response, next: NextFunction) => {
   })
   .then( rating => {
     if( rating ){
-      res.sendStatus(200)
+      res.send(rating)
     } else {
       res.sendStatus(404)
     }
