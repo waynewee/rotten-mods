@@ -8,29 +8,23 @@ export let getPlannedMods = (req: Request, res: Response, next: NextFunction) =>
 
   PlannedMod.find({userId})
   .then(plannedMods => {
+
+    const plannedModsIds = plannedMods.map( plannedMod => plannedMod.modId )
     
-    if( plannedMods.length == 0 ){
-      res.send(200)
-    } else {
-      return Mod.find({
-        $or: plannedMods.map( plannedMod => ({ _id: plannedMod.modId }))
+    return Mod.findByIds(plannedModsIds)
+    .then( (mods: any[]) => {
+
+      const preReqIds = Mod.getPreReqDetails(mods)
+
+      return Mod.findByIds(preReqIds)
+      .then( (preReqMods: any[]) => {
+        
+        const modList = PlannedMod.checkForPreReqs(mods, plannedMods, preReqMods)
+        
+        res.send(modList)
+
       })
-      .then( mods => {
-
-        const preReqIds = Mod.getPreReqDetails(mods)
-
-        return Mod.find({
-          $or: preReqIds.map( preReqId => ({ _id: preReqId }))
-        })
-        .then( preReqMods => {
-          
-          const modList = PlannedMod.checkForPreReqs(mods, plannedMods, preReqMods)
-          
-          res.send(modList)
-
-        })
-      })
-    }
+    })
   })
   .catch(next)
 

@@ -30,6 +30,16 @@ const Mod = typedModel('Mod', ModSchema, undefined, undefined, {
       }
       return acc
     },[])
+  },
+  findByIds: async function(ids: Array<any>){
+
+    if( ids.length == 0 ){
+      return []
+    }
+
+    return Mod.find({
+      $or: ids.map( id => ({ _id: id }))
+    })
   }
 });
 
