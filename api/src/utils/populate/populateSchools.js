@@ -29,7 +29,8 @@ function populateSchools(){
     for( let i = 0; i < schools.length; i++ ){
   
       const newSchool = new School({
-        name: schools[i]
+        name: schools[i],
+        shortName: School.getShortName(schools[i])
       })
     
       promises.push(newSchool.save())
