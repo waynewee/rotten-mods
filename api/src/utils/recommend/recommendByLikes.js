@@ -5,8 +5,7 @@ const { mongoUri } = require('../../../dist/config')
 mongoose.connect(mongoUri)
 
 const Event = require('../../../dist/src/models/Event').default
-const User = require('../../../dist/src/models/User').default
-const Mod = require('../../../dist/src/models/Mod').default
+const Mod = require('../../../dist/src/models/mod').default
 const Recommendation = require('../../../dist/src/models/Recommendation').default
 const { recommendationTypesEnum } = require('../../../dist/src/models/Recommendation')
 var _ = require('lodash');
@@ -19,9 +18,6 @@ to generate recommendation
 - recommend
 - for each mod
 -- call recommendation index (user, module)
--- call total likes (module)
--- call liked users (module)
--- call jaccard index (user)
 */
 
 //calculate jaccard index
@@ -29,19 +25,21 @@ to generate recommendation
 function jaccardIndex(user, users) {
     return new Promise(function(resolve, reject) {
         Event.aggregate([ 
-            { $group: { _id : "$userId", modId: {$push: "$modId"}}},
+            { $match: {sub : "mod"}},
+            { $group: {_id : "$userId", subId: {$push: "$subId"}}},
             { $match: {_id : user}}
         ]).then(function(res) {
             //console.log("res is: ", res[0].modId);
             Event.aggregate([
+                { $match: {sub : "mod"}},
                 { $match: {userId : {"$in": users}}},
-                { $group: { _id : "$userId", mods: {$push: "$modId"}}},
+                { $group: { _id : "$userId", mods: {$push: "$subId"}}},
                 { $project: {
-                    "intersect": {"$size": { "$setIntersection": [res[0].modId, "$mods"]}}, 
-                    "union": {"$size": { "$setUnion": [res[0].modId, "$mods"] }},
+                    "intersect": {"$size": { "$setIntersection": [res[0].subId, "$mods"]}}, 
+                    "union": {"$size": { "$setUnion": [res[0].subId, "$mods"] }},
                     "jaccard": 
-                        { "$divide": [{"$size": { "$setIntersection": [res[0].modId, "$mods"]}},
-                              {"$size": { "$setUnion": [res[0].modId, "$mods"]}}]},
+                        { "$divide": [{"$size": { "$setIntersection": [res[0].subId, "$mods"]}},
+                              {"$size": { "$setUnion": [res[0].subId, "$mods"]}}]},
                 }},
                 { $group: { _id : 0, total: {$sum: "$jaccard"}}},
             ]).then(function (res2) {
@@ -56,10 +54,11 @@ function jaccardIndex(user, users) {
 function totalLikes(module) {
     return new Promise(function(resolve, reject) {
         Event.aggregate([
-            {$match: {type: "likedMod"}},
-            {$match: {modId: module}},
+            {$match: {type: "like"}},
+            {$match: {subId: module}},
             {$count: "totalLikes"}
-        ]).then(function (res) {resolve(res[0].totalLikes)});
+        ]).then(function (res) {
+            resolve(res[0].totalLikes)});
     });
 }
 
@@ -67,8 +66,8 @@ function totalLikes(module) {
 function likedUsers(module) {
     return new Promise(function(resolve, reject) {
         Event.aggregate([
-            { $match: { type : "likedMod"}},
-            { $match: { modId : module}},
+            { $match: { type : "like"}},
+            { $match: { subId : module}},
             { $group: { _id: '$userId'}}
         ]).then(function (res) {
             res = res.map(function(r) {
@@ -79,32 +78,6 @@ function likedUsers(module) {
     });
     
 }
-/*
-function recommend(user, module) {
-    return new Promise(function(resolve, reject) {
-        Mod.aggregate([
-
-        ]).then(function(res1) {
-            console.log("res1: ", res1);
-        })
-
-        
-
-        /*
-        Event.aggregate([
-            { $match: { type : "likedMod"}},
-            { $match: { modId : module}},
-            { $group: { _id: '$userId'}}
-        ]).then(function (res) {
-            res = res.map(function(r) {
-                return r._id;
-            });
-            return(Object.values(res));
-        }).then(function (res1) {
-            console.log(res1);
-        });
-    });
-}*/
 
 //calculate recommendation index
 function recommendationIndex(user, module) {
@@ -131,51 +104,25 @@ function recommend(user) {
             if(err) {
                 console.log(err);
             } 
-            
+            var recommendations;
             modules.map(module => {
-                var a = likedUsers(module._id);
-                a.then(function(res) {
-                    //console.log(res);
-                    var b = totalLikes(module._id);
-                    b.then(function(res2) {
-                        console.log(res2);
-                    })
-                });
+                var index = recommendationIndex(user, module._id);
+                index.then(function(idx) {
+                    recommendations.module = idx;
+                })
             });
+            
+            const newRecommendation = new Recommendation({
+                userId: user._id,
+                recommendations: recommendations, //store key value pair of mod code to rec idx
+                type: recommendationTypesEnum.likes
+            });
+            resolve(newRecommendation.save());
         });
     });
 }
 
-
-
-/*
-//save recommendation on Recommendation
-function recommend(user) {
-    Mod.find().then(modules => {
-        var promises = [];
-        recommendations = [];
-        for (var i = 0; i < modules.length; i++) {
-            promises.push(recommendationIndex(user, modules[i]));
-        }
-        Promise.all(promises).then(function(res) {
-            for (var i = 0; i < modules.length; i++) {
-                var mod = {
-                    modId: modules[i].modId,
-                    recIndex: res[i]
-                };
-                recommendations.push(mod);
-            }
-            const newRecommendation = new Recommendation({
-                userId: user._id,
-                recommendations: recommendations, //store string array of mods
-                type: recommendationTypesEnum.likes
-            });
-            newRecommendation.save();
-            resolve(recommendations);
-        });
-    });
-}*/
-
-console.log("generate");
-//console.log(recommendationIndex(ObjectId("5f854114eee454084b1f9eab"), ObjectId("5f854114eee454084b1f9fb0")));
-recommend(ObjectId("5f854114eee454084b1f9eab"));
+likedUsers(ObjectId("5f9b1c53c497871dbf23e702"));
+totalLikes(ObjectId("5f9b1c53c497871dbf23e702"));
+recommendationIndex(ObjectId("5f9b1c53c497871dbf23e65e"), ObjectId("5f9b1c53c497871dbf23e702"));
+recommend(ObjectId("5f9b1c53c497871dbf23e65e"));
