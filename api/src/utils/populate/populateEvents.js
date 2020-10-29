@@ -6,58 +6,66 @@ mongoose.connect(mongoUri)
 
 const { eventTypesEnum } = require('../../../dist/src/models/Event')
 const Event = require('../../../dist/src/models/Event').default
-const User = require('../../../dist/src/models/User').default
-const Mod = require('../../../dist/src/models/Mod').default
+const Mod = mongoose.model("Mod")
+const User = require('../../../dist/src/models/user').default
 
 function populateEvents(eventType){
 
-  const promises = []
-
-  // create views
-  for( let i = 0; i < 10000; i++ ){
-    
-    promises.push(
-      User.aggregate([
-        {$sample: {size: 1}}
-      ])
-      .then( users => {
-
-        if( users.length == 0 ){
-          console.log("No users found")
-          return;
-        }
-
-        return Mod.aggregate([
+  return Event.remove({})
+  .then(() => {
+    console.log("Populating events")
+    const promises = []
+  
+    // create views
+    for( let i = 0; i < 500; i++ ){
+      
+      promises.push(
+        User.aggregate([
           {$sample: {size: 1}}
         ])
-        .then( mods => {
-
-          if( mods.length == 0 ){
+        .then( users => {
+  
+          if( users.length == 0 ){
             console.log("No users found")
             return;
           }
-
-          const user = users[0]
-          const mod = mods[0]
-
-          const newEvent = new Event({
-            type: eventType,
-            userId: user._id,
-            modId: mod._id
+  
+          return Mod.aggregate([
+            {$sample: {size: 1}}
+          ])
+          .then( mods => {
+  
+            if( mods.length == 0 ){
+              console.log("No users found")
+              return;
+            }
+  
+            const user = users[0]
+            const mod = mods[0]
+  
+            const newEvent = new Event({
+              type: eventType,
+              userId: user._id,
+              subId: mod._id,
+              sub: "mod"
+            })
+  
+            return newEvent.save()
+  
           })
-
-          return newEvent.save()
-
         })
-      })
+  
+      )
+  
+    }
 
-    )
+    return Promise.all(promises)
 
-  }
+  })
 }
 
-function populateViews(){ return populateEvents( eventTypesEnum.viewedMod )}
-function populateLikes(){ return populateEvents(eventTypesEnum.likedMod)}
+function populateViews(){ return populateEvents( eventTypesEnum.view )}
+function populateLikes(){ return populateEvents(eventTypesEnum.like)}
 
 module.exports = {
   populateLikes,

@@ -1,7 +1,11 @@
 export function validateString(str: string): boolean{
-  if( str.length == 0 ){
-    return false;
-  }
+  return str.length > 0
+}
 
-  return true;
+export function validateEmail(email: string): boolean {
+  
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$/
+
+  return regex.test(email)
+
 }

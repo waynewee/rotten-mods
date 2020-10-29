@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css?family=Mukta&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800&display=swap");
+
+.commentModal::-webkit-scrollbar {
+  display: none;
+}
+
+.commentModal {
+  max-height: 80vh;
+}

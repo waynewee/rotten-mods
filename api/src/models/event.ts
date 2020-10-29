@@ -1,16 +1,17 @@
 import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
-
+import { eventSubTypes } from '../publishers/event/eventPub'
 export enum eventTypesEnum {
-  likedMod = 'likedMod',
-  viewedMod = 'viewedMod'
+  like = 'like',
+  view = 'view'
 }
 
-const eventTypes = [ eventTypesEnum.likedMod, eventTypesEnum.viewedMod ]
+const eventTypes = [ eventTypesEnum.like, eventTypesEnum.view ]
 
 export const EventSchema = createSchema({
   userId: Type.objectId({ required: true }),
-  modId: Type.objectId(),
-  type: Type.string({ required: true, enum: eventTypes })
+  subId: Type.objectId({ required: true }),
+  sub: Type.string({ required: true, enum: eventSubTypes }),
+  type: Type.string({ required:true, enum: eventTypes })
 },{
   timestamps: true
 })

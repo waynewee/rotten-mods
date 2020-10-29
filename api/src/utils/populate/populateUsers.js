@@ -3,25 +3,38 @@ const randomString = require('randomstring')
 
 const { mongoUri } = require('../../../dist/config')
 
+const { hash } = require('../../../dist/src/services/security')
+
 mongoose.connect(mongoUri)
 
-const User = require('../../../dist/src/models/User').default
+const User = require('../../../dist/src/models/user').default
 
 function populateUsers(){
 
-  const promises = []
+  return User.remove({})
+  .then(() => hash("12345"))
+  .then(password => {
+    console.log("Populating users")
+    const promises = []
+    
+    for( let i = 0; i < 100; i++ ){
   
-  for( let i = 0; i < 100; i++ ){
+      const randomNumber = Math.floor(Math.random() * 20) + 5
+    
+      const email = randomString.generate(randomNumber) + "@email.edu"
+      const name = randomString.generate({ length: randomNumber, charset: 'alphabetic'}) + " " + randomString.generate(3)
   
-    const email = randomString.generate(Math.floor(Math.random() * 15) + 5) + "@email.com"
-  
-    const newUser = new User({
-      email
-    })
-  
-    promises.push(newUser.save())
-  }
-  return Promise.all(promises)
+      const newUser = new User({
+        name,
+        email,
+        password
+      })
+    
+      promises.push(newUser.save())
+    }
+    return Promise.all(promises)
+  })
+
 
 }
 
