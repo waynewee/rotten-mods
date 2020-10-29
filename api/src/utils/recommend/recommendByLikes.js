@@ -17,6 +17,7 @@ to generate recommendation
 - sum(jaccard of user and all users who liked mod) / total likes for mod
 
 - recommend
+- for each mod
 -- call recommendation index (user, module)
 -- call total likes (module)
 -- call liked users (module)
@@ -33,6 +34,7 @@ function jaccardIndex(user, users) {
         ]).then(function(res) {
             //console.log("res is: ", res[0].modId);
             Event.aggregate([
+                { $match: {userId : {"$in": users}}},
                 { $group: { _id : "$userId", mods: {$push: "$modId"}}},
                 { $project: {
                     "intersect": {"$size": { "$setIntersection": [res[0].modId, "$mods"]}}, 
@@ -68,18 +70,47 @@ function likedUsers(module) {
             { $match: { type : "likedMod"}},
             { $match: { modId : module}},
             { $group: { _id: '$userId'}}
-        ]).then(function (res) {resolve(res)});
+        ]).then(function (res) {
+            res = res.map(function(r) {
+                return r._id;
+            });
+            resolve(Object.values(res));
+        });
     });
     
 }
+/*
+function recommend(user, module) {
+    return new Promise(function(resolve, reject) {
+        Mod.aggregate([
+
+        ]).then(function(res1) {
+            console.log("res1: ", res1);
+        })
+
+        
+
+        /*
+        Event.aggregate([
+            { $match: { type : "likedMod"}},
+            { $match: { modId : module}},
+            { $group: { _id: '$userId'}}
+        ]).then(function (res) {
+            res = res.map(function(r) {
+                return r._id;
+            });
+            return(Object.values(res));
+        }).then(function (res1) {
+            console.log(res1);
+        });
+    });
+}*/
 
 //calculate recommendation index
 function recommendationIndex(user, module) {
-    console.log("user is: ", user);
     return new Promise((resolve, reject) => {
         var users = likedUsers(module);
         users.then(function(u) {
-            console.log("liked users: ", u);
             var index = jaccardIndex(user, u);
             index.then(function(ind) {
                 var total = totalLikes(module);
@@ -96,14 +127,26 @@ function recommendationIndex(user, module) {
 
 function recommend(user) {
     return new Promise((resolve, reject) => {
-        Mod.aggregate([
-            { $project: {
-                "count": {"$sum" : "$_id"},
-                "index": recIdx(user, "$_id")}
-                }
-        ]).then(function (res) {console.log(res); resolve(res)});
+        Mod.find({}, (err, modules) => {
+            if(err) {
+                console.log(err);
+            } 
+            
+            modules.map(module => {
+                var a = likedUsers(module._id);
+                a.then(function(res) {
+                    //console.log(res);
+                    var b = totalLikes(module._id);
+                    b.then(function(res2) {
+                        console.log(res2);
+                    })
+                });
+            });
+        });
     });
 }
+
+
 
 /*
 //save recommendation on Recommendation
@@ -134,5 +177,5 @@ function recommend(user) {
 }*/
 
 console.log("generate");
-console.log(recommendationIndex(ObjectId("5f854114eee454084b1f9eab"), ObjectId("5f854114eee454084b1f9fb0")));
-//console.log(recommend(ObjectId("5f854114eee454084b1f9eab")));
+//console.log(recommendationIndex(ObjectId("5f854114eee454084b1f9eab"), ObjectId("5f854114eee454084b1f9fb0")));
+recommend(ObjectId("5f854114eee454084b1f9eab"));
