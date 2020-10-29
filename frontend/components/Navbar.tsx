@@ -11,6 +11,7 @@ import { codeBlue } from "../styles/colors";
 import ProfileButton from "./ProfileButton";
 import Button from "./Button";
 
+
 const { Search } = Input;
 
 interface NavBarProps {
@@ -65,7 +66,7 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
         <Button style={styles.addModuleButton} onClick={() => setAddModuleModalVisibility(true)}>
           Add Module
         </Button>
-        <ProfileButton isAuthenticated={true} />
+        <ProfileButton/>
       </div>
     </div>
 

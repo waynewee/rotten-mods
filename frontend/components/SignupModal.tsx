@@ -69,6 +69,7 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
   const onFormFinish = signUpValues => {
     console.log(signUpValues);
     authService.signUp(signUpValues);
+    toggles.toggles.switchModals();
   }
 
   const onUniversityChange = event => {
