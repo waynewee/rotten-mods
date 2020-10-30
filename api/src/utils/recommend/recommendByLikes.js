@@ -23,6 +23,33 @@ to generate recommendation
 //calculate jaccard index
 // map to generate jaccard?
 function jaccardIndex(user, users) {
+
+    return Event.aggregate([ 
+      { $match: {sub : "mod"}},
+      { $group: {_id : "$userId", subId: {$push: "$subId"}}},
+      { $match: {_id : user}}
+    ])
+    .then( res => {
+      console.log("res is: ", res);
+        return Event.aggregate([
+          { $match: {sub : "mod"}},
+          { $match: {userId : {"$in": users}}},
+          { $group: { _id : "$userId", mods: {$push: "$subId"}}},
+          { $project: {
+              "intersect": {"$size": { "$setIntersection": [res[0].subId, "$mods"]}}, 
+              "union": {"$size": { "$setUnion": [res[0].subId, "$mods"] }},
+              "jaccard": 
+                  { "$divide": [{"$size": { "$setIntersection": [res[0].subId, "$mods"]}},
+                        {"$size": { "$setUnion": [res[0].subId, "$mods"]}}]},
+          }},
+          { $group: { _id : 0, total: {$sum: "$jaccard"}}},
+        ])
+        .then( res2 =>{
+          console.log(res2)
+          return res2[0].total
+        })
+    })
+
     return new Promise(function(resolve, reject) {
         Event.aggregate([ 
             { $match: {sub : "mod"}},
@@ -64,6 +91,17 @@ function totalLikes(module) {
 
 //filter users who liked a mod
 function likedUsers(module) {
+
+    return Event.aggregate([
+      { $match: { type : "view"}},
+      { $match: { subId : module}},
+      { $group: { _id: '$userId'}}
+    ])
+    .then( res => {
+      res = res.map( r => r._id)
+      return res
+    })
+
     return new Promise(function(resolve, reject) {
         Event.aggregate([
             { $match: { type : "view"}},
@@ -81,6 +119,15 @@ function likedUsers(module) {
 
 //calculate recommendation index
 function recommendationIndex(user, module) {
+
+    return likedUsers(module)
+    .then( u => {
+      return jaccardIndex(user, u)
+      .then( indx => {
+        return indx/u.length
+      })
+    })
+
     return new Promise((resolve, reject) => {
         var users = likedUsers(module);
         return users.then(function(u) {
@@ -96,6 +143,25 @@ function recommendationIndex(user, module) {
 }
 
 function recommend(user) {
+
+  return Mod.find({})
+  .then( modules => {
+
+    const recs = {}
+
+    return Promise.all(
+      modules.map( m => {
+        return recommendationIndex(user, m._id)
+        .then( idx => {
+          recs.module.code = idx
+        })
+      })
+    )
+  })
+  .catch( err => {
+    console.log(err)
+  })
+
     return new Promise((resolve, reject) => {
         Mod.find({}, (err, modules) => {
             if(err) {
@@ -128,4 +194,5 @@ function recommend(user) {
 //likedUsers(ObjectId("5f9b1c53c497871dbf23e702"));
 //totalLikes(ObjectId("5f9b1c53c497871dbf23e702"));
 //recommendationIndex(ObjectId("5f9b64e79aa8ac9046e1278b"), ObjectId("5f9b64ec9aa8ac9046e13389"));
-recommend(ObjectId("5f9b64e79aa8ac9046e1278b"));
+recommend(ObjectId("5f98f8e007b1a55d80fa8410"));
+
