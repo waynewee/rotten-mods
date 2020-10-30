@@ -7,11 +7,11 @@ const getModule = async (id) => {
   return response.data;
 };
 
-const searchModule = async (searchTerm) => {
+const searchModule = async (searchTerm, limit = 10) => {
   const query = {
     s: searchTerm,
     page: 1,
-    limit: 10,
+    limit,
   };
 
   const response = await axios.get(
@@ -20,4 +20,19 @@ const searchModule = async (searchTerm) => {
   return response.data;
 };
 
-export default { getModule, searchModule };
+interface NewModule {
+  code: string;
+  title: string;
+  schoolId: string;
+  semester: number[];
+  description: string;
+  credit: number;
+  workload: number;
+  prereqs: string[];
+}
+const addModule = async (module: NewModule) => {
+  const response = await axios.post(baseUrl, module, { withCredentials: true });
+  console.log(response);
+};
+
+export default { getModule, searchModule, addModule };

@@ -40,6 +40,7 @@ const styles = {
     marginBottom: 15,
     display: "flex",
     flexDirection: "column" as "column",
+    minHeight: 150
   },
   header: {
     display: "flex",

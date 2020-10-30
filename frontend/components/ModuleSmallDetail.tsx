@@ -1,10 +1,14 @@
 interface ModuleSmallDetailProps {
-  Icon: React.FC<React.SVGProps<SVGSVGElement>>,
-  text: string,
-  iconStyle: React.CSSProperties
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  text: string;
+  iconStyle: React.CSSProperties;
 }
 
-const ModuleSmallDetail: React.FC<ModuleSmallDetailProps> = ({ Icon, text, iconStyle }) => {
+const ModuleSmallDetail: React.FC<ModuleSmallDetailProps> = ({
+  Icon,
+  text,
+  iconStyle,
+}) => {
   return (
     <div style={styles.container}>
       <div style={styles.iconContainer}>
@@ -18,19 +22,19 @@ const ModuleSmallDetail: React.FC<ModuleSmallDetailProps> = ({ Icon, text, iconS
 const styles = {
   container: {
     display: "flex",
-    flexDirection: "row" as "row",
-    marginLeft: 40,
-    padding: "10px 0px"
+    marginLeft: 20,
+    padding: "10px 0px",
   },
   iconContainer: {
     display: "flex",
     justifyContent: "center",
-    width: 26
+    width: 26,
   },
   text: {
     marginLeft: 10,
-    color: "#838383"
-  }
-}
+    color: "#838383",
+    textOverflow: "ellipsis",
+  },
+};
 
 export default ModuleSmallDetail;

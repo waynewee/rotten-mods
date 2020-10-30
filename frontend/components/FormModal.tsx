@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import CrossIcon from "../icons/CrossIcon";
 import Modal from "react-modal";
@@ -54,7 +54,8 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(232, 232, 232, 0.5)"
+    backgroundColor: "rgba(232, 232, 232, 0.5)",
+    zIndex: 10
   },
   content: {
     position: "static",
@@ -63,7 +64,8 @@ const styles = {
     borderRadius: 15,
     borderWidth: 0,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
-    padding: "30px 30px 20px 30px"
+    padding: "30px 30px 20px 30px",
+    zIndex: 11
   },
   header: {
     display: "flex",

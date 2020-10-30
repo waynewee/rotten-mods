@@ -14,12 +14,13 @@ interface ModuleListCardProps {
 const SearchModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { code, title, description, _id } = module;
+  const { code, title, description, _id, rating } = module;
+  const star = rating?.star?.value || 0;
 
   const navigateToModuleReviewPage = () => {
     router.push({
       pathname: "/module-review",
-      query: { module: JSON.stringify(module) }
+      query: { id: _id }
     })
   }
 
@@ -43,7 +44,7 @@ const SearchModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
         </div>
         <div style={styles.reviewStarContainer}>
           <StarFilledIcon style={styles.starIcon} />
-          <span style={styles.reviewNumber}>4.7</span>
+          <span style={styles.reviewNumber}>{star}</span>
         </div>
       </div>
       <div style={styles.compareButton} onClick={onCompare}>vs</div>

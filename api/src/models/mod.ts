@@ -6,7 +6,7 @@ import { acadSemType } from './types';
 
 export const ModSchema = createSchema({
   code: Type.string({ required: true }),
-  schoolId: Type.objectId({required: true}),
+  schoolId: Type.objectId(),
   title: Type.string({required: true }),
   acadYear: Type.string(),
   semester: Type.array().of(acadSemType),
@@ -30,6 +30,16 @@ const Mod = typedModel('Mod', ModSchema, undefined, undefined, {
       }
       return acc
     },[])
+  },
+  findByIds: async function(ids: Array<any>){
+
+    if( ids.length == 0 ){
+      return []
+    }
+
+    return Mod.find({
+      $or: ids.map( id => ({ _id: id }))
+    })
   }
 });
 

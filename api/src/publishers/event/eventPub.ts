@@ -66,6 +66,34 @@ class EventPub {
 
   }
 
+  static notifyOfDeletion(event: any){
+
+    let promises:any = []
+
+    for (let i = 0; i < eventSubs.length; i++ ){
+
+      const sub:any = eventSubs[i]
+      const subType = eventSubTypes[i]
+
+      if(event.sub == subType){
+
+        return sub.findOne({ _id: event.subId})
+        .then( (subObj: any) => {
+          
+          const eventType = event.type
+
+          subObj.event[eventType].count -= 1
+          
+          promises.push(subObj.save())
+
+        })
+      }
+    }
+
+    return Promise.all(promises)
+
+  }
+
 }
 
 export default EventPub

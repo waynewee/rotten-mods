@@ -282,50 +282,6 @@
       }
     },
     "/event":{
-      "get":{
-        "tags": ["event"],
-        "summary": "checks for an event",
-        "description": "Checks if an event exists for a user, an event type and a sub type",
-        "parameters":[{
-          "in": "query",
-          "name": "sub",
-          "description": "Type of subscriber to the event",
-          "required": "true",
-          "schema" : {
-            "type": "string",
-            "enum": ["course", "mod", "review", "school"]
-          }
-        },{
-          "in": "query",
-          "name": "userId",
-          "description": "OID of subscriber object",
-          "required": "true",
-          "schema":{
-            "type": "string",
-            "example": "512345678910111211314151"
-          }
-        },{
-          "in": "query",
-          "name": "type",
-          "description": "Type of event",
-          "required": "true",
-          "schema":{
-            "type": "string",
-            "enum": ["like", "view"]
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Event found"
-          },
-          "404":{
-            "description": "Event not found"
-          },
-          "500": {
-            "description": "Error"
-          }
-        }
-      },
       "post" :{
         "tags": ["event"],
         "summary":"creates an event",
@@ -369,6 +325,110 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
+      "delete" :{
+        "tags": ["event"],
+        "summary":"deletes an event",
+        "description":"",
+        "parameters":[{
+          "in": "body",
+          "name": "body",
+          "description": "Event object",
+          "required": "true",
+          "schema": {
+            "$ref": "#/definitions/EventCreate"
+          }
+        },{
+          "in": "body",
+          "name": "sub",
+          "description": "Type of subscriber to the event",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["course", "mod", "review", "school"]
+          }
+        },{
+          "in": "body",
+          "name": "subId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "body",
+          "name": "type",
+          "description": "Type of event",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["like", "view"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/event/find":{
+      "get":{
+        "tags": ["event"],
+        "summary": "checks for an event",
+        "description": "Checks if an event exists for a user, an event type and a sub type",
+        "parameters":[{
+          "in": "query",
+          "name": "sub",
+          "description": "Type of subscriber to the event",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["course", "mod", "review", "school"]
+          }
+        },{
+          "in": "query",
+          "name": "subId",
+          "description": "OID of the subscriber",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "userId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "type",
+          "description": "Type of event",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["like", "view"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Event found"
+          },
+          "404":{
+            "description": "Event not found"
           },
           "500": {
             "description": "Error"
@@ -688,12 +748,20 @@
       }
     },
     "/rating":{
-      "get":{
+      "post": {
         "tags": ["rating"],
-        "summary": "checks for an rating",
-        "description": "Checks if an rating exists for a user, an rating type and a sub type",
+        "summary": "creates a rating",
+        "description": "",
         "parameters":[{
-          "in": "query",
+          "in": "body",
+          "name": "body",
+          "description": "Rating Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/RatingCreate"
+          }
+        },{
+          "in": "body",
           "name": "sub",
           "description": "Type of subscriber to the rating",
           "required": "true",
@@ -702,8 +770,8 @@
             "enum": ["mod", "school", "course"]
           }
         },{
-          "in": "query",
-          "name": "userId",
+          "in": "body",
+          "name": "subId",
           "description": "OID of subscriber object",
           "required": "true",
           "schema":{
@@ -711,7 +779,7 @@
             "example": "512345678910111211314151"
           }
         },{
-          "in": "query",
+          "in": "body",
           "name": "type",
           "description": "Type of rating",
           "required": "true",
@@ -719,22 +787,31 @@
             "type": "string",
             "enum": ["difficulty", "star"]
           }
+        },{
+          "in": "body",
+          "name": "value",
+          "description": "Rating number",
+          "required": "true",
+          "schema":{
+            "type": "integer",
+            "example": 4
+          }
         }],
         "responses": {
           "200": {
-            "description": "Rating found"
-          },
-          "404":{
-            "description": "Rating not found"
+            "description": "Success"
           },
           "500": {
             "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
           }
         }
       },
-      "post": {
+      "delete": {
         "tags": ["rating"],
-        "summary": "creates a rating",
+        "summary": "deletes a rating",
         "description": "",
         "parameters":[{
           "in": "body",
@@ -852,6 +929,61 @@
           },
           "403":{
             "description":"Not authorized"
+          }
+        }
+      }
+    },
+    "/rating/find":{
+      "get":{
+        "tags": ["rating"],
+        "summary": "checks for an rating",
+        "description": "Checks if an rating exists for a user, an rating type and a sub type",
+        "parameters":[{
+          "in": "query",
+          "name": "sub",
+          "description": "Type of subscriber to the rating",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["mod", "school", "course"]
+          }
+        },{
+          "in": "query",
+          "name": "subId",
+          "description": "OID of the subscriber",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "userId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "type",
+          "description": "Type of rating",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["difficulty", "star"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Rating found"
+          },
+          "404":{
+            "description": "Rating not found"
+          },
+          "500": {
+            "description": "Error"
           }
         }
       }
@@ -1118,6 +1250,47 @@
           "in": "path",
           "name": "modId",
           "description": "OID of the module",
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "page",
+          "description": "Page number",
+          "schema":{
+            "type": "integer"
+          }
+        },{
+          "in": "query",
+          "name": "limit",
+          "description":"Maximum number of results returned",
+          "schema": {
+            "type": "Integer"
+          }
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/review/user/{userId}":{
+      "get":{
+        "tags": ["review"],
+        "summary": "paginate reviews for single module",
+        "description": "Returns a list of reviews by a user",
+        "parameters":[{
+          "in": "path",
+          "name": "userId",
+          "description": "OID of the user",
           "schema": {
             "type": "string",
             "example": "512345678910111211314151"
@@ -1728,6 +1901,27 @@
       "type": "array",
       "items":{
         "$ref": "#/definitions/PlannedMod"
+      }
+    },
+    "RatingDelete":{
+      "type": "object",
+      "properties":{
+        "userId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "sub": {
+          "type": "string",
+          "example": "mod"
+        },
+        "subId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "type": {
+          "type": "string",
+          "example": "difficulty"
+        }
       }
     },
     "RatingCreate": {

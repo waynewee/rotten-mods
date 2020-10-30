@@ -3,7 +3,10 @@ import { useSelector } from "react-redux";
 import { Module } from "../types";
 import bookmarkApi from "../api/bookmark";
 import plannedModApi from "../api/planned-mod";
-import { updatedPersonalPlannedModules, updatePersonalBookmarks } from "../utils/helpers";
+import {
+  updatedPersonalPlannedModules,
+  updatePersonalBookmarks,
+} from "../utils/helpers";
 
 import ModuleSmallDetail from "../components/ModuleSmallDetail";
 import UserClockIcon from "../icons/UserClockIcon";
@@ -15,6 +18,7 @@ import StarOutlinedIcon from "../icons/StarOutlinedIcon";
 import UniversityIcon from "../icons/UniversityIcon";
 import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
 import BookmarkOutlinedIcon from "../icons/BookmarkOutlinedIcon";
+import CheckboxOutlinedIcon from "../icons/CheckboxOutlinedIcon";
 import { BookFilled, BookOutlined } from "@ant-design/icons";
 import PenFilledIcon from "../icons/PenFilledIcon";
 import Button from "./Button";
@@ -30,22 +34,35 @@ interface ModuleInformationProps {
 const ModuleInformation: React.FC<ModuleInformationProps> = ({
   module,
   setAddReviewModalVisibility,
-  setAddRatingsModalVisibility
+  setAddRatingsModalVisibility,
 }) => {
-  const [plannedSemester, setPlannedSemester] = useState(1);
-  const [isAddPlannedModModalVisible, setAddPlannedModModalVisibility] = useState(false);
+  const [
+    isAddPlannedModModalVisible,
+    setAddPlannedModModalVisibility,
+  ] = useState(false);
 
-  const userId = useSelector(state => state.auth.user?._id);
-  const bookmarkId = useSelector(state => state.personalModules.bookmarks)
-    .find(bookmark => bookmark.modId === module?._id)?._id;
-  const plannedModId = useSelector(state => state.personalModules.plannedMods)
-    .find(mod => mod.plannedMod.modId === module?._id)?._id;
-  const plannedMods = useSelector(state => state.personalModules.plannedMods)
-  console.log("Planned Mods:", plannedMods);
-  console.log("plannedModId:", plannedModId);
-  console.log("Module Id:", module?._id);
+  const userId = useSelector((state) => state.auth.user?._id);
+  const bookmarkId = useSelector(
+    (state) => state.personalModules.bookmarks
+  ).find((bookmark) => bookmark.modId === module?._id)?._id;
+  const plannedModId = useSelector(
+    (state) => state.personalModules.plannedMods
+  ).find((plannedMod) => plannedMod.modId === module?._id)?._id;
+  const schools = useSelector((state) => state.schools);
 
-  const { code, workload = 10, rating, university, description, title, credit = 4, semester = [1, 2], _id } = module;
+  const {
+    code,
+    workload = 10,
+    rating,
+    schoolId,
+    description,
+    title,
+    credit = 4,
+    semester = [1, 2],
+    prereqs,
+    _id,
+  } = module;
+  const university = schools.find((school) => school._id === schoolId)?.name;
   const difficulty = rating?.difficulty?.value || 0;
   const star = rating?.star?.value || 0;
 
@@ -57,16 +74,16 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
     }
 
     updatePersonalBookmarks(userId);
-  }
+  };
 
   const togglePlanner = async () => {
     if (!plannedModId) {
       setAddPlannedModModalVisibility(true);
     } else {
-      await plannedModApi.removePlannedMod(plannedModId)
+      await plannedModApi.removePlannedMod(plannedModId);
       updatedPersonalPlannedModules(userId);
     }
-  }
+  };
 
   return (
     <div style={styles.container}>
@@ -99,9 +116,9 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
           </div>
           <div style={styles.moduleSmallDetailsColumn}>
             <ModuleSmallDetail
-              Icon={StarFilledIcon}
-              text={`Ratings: ${star.toFixed(1)}`}
-              iconStyle={{ color: ratingsYellow }}
+              Icon={CheckboxOutlinedIcon}
+              text={`Pre-reqs: ${prereqs.join(", ") || "None"}`}
+              iconStyle={styles.iconStyle}
             />
             <ModuleSmallDetail
               Icon={LayerGroupIcon}
@@ -110,33 +127,75 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
             />
           </div>
         </div>
-        <div style={styles.actionsBar}>
-          <Button onClick={togglePlanner}>
-            {plannedModId
-              ? (<BookFilled
-                style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 25 }}
-              />)
-              : (<BookOutlined
-                style={{ ...styles.actionIcon, color: "#76CCB7", fontSize: 25 }}
-              />)}
-          </Button>
-          <Button onClick={toggleBookmark}>
-            {bookmarkId
-              ? (<BookmarkFilledIcon
-                style={{ ...styles.actionIcon, color: "#289FA7" }}
-              />)
-              : (<BookmarkOutlinedIcon
-                style={{ ...styles.actionIcon, color: "#289FA7" }}
-              />)}
-          </Button>
-          <Button onClick={() => setAddRatingsModalVisibility(true)}>
-            <StarOutlinedIcon
-              style={{ ...styles.actionIcon, color: ratingsYellow }}
-            />
-          </Button>
-          <Button onClick={() => setAddReviewModalVisibility(true)}>
-            <PenFilledIcon style={{ ...styles.actionIcon, color: "#7497CC" }} />
-          </Button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignContent: "center",
+            height: "100%",
+            fontSize: 14,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              padding: "10px 10px 10px 0px",
+              width: "100%",
+              color: "#838383",
+            }}
+          >
+            <div>
+              <StarFilledIcon
+                style={{ height: 20, color: ratingsYellow, margin: "0px 10px" }}
+              />
+            </div>
+            {`${star.toFixed(1)}`}
+          </div>
+
+          <div style={styles.actionsBar}>
+            <Button onClick={togglePlanner}>
+              {plannedModId ? (
+                <BookFilled
+                  style={{
+                    ...styles.actionIcon,
+                    color: "#76CCB7",
+                    fontSize: 25,
+                  }}
+                />
+              ) : (
+                <BookOutlined
+                  style={{
+                    ...styles.actionIcon,
+                    color: "#76CCB7",
+                    fontSize: 25,
+                  }}
+                />
+              )}
+            </Button>
+            <Button onClick={toggleBookmark}>
+              {bookmarkId ? (
+                <BookmarkFilledIcon
+                  style={{ ...styles.actionIcon, color: "#289FA7" }}
+                />
+              ) : (
+                <BookmarkOutlinedIcon
+                  style={{ ...styles.actionIcon, color: "#289FA7" }}
+                />
+              )}
+            </Button>
+            <Button onClick={() => setAddRatingsModalVisibility(true)}>
+              <StarOutlinedIcon
+                style={{ ...styles.actionIcon, color: ratingsYellow }}
+              />
+            </Button>
+            <Button onClick={() => setAddReviewModalVisibility(true)}>
+              <PenFilledIcon
+                style={{ ...styles.actionIcon, color: "#7497CC" }}
+              />
+            </Button>
+          </div>
         </div>
       </div>
       <div style={styles.infoContainer}>
@@ -150,7 +209,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
         userId={userId}
         plannedModId={plannedModId}
       />
-    </div >
+    </div>
   );
 };
 
@@ -210,8 +269,8 @@ const styles = {
     fontWeight: 300,
   },
   iconStyle: {
-    color: "#B9B9B9"
-  }
+    color: "#B9B9B9",
+  },
 };
 
 export default ModuleInformation;

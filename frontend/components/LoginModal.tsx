@@ -21,7 +21,6 @@ const LoginModal: React.FC<LoginModalProps> = (toggles) => {
   const onFormFinish = loginValues => {
     //console.log(loginValues);
     authService.logIn(loginValues, dispatch);
-    
   }
 
   return (

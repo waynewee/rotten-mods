@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { ModalState } from "../types";
 import reviewApi from "../api/review";
 
@@ -9,14 +10,18 @@ import { reviewBlue, submitBlue, crossRed } from "../styles/colors";
 interface AddRatingsModalProps extends ModalState {
   code: string;
   modId: string;
+  ratingsByUser?: { value: number, _id: string };
 }
 
-const AddRatingsModal: React.FC<AddRatingsModalProps> = ({ code, modId, isModalVisible, setModalVisibility }) => {
-  const userId = "5f93fe299a31d12bf74a3101"; // TODO: Change to useSelector
-
-  const [ratings, setRatings] = useState(0);
+const AddRatingsModal: React.FC<AddRatingsModalProps> = ({ code, modId, ratingsByUser: ratingByUser, isModalVisible, setModalVisibility }) => {
+  const userId = useSelector(state => state.auth.user?._id);
+  const [ratings, setRatings] = useState(ratingByUser?.value ?? 0);
   const [submitText, setSubmitText] = useState("Submit");
   const [submitColor, setSubmitColor] = useState(submitBlue);
+
+  useEffect(() => {
+    setRatings(ratingByUser?.value ?? 0)
+  }, [ratingByUser]);
 
   const onSubmit = async () => {
     if (!validateForm()) {
@@ -25,7 +30,11 @@ const AddRatingsModal: React.FC<AddRatingsModalProps> = ({ code, modId, isModalV
       return;
     }
 
-    await reviewApi.addRatingOfModule(ratings, "star", userId, modId, "mod");
+    if (ratingByUser) {
+      await reviewApi.updateRating(ratings, "star", userId, modId, "mod", ratingByUser._id);
+    } else {
+      await reviewApi.addRating(ratings, "star", userId, modId, "mod");
+    }
     setModalVisibility(false);
   }
 

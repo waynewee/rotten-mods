@@ -1,4 +1,6 @@
-import { Button } from "antd";
+import { Button, Menu, Dropdown } from "antd";
+import { UserOutlined} from '@ant-design/icons';
+
 import "../styles/antd.less";
 
 import { useSelector } from "react-redux";
@@ -7,22 +9,22 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from 'react';
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
-import { codeBlue } from "../styles/colors";
+import { reviewBlue } from "../styles/colors";
 import { User } from "../types";
 import CustomButton from "./Button";
-
-interface Props {
-  isAuthenticated: boolean;
-}
+import authService from '../services/authentication';
+import { useDispatch } from "react-redux";
 
 
-const ProfileButton: React.FC<Props> = ({ isAuthenticated }) => {
+
+const ProfileButton: React.FC = () => {
   const [loginModalVisible, setLoginModalVisible] = useState(false);
   const [signupModalVisible, setSignupModalVisible] = useState(false);
   const isLoggedIn: boolean = useSelector(state => state.auth.isLoggedIn);
   const user: User = useSelector(state => state.auth.user);
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
 
   useEffect(() => {
@@ -49,15 +51,41 @@ const ProfileButton: React.FC<Props> = ({ isAuthenticated }) => {
       pathname: "/profile",
     })
   }
+
+  function handleMenuClick(e) {
+    console.log('click', e);
+  }
+
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="1">
+        <Button type="text" onClick={navigateToProfilePage}>
+          Profile
+        </Button>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <Button type="text" onClick={() =>authService.logOut(dispatch)}>
+          Log Out
+        </Button>
+      </Menu.Item>
+    </Menu>
+  );
+
+
+  
   // return isAuthenticated ? <div>Logout</div> : <button>Login</button>;
   return (
     <>
       {
         isLoggedIn
-          ? <CustomButton style={styles.container} onClick={navigateToProfilePage}>
-            {user.fullName}
-          </CustomButton>
-
+          ? <>
+              <Dropdown overlay={menu} placement="bottomCenter">
+                <Button style={styles.container}>
+                  {user.fullName}
+                </Button>
+              </Dropdown>
+            </>
+        
           : <Button type="primary" onClick={toggleLoginModal}>
             Log In
           </Button>
@@ -73,7 +101,12 @@ const ProfileButton: React.FC<Props> = ({ isAuthenticated }) => {
 const styles = {
   container: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    margin: "0px 10px",
+    padding: 20,
+    backgroundColor: reviewBlue,
+    color: "#fff",
+    borderRadius: 8
   },
   userName: {
     alignItems: "flex-end",

@@ -13,7 +13,7 @@ interface HomeModuleListCardProps {
 const HomeModuleListCard: React.FC<HomeModuleListCardProps> = ({ module }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  
   const { code, title, rating, _id } = module;
   const star = rating?.star?.value || 0;
 

@@ -6,19 +6,17 @@ import { User } from "../types";
 import ReviewedModuleCard from "../components/ReviewedModuleCard";
 import SearchModuleList from "../components/SearchModuleList";
 
+
+import { useSelector } from "react-redux";
+
+
 const Profile: React.FC = () => {
 
-  const dummyProfile: User = {
-    fullName: "Chester Sim",
-    studyCourse: "Computer Science",
-    yearOfStudy: 3,
-    _id: "string"
-
-  }
+  const user : User = useSelector(state => state.auth.user);
 
   return (
     <>
-      <ProfileCard user={dummyProfile} />
+      <ProfileCard user={user} />
       <BookmarkedModuleCard />
       <div style={styles.container}>
         <StudyPlanCard />
