@@ -56,9 +56,12 @@ async function signUp(values) {
 
     if (course !== "userCreated" && university !== "userCreated") {
         
-        const data = await authApi.signUp(fullname, emailaddress, userpassword, university, course, yearofstudy);
-        console.log("sign up success");
-        message.success("Successfully Signed Up");
+        const data = await authApi.signUp(fullname, emailaddress, userpassword, university, course, yearofstudy).catch((error) => {
+            throw error;
+        })
+        if (data) {
+            console.log("sign up success");
+        }
     }
 
 }
@@ -66,25 +69,29 @@ async function signUp(values) {
 
 async function logIn(values, dispatch) {
     const { emailaddress, password } = values;
-    const data = await authApi.logIn(emailaddress, password);
-    const { name, currentYear, courseId, _id } = data;
-    const courseData = await courseApi.getCourse(courseId);
-    console.log(courseData);
-    const user: User = {
-        fullName: name,
-        yearOfStudy: currentYear,
-        studyCourse: courseData.name,
-        _id
-    }
+    const data = await authApi.logIn(emailaddress, password).catch((error)=> {
+        throw error;
+    })
+    if (data) {
+        const { name, currentYear, courseId, _id } = data;
+        const courseData = await courseApi.getCourse(courseId);
+        console.log(courseData);
+        const user: User = {
+            fullName: name,
+            yearOfStudy: currentYear,
+            studyCourse: courseData.name,
+            _id
+        }
 
-    window.localStorage.setItem("ROTTENMODS_EMAIL", emailaddress);
-    window.localStorage.setItem("ROTTENMODS_PASSWORD", password);
-    
-    message.success("Successfully Logged In")
-    dispatch({
-        type: LOG_USER_IN,
-        payload: user
-    });
+        window.localStorage.setItem("ROTTENMODS_EMAIL", emailaddress);
+        window.localStorage.setItem("ROTTENMODS_PASSWORD", password);
+
+        dispatch({
+            type: LOG_USER_IN,
+            payload: user
+        });
+
+    }
 
 }
 

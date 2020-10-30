@@ -5,6 +5,7 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import authService from '../services/authentication';
 import { useDispatch } from "react-redux";
 
+import { message } from 'antd';
 
 
 interface LoginModalProps {
@@ -19,8 +20,12 @@ const LoginModal: React.FC<LoginModalProps> = (toggles) => {
   const dispatch = useDispatch();
 
   const onFormFinish = loginValues => {
-    //console.log(loginValues);
-    authService.logIn(loginValues, dispatch);
+      authService.logIn(loginValues, dispatch).then((response) => {
+        message.success("Successfully Logged in!")
+      }).catch((error) => {
+        message.error("The email address or password provided is invalid!");
+      })
+    
   }
 
   return (

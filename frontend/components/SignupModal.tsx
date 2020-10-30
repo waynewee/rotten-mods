@@ -7,6 +7,7 @@ import { codeBlue } from "../styles/colors";
 import axios from 'axios';
 import authService from '../services/authentication';
 
+import { message } from 'antd';
 
 
 interface SignupModalProps {
@@ -42,7 +43,6 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
       });
       setUniversityInputValues(schoolsInDatabase);
       console.log('Now uni has these values');
-      console.log(inputUniversityValues);
     }).then(function (error) {
       console.log(error);
     })
@@ -67,13 +67,18 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
   }
 
   const onFormFinish = signUpValues => {
+    console.log("signup done");
     console.log(signUpValues);
-    authService.signUp(signUpValues);
-    toggles.toggles.switchModals();
+    authService.signUp(signUpValues).then(function(response) {
+      message.success("Successfully Signed Up");
+      toggles.toggles.switchModals();
+    }).catch((error) => {
+      message.error("This user has already been created. Do you mean to sign in?");
+    })
+
   }
 
   const onUniversityChange = event => {
-    console.log("changing");
     setSchoolName(event.target.value);
   };
 
@@ -96,6 +101,14 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
       setInputCourses([...inputCourses,  {"courseId": "userCreated", "courseName": newCourseName}]);
     }
   };
+
+  const validateEmail = (email: string): boolean => {
+  
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$/
+  
+    return regex.test(email)
+  
+  }
 
   function renderAddition(addition) {
     if (addition == "university") {
@@ -148,7 +161,17 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
           </Form.Item>
           <Form.Item
             name="emailaddress"
-            rules={[{ required: true, message: 'Please enter an email address!' }]}
+            rules={[
+              { required: true, message: 'Please enter an email address!' },
+              { validator: (_, value) => {
+                if (!validateEmail(value)) {
+                  return Promise.reject("Only .edu email address are allowed to sign up");
+                } else {
+                  return Promise.resolve();
+                }
+              }}
+          ]}
+            
           >
             <Input
               prefix={<MailOutlined />} placeholder="Email Address" />
@@ -167,8 +190,16 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
           <Form.Item style={{ marginBottom: 0 }}>
             <Form.Item
               name="yearofstudy"
-              rules={[{ required: true, message: 'Please enter your Year of Study!' }]}
-              style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+              rules={[
+                { required: true, message: 'Please enter your Year of Study!' },
+                { validator: (_, value) => {
+                  if (value < 1 || value > 8) {
+                    return Promise.reject("Your Year of Study should only be between 1 to 8");
+                  } else {
+                    return Promise.resolve();
+                  }
+                }
+              }]}
             >
               <Input type="number" prefix={<CalendarOutlined />} placeholder="Year Of Study" />
             </Form.Item>
@@ -180,7 +211,6 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
             rules={[{ required: true, message: 'Please enter your University!' }]}
           >
             <Select
-              showSearch
               style={{ width: "100%" }}
               placeholder="University"
               dropdownRender={menu => (
