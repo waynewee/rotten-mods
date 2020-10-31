@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express'
 import cookieParser from 'cookie-parser'
 
 import * as config from '../config'
-import router from './routes'
+import router from './routers'
 import swaggerDocument from '../docs/swagger.json'
 
 mongoose.connect(config.mongoUri)

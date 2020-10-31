@@ -4,10 +4,9 @@ const { mongoUri } = require('../../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const { ratingTypesEnum } = require('../../../dist/src/models/Rating')
 const Rating = require('../../../dist/src/models/Rating').default
-const User = mongoose.model("User")
-const Mod = mongoose.model("Mod")
+const Mod = require('../../../dist/src/models/mod').default
+const User = require('../../../dist/src/models/user').default
 
 function populateRatings(ratingType){
 
@@ -68,8 +67,8 @@ function populateRatings(ratingType){
 
 }
 
-function populateDifficulty(){ return populateRatings( ratingTypesEnum.difficulty )}
-function populateStar(){ return populateRatings(ratingTypesEnum.star)}
+function populateDifficulty(){ return populateRatings( "difficulty" )}
+function populateStar(){ return populateRatings("star")}
 
 module.exports = {
   populateStar,

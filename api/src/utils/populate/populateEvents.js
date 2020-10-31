@@ -4,9 +4,8 @@ const { mongoUri } = require('../../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const { eventTypesEnum } = require('../../../dist/src/models/Event')
 const Event = require('../../../dist/src/models/Event').default
-const Mod = mongoose.model("Mod")
+const Mod = require('../../../dist/src/models/mod').default
 const User = require('../../../dist/src/models/user').default
 
 function populateEvents(eventType){
@@ -64,10 +63,10 @@ function populateEvents(eventType){
   })
 }
 
-function populateViews(){ return populateEvents( eventTypesEnum.view )}
-function populateLikes(){ return populateEvents(eventTypesEnum.like)}
+function populateViews(){ return populateEvents( "view" )}
+function populateClicks(){ return populateEvents("click")}
 
 module.exports = {
-  populateLikes,
+  populateClicks,
   populateViews
 }

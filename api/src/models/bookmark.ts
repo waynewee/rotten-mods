@@ -1,14 +1,12 @@
-import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
+const mongoose = require('mongoose')
 
-export const BookMarkSchema = createSchema({
-  modId: Type.objectId(),
-  userId: Type.objectId()
+export const BookmarkSchema = mongoose.Schema({
+  modId: { type: String, required: true },
+  userId: { type: String, required: true }
 },{
   timestamps: true
 })
 
-export type BookMarkDoc = ExtractDoc<typeof BookMarkSchema> 
+const Bookmark = mongoose.model('bookmark', BookmarkSchema)
 
-const BookMark = typedModel('BookMark', BookMarkSchema);
-
-export default BookMark
+export default Bookmark
