@@ -5,11 +5,12 @@ const { mongoUri } = require('../../../dist/config')
 mongoose.connect(mongoUri)
 
 const School = require('../../../dist/src/models/school').default
+const makeSchool = require('../../../dist/src/makers/school-maker').default
 
-function populateSchools(){
+async function populateSchools(){
 
   return School.remove({})
-  .then(() => {
+  .then(async () => {
     console.log("Populating schools")
     const promises = []
   
@@ -28,10 +29,11 @@ function populateSchools(){
     
     for( let i = 0; i < schools.length; i++ ){
   
-      const newSchool = new School({
+      const school = await makeSchool({
         name: schools[i],
-        shortName: School.getShortName(schools[i])
       })
+
+      const newSchool = new School(school)
     
       promises.push(newSchool.save())
     }

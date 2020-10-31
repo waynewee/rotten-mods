@@ -22,6 +22,7 @@ function transform(schoolInfo: any){
 
   return {
     ...otherInfo,
+    name,
     shortName
   }
 

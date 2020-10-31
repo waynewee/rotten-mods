@@ -5,8 +5,8 @@ const { mongoUri } = require('../../../dist/config')
 mongoose.connect(mongoUri)
 
 const Review = require('../../../dist/src/models/review').default
-const User = mongoose.model("User")
-const Mod = mongoose.model("Mod")
+const User = require('../../../dist/src/models/user').default
+const Mod = require('../../../dist/src/models/mod').default
 
 function populateReviews(){
 

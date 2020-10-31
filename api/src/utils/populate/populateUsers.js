@@ -3,7 +3,7 @@ const randomString = require('randomstring')
 
 const { mongoUri } = require('../../../dist/config')
 
-const { hash } = require('../../../dist/src/services/security')
+const { hash } = require('../../../dist/src/helpers/hash')
 
 mongoose.connect(mongoUri)
 
