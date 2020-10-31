@@ -2,6 +2,7 @@ import Mod from '../../models/mod'
 import School from '../../models/school'
 import Course from '../../models/course'
 import Review from '../../models/review'
+import Rating from '../../models/rating'
 
 enum ratingSubTypesEnum {
   mod = "mod",
@@ -24,7 +25,7 @@ const ratingSubs = [
   Review
 ]
 
-class RatingPub {
+class RatingObserver {
 
   static notify(rating: any){
 
@@ -33,9 +34,8 @@ class RatingPub {
     for (let i = 0; i < ratingSubs.length; i++ ){
 
       const sub:any = ratingSubs[i]
-      const ratingSubType = ratingSubTypes[i]
 
-      if(rating.sub == ratingSubType){
+      if(rating.sub == sub.modelName){
 
         sub.findOne({ _id: rating.subId})
         .then( (subObj: any) => {
@@ -66,27 +66,33 @@ class RatingPub {
 
   }
 
-  static notifyOfDeletion(rating: any){
+  static notifyOfUpdate(oldRatingValue: number, rating: any){
 
     let promises:any = []
 
     for (let i = 0; i < ratingSubs.length; i++ ){
 
       const sub:any = ratingSubs[i]
-      const ratingSubType = ratingSubTypes[i]
 
-      if(rating.sub == ratingSubType){
-
+      if(rating.sub == sub.modelName){
         sub.findOne({ _id: rating.subId})
         .then( (subObj: any) => {
           
           const ratingType = rating.type
 
-          subObj.rating[ratingType].count -= 1
+          if( !subObj.rating ){
+            subObj.rating = {}
+          }
+
+          if( !subObj.rating[ratingType] ){
+            subObj.rating[ratingType] = {}
+          }
 
           const count = subObj.rating[ratingType].count
+          const currValue = count * subObj.rating[ratingType].value
+          const newValue = (currValue - oldRatingValue + rating.value)/count 
 
-          subObj.rating[ratingType].value = ((subObj.rating[ratingType].value * (count + 1)) - rating.value)/count
+          subObj.rating[ratingType].value = newValue
 
           promises.push(subObj.save())
 
@@ -100,4 +106,4 @@ class RatingPub {
 
 }
 
-export default RatingPub
+export default RatingObserver

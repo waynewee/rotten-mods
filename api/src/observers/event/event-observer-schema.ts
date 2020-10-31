@@ -5,6 +5,6 @@ export const EventPropSchema = createSchema({
 })
 
 export const EventObjSchema = createSchema({
-  like: EventPropSchema,
+  click: EventPropSchema,
   view: EventPropSchema
 })

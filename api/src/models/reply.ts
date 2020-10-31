@@ -1,19 +1,18 @@
-import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
-import { validateString } from '../helpers/validators';
-import { EventObjSchema } from '../publishers/event/eventPubSchema';
+const mongoose = require('mongoose')
+import { EventObjSchema } from '../observers/event/event-observer-schema';
+import { ReactionObjSchema } from '../observers/reaction/reaction-observer-schema';
 
-export const ReplySchema = createSchema({
-  userId: Type.objectId({ required: true }),
-  text: Type.string({ required: true, validate: validateString }),
-  reviewId: Type.objectId({ required: true }),
-  replyId: Type.objectId(),
-  event: EventObjSchema
+const ReplySchema = new mongoose.Schema({
+  userId: { type: String, required: true },
+  text: { type: String, required: true },
+  reviewId: { type: String, required: true },
+  replyId: { type: String },
+  event: EventObjSchema,
+  reaction: ReactionObjSchema
 },{
-  timestamps: true
+  timestamps: true,
+  usePushEach: true
 })
 
-export type ReplyDoc = ExtractDoc<typeof ReplySchema> 
-
-const Reply = typedModel('Reply', ReplySchema);
-
+const Reply = mongoose.model('reply', ReplySchema)
 export default Reply

@@ -1,18 +1,20 @@
-import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
+const mongoose = require('mongoose')
 
-import { RatingObjSchema} from '../publishers/rating/ratingPubSchema'
-import { EventObjSchema } from '../publishers/event/eventPubSchema'
+import { RatingObjSchema} from '../observers/rating/rating-observer-schema'
+import { EventObjSchema } from '../observers/event/event-observer-schema'
+import { ReactionObjSchema } from '../observers/reaction/reaction-observer-schema'
 
-export const CourseSchema = createSchema({
-  name: Type.string({ required: true }),
+export const CourseSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  shortName: { type: String, required: true },
   rating: RatingObjSchema,
-  event: EventObjSchema
+  event: EventObjSchema,
+  reaction: ReactionObjSchema
 },{
-  timestamps: true
+  timestamps: true,
+  usePushEach: true 
 })
 
-export type CourseDoc = ExtractDoc<typeof CourseSchema> 
-
-const Course = typedModel('Course', CourseSchema);
+const Course = mongoose.model('course', CourseSchema)
 
 export default Course
