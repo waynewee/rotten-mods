@@ -10,9 +10,9 @@ import {
 
 export default async function makeReply(replyInfo: any){
 
-  const transformed = transform(replyInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(replyInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

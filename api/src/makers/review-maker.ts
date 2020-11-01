@@ -10,9 +10,9 @@ import {
 
 export default async function makeReview(reviewInfo: any){
 
-  const transformed = transform(reviewInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(reviewInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

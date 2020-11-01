@@ -1,20 +1,16 @@
 import makeEvent from '../makers/event-maker'
 import Event from '../models/event'
-import EventObserver from '../observers/event/event-observer'
+import { notify } from '../observers/event/event-observer'
 
-export default class EventHandler {
+export async function create(eventInfo: any){
 
-  static async create(eventInfo: any){
+  const event = await makeEvent(eventInfo)
 
-    const event = await makeEvent(eventInfo)
-
-    const newEvent = new Event(event)
-    const result = await newEvent.save()
-    
-    await EventObserver.notify(result)
-    
-    return result
-
-  }
+  const newEvent = new Event(event)
+  const result = await newEvent.save()
   
+  await notify(result)
+  
+  return result
+
 }

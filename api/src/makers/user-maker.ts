@@ -11,10 +11,9 @@ import {
 
 export default async function makeUser(userInfo: any){
 
-  const transformed = await transform(userInfo)
-  console.log(transformed)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(userInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

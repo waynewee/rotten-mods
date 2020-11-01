@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.4",
+    "swagger-spec-to-pdf": "^1.1.0",
     "swagger-ui-express": "^4.1.4"
   }
 }

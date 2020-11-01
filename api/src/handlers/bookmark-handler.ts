@@ -1,41 +1,38 @@
 import makeBookmark from '../makers/bookmark-maker'
 import Bookmark from '../models/bookmark'
 import { ObjectNotFoundError } from '../errors'
-
-export default class BookmarkHandler {
   
-  static async findByUserId( userId: string ){
-    const bookmark = await Bookmark.find({ userId })
-    return bookmark
-  }
-  
-  static async findById(id: string){
-      
-    const bookmark = await Bookmark.findById(id)
+export async function findByUserId( userId: string ){
+  const bookmark = await Bookmark.find({ userId })
+  return bookmark
+}
 
-    if(!bookmark){
-      throw new ObjectNotFoundError('Bookmark')
-    }
+export async function findById(id: string){
+    
+  const bookmark = await Bookmark.findById(id)
 
-    return bookmark
-
+  if(!bookmark){
+    throw new ObjectNotFoundError('Bookmark')
   }
 
-  static async create(bookmarkInfo: any){
+  return bookmark
 
-    const bookmark = await makeBookmark(bookmarkInfo)
-    const newBookmark = new Bookmark(bookmark)
-    return newBookmark.save()
+}
 
+export async function create(bookmarkInfo: any){
+
+  const bookmark = await makeBookmark(bookmarkInfo)
+  const newBookmark = new Bookmark(bookmark)
+  return newBookmark.save()
+
+}
+
+export async function remove(id: string){
+  const result = await Bookmark.deleteOne({_id: id})
+
+  if( result.n === 0 ){
+    throw new ObjectNotFoundError("Bookmark")
   }
 
-  static async remove(id: string){
-    const result = await Bookmark.deleteOne({_id: id})
-
-    if( result.n === 0 ){
-      throw new ObjectNotFoundError("Bookmark")
-    }
-
-    return result
-  }
+  return result
 }

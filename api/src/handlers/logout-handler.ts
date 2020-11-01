@@ -1,11 +1,6 @@
-import { Response } from 'express'
-import { AuthenticationError } from '../errors'
-import { removeCookie, setCookie } from '../helpers/cookie'
-import { verify } from '../helpers/verify-password'
-import User from '../models/user'
+import { Response} from 'express'
+import { removeCookie } from '../helpers/cookie'
 
-export default class LogoutHandler {
-  static handleLogout(res: Response){
-    removeCookie(res)
-  }
+export async function handleLogout(res: Response){
+  removeCookie(res)
 }

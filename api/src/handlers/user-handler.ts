@@ -1,73 +1,71 @@
 
-import userValidator from '../makers/user-maker'
+import makeUser from '../makers/user-maker'
 import User from '../models/user'
 import { ObjectNotFoundError } from '../errors'
 import makeSearch from '../makers/search-maker'
 
-export default class UserHandler {
   
-  static async findById(id: string){
-      
-    const user = await User.findById(id)
+export async function findById(id: string){
+    
+  const user = await User.findById(id)
 
-    if(!user){
-      throw new ObjectNotFoundError('User')
-    }
-
-    return user
-
+  if(!user){
+    throw new ObjectNotFoundError('User')
   }
 
-  static async update(id: string, userInfo: any){
-    const existingUser = await User.findOne({ _id: id })
+  return user
 
-    if( !existingUser ){
-      throw new ObjectNotFoundError('User')
-    }
+}
 
-    const user = await userValidator({
-      ...existingUser._doc,
-      ...userInfo
-    })
+export async function update(id: string, userInfo: any){
+  const existingUser = await User.findOne({ _id: id })
 
-    const result = await User.updateOne({_id: id}, user)
-
-    return result
+  if( !existingUser ){
+    throw new ObjectNotFoundError('User')
   }
 
-  static async create(userInfo: any){
+  const user = await makeUser({
+    ...existingUser._doc,
+    ...userInfo
+  })
 
-    const user = await userValidator(userInfo)
-    const newUser = new User(user)
-    return newUser.save()
+  const result = await User.updateOne({_id: id}, user)
 
+  return result
+}
+
+export async function create(userInfo: any){
+
+  const user = await makeUser(userInfo)
+  const newUser = new User(user)
+  return newUser.save()
+
+}
+
+export async function remove(id: string){
+  const result = await User.deleteOne({_id: id})
+
+  if( result.n === 0 ){
+    throw new ObjectNotFoundError("User")
   }
 
-  static async remove(id: string){
-    const result = await User.deleteOne({_id: id})
+  return result
+}
 
-    if( result.n === 0 ){
-      throw new ObjectNotFoundError("User")
-    }
+export async function search(searchInfo: any){
 
-    return result
-  }
+  const search = await makeSearch(searchInfo)
 
-  static async search(searchInfo: any){
+  const { limit, page, searchTerm } = search
 
-    const search = await makeSearch(searchInfo)
+  const results = await User.find({
+    $or: [
+      { title: { $regex: searchTerm, $options: 'i' } },
+      { code: { $regex: searchTerm, $options: 'i' } }
+    ]
+  })
+  .limit(limit) 
+  .skip((page - 1) * limit)
 
-    const { limit, page, searchTerm } = search
-
-    const results = await User.find({
-      $or: [
-        { title: { $regex: searchTerm, $options: 'i' } },
-        { code: { $regex: searchTerm, $options: 'i' } }
-      ]
-    })
-    .limit(limit) 
-    .skip((page - 1) * limit)
-
-    return results
-  }
+  return results
 }

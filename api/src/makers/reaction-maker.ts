@@ -11,9 +11,9 @@ const allowedTypes = ["like", "love", "dislike"]
 
 export default async function makeReaction(reactionInfo: any){
 
-  const transformed = transform(reactionInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(reactionInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import PlannedModHandler from "../handlers/planned-mod-handler";
+import * as PlannedModHandler from "../handlers/planned-mod-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
 import { requireLogin } from "../middleware";
@@ -47,4 +47,3 @@ export default async function plannedModRouter(req: Request, res: Response ){
   }
 
 }
-

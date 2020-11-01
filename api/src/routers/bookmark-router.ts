@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import BookmarkHandler from "../handlers/bookmark-handler";
+import * as BookmarkHandler from "../handlers/bookmark-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
 import { requireLogin } from "../middleware";

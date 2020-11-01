@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import ReplyHandler from "../handlers/reply-handler";
+import * as ReplyHandler from "../handlers/reply-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
 import { requireLogin } from "../middleware";

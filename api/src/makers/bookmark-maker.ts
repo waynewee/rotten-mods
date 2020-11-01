@@ -8,9 +8,9 @@ import {
 
 export default async function makeBookmark(bookmarkInfo: any){
 
-  const transformed = transform(bookmarkInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(bookmarkInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

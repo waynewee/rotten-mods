@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import RatingHandler from "../handlers/rating-handler";
+import * as RatingHandler from "../handlers/rating-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
 import { requireLogin } from "../middleware";

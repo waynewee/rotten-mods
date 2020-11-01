@@ -4,71 +4,68 @@ import School from '../models/school'
 import { ObjectNotFoundError } from '../errors'
 import makeSearch from '../makers/search-maker'
 
-export default class SchoolHandler {
 
-  static async findById(id: string){
-      
-    const school = await School.findById(id)
+export async function findById(id: string){
+    
+  const school = await School.findById(id)
 
-    if(!school){
-      throw new ObjectNotFoundError('School')
-    }
-
-    return school
-
+  if(!school){
+    throw new ObjectNotFoundError('School')
   }
 
-  static async update(id: string, schoolInfo: any){
-    const existingSchool = await School.findOne({ _id: id })
+  return school
 
-    if( !existingSchool ){
-      throw new ObjectNotFoundError('School')
-    }
+}
 
-    const school = await makeSchool({
-      ...existingSchool._doc,
-      ...schoolInfo
-    })
+export async function update(id: string, schoolInfo: any){
+  const existingSchool = await School.findOne({ _id: id })
 
-    const result = await School.updateOne({_id: id}, school)
-
-    return result
+  if( !existingSchool ){
+    throw new ObjectNotFoundError('School')
   }
 
-  static async create(schoolInfo: any){
+  const school = await makeSchool({
+    ...existingSchool._doc,
+    ...schoolInfo
+  })
 
-    const school = await makeSchool(schoolInfo)
-    const newSchool = new School(school)
-    return newSchool.save()
+  const result = await School.updateOne({_id: id}, school)
 
+  return result
+}
+
+export async function create(schoolInfo: any){
+
+  const school = await makeSchool(schoolInfo)
+  const newSchool = new School(school)
+  return newSchool.save()
+
+}
+
+export async function remove(id: string){
+  const result = await School.deleteOne({_id: id})
+
+  if( result.n === 0 ){
+    throw new ObjectNotFoundError("School")
   }
 
-  static async remove(id: string){
-    const result = await School.deleteOne({_id: id})
+  return result
+}
 
-    if( result.n === 0 ){
-      throw new ObjectNotFoundError("School")
-    }
+export async function search(searchInfo: any){
 
-    return result
-  }
+  const search = await makeSearch(searchInfo)
 
-  static async search(searchInfo: any){
+  const { limit, page, searchTerm } = search
 
-    const search = await makeSearch(searchInfo)
+  const results = await School.find({
+    $or: [
+      { name: { $regex: searchTerm, $options: 'i' } },
+      { shortName: { $regex: searchTerm, $options: 'i' } }
+    ]
+  })
+  .limit(limit) 
+  .skip((page - 1) * limit)
 
-    const { limit, page, searchTerm } = search
-
-    const results = await School.find({
-      $or: [
-        { name: { $regex: searchTerm, $options: 'i' } },
-        { shortName: { $regex: searchTerm, $options: 'i' } }
-      ]
-    })
-    .limit(limit) 
-    .skip((page - 1) * limit)
-
-    return results
-  }
-  
+  return results
 }

@@ -9,10 +9,10 @@ import {
 
 export default async function makeLogin(loginInfo: any){
 
-  const transformed = transform(loginInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
-
+  const validated = await validate(loginInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
+  
   return normalized
 
 }
