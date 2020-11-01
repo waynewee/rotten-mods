@@ -7,10 +7,10 @@ const getModule = async (id) => {
   return response.data;
 };
 
-const searchModule = async (searchTerm, limit = 10) => {
+const searchModule = async (searchTerm, limit = 10, page = 1) => {
   const query = {
     s: searchTerm,
-    page: 1,
+    page,
     limit,
   };
 

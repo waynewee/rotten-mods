@@ -8,16 +8,17 @@ interface ReviewToSubmit {
   text: string;
   semesterTaken: number;
   acadYearTaken: string;
-  // workload: number;
 }
 
-const getReviewsOfModule = async (modId) => {
-  const response = await axios.get(`${reviewBaseUrl}/mod/${modId}`);
+const getReviewsOfModule = async (modId, limit = 10, page = 1) => {
+  const query = queryString.stringify({ modId });
+  const response = await axios.get(`${reviewBaseUrl}/?${query}`);
   return response.data;
 };
 
 const getReviewsOfUser = async (userId) => {
-  const response = await axios.get(`${reviewBaseUrl}/user/${userId}`, {
+  const query = queryString.stringify({ userId });
+  const response = await axios.get(`${reviewBaseUrl}/?${query}`, {
     withCredentials: true,
   });
   return response.data;
@@ -37,7 +38,6 @@ const addReviewOfModule = async (
       userId,
       semesterTaken,
       acadYearTaken,
-      // workload,
     },
     {
       withCredentials: true,
@@ -62,7 +62,6 @@ const updateReviewOfModule = async (
       userId,
       semesterTaken,
       acadYearTaken,
-      // workload,
     },
     {
       withCredentials: true,
@@ -96,9 +95,10 @@ const addRating = async (
   return response.status;
 };
 
-const getRating = async (subscriberType, userId, ratingType) => {
+const getRating = async (subscriberType, subscriberId, userId, ratingType) => {
   const query = queryString.stringify({
     sub: subscriberType,
+    subId: subscriberId,
     userId,
     type: ratingType,
   });

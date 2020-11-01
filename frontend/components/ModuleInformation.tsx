@@ -6,6 +6,7 @@ import plannedModApi from "../api/planned-mod";
 import {
   updatedPersonalPlannedModules,
   updatePersonalBookmarks,
+  triggerRequireLoginMessage,
 } from "../utils/helpers";
 
 import ModuleSmallDetail from "../components/ModuleSmallDetail";
@@ -49,6 +50,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
     (state) => state.personalModules.plannedMods
   ).find((plannedMod) => plannedMod.modId === module?._id)?._id;
   const schools = useSelector((state) => state.schools);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const {
     code,
@@ -67,6 +69,11 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
   const star = rating?.star?.value || 0;
 
   const toggleBookmark = async () => {
+    if (!isLoggedIn) {
+      triggerRequireLoginMessage();
+      return;
+    }
+
     if (!bookmarkId) {
       await bookmarkApi.addBookmark(userId, _id);
     } else {
@@ -77,6 +84,11 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
   };
 
   const togglePlanner = async () => {
+    if (!isLoggedIn) {
+      triggerRequireLoginMessage();
+      return;
+    }
+
     if (!plannedModId) {
       setAddPlannedModModalVisibility(true);
     } else {
@@ -84,6 +96,22 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
       updatedPersonalPlannedModules(userId);
     }
   };
+
+  const toggleAddRatingsModal = () => {
+    if (!isLoggedIn) {
+      triggerRequireLoginMessage();
+      return;
+    }
+    setAddRatingsModalVisibility(true);
+  }
+
+  const toggleAddReviewModal = () => {
+    if (!isLoggedIn) {
+      triggerRequireLoginMessage();
+      return;
+    }
+    setAddReviewModalVisibility(true);
+  }
 
   return (
     <div style={styles.container}>
@@ -185,12 +213,12 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
                 />
               )}
             </Button>
-            <Button onClick={() => setAddRatingsModalVisibility(true)}>
+            <Button onClick={toggleAddRatingsModal}>
               <StarOutlinedIcon
                 style={{ ...styles.actionIcon, color: ratingsYellow }}
               />
             </Button>
-            <Button onClick={() => setAddReviewModalVisibility(true)}>
+            <Button onClick={toggleAddReviewModal}>
               <PenFilledIcon
                 style={{ ...styles.actionIcon, color: "#7497CC" }}
               />

@@ -86,11 +86,13 @@ const StudyPlanCard: React.FC = () => {
 
   const renderModuleCodes = () =>
     viewablePlannedMods.map((plannedMod) => {
-      return <ModulePill 
-        modId={plannedMod.modId} 
-        key={plannedMod._id} 
-        missingPrereqs={plannedMod.missingPrereqs}
-      />;
+      return (
+        <ModulePill
+          modId={plannedMod.modId}
+          key={plannedMod._id}
+          missingPrereqs={plannedMod.missingPrereqs}
+        />
+      );
     });
 
   return (
@@ -107,7 +109,6 @@ const StudyPlanCard: React.FC = () => {
               <DownOutlined />
             </div>
           </Dropdown>
-          <PlusOutlined style={{ marginLeft: 10 }} />
         </div>
       </div>
       <div style={styles.moduleList}>{renderModuleCodes()}</div>

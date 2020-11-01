@@ -2,7 +2,7 @@
 import { Modal, Button, Form, Input, Divider } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
-import authService from '../services/authentication';
+import authService from '../utils/authentication';
 import { useDispatch } from "react-redux";
 
 import { message } from 'antd';

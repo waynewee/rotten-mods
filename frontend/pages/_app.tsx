@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppProps } from "next/app";
 import { wrapper } from "../redux/store";
-import authService from "../services/authentication";
+import authService from "../utils/authentication";
 import {
   updatePersonalBookmarks,
   updatePersonalReviews,
