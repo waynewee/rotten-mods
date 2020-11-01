@@ -32,7 +32,6 @@ async function validate(eventInfo: any){
     type
   } = eventInfo
 
-  requireParam(userId, 'userId')
   requireParam(sub, 'sub')
   requireParam(subId, 'subId')
   requireParam(type, 'type')
