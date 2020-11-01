@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { User } from "../types";
-import authService from "../services/authentication";
+// import authService from "../services/authentication";
+import authUtils from "../utils/authentication";
 
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
-import { reviewBlue, codeBlue } from "../styles/colors";
+import { reviewBlue } from "../styles/colors";
 import CustomButton from "./Button";
 import { Button, Menu, Dropdown } from "antd";
 import "../styles/antd.less";
@@ -19,12 +19,9 @@ const ProfileButton: React.FC = () => {
   const user: User = useSelector((state) => state.auth.user);
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     isLoggedIn ? setLoginModalVisible(false) : null;
-    // console.log("the user is ");
-    // console.log(user);
   });
 
   const toggleLoginModal = () => {
@@ -46,26 +43,21 @@ const ProfileButton: React.FC = () => {
     });
   };
 
-  function handleMenuClick(e) {
-    console.log("click", e);
-  }
-
   const menu = (
-    <Menu onClick={handleMenuClick}>
+    <Menu>
       <Menu.Item key="1">
         <Button type="text" onClick={navigateToProfilePage}>
           Profile
         </Button>
       </Menu.Item>
       <Menu.Item key="2">
-        <Button type="text" onClick={() => authService.logOut(dispatch)}>
+        <Button type="text" onClick={authUtils.logOut}>
           Log Out
         </Button>
       </Menu.Item>
     </Menu>
   );
 
-  // return isAuthenticated ? <div>Logout</div> : <button>Login</button>;
   return (
     <>
       {isLoggedIn ? (

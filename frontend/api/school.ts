@@ -6,7 +6,7 @@ const searchSchools = async (searchTerm: string) => {
   const query = queryString.stringify({
     s: searchTerm,
     page: 1,
-    limit: 1000,
+    limit: 100,
   });
   const response = await axios.get(`${baseUrl}/?${query}`);
   return response.data;

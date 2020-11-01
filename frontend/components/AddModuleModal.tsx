@@ -32,7 +32,7 @@ const AddModuleModal: React.FC<ModalState> = ({
   }, []);
 
   const getAllModules = async () => {
-    const modules = await moduleApi.searchModule("", 6000);
+    const modules = await moduleApi.searchModule("", 10);
     const moduleCodes = modules.map((mod) => ({
       value: mod.code,
       id: mod._id,
@@ -41,6 +41,10 @@ const AddModuleModal: React.FC<ModalState> = ({
   };
 
   const onSubmit = () => {
+    if (validateForm()) {
+      return;
+    }
+
     const schoolId = schools.find((school) => school.name === university)?._id;
     const prereqs = modulePrereqs.map((code) => {
       return allModules.find((mod) => mod.value === code)?.id;
@@ -60,10 +64,14 @@ const AddModuleModal: React.FC<ModalState> = ({
       workload,
       prereqs,
     };
-    
+
     moduleApi.addModule(newModule);
     setModalVisibility(false);
     resetState();
+  };
+
+  const validateForm = () => {
+    return code && title && university && description && credit && workload;
   };
 
   const resetState = () => {

@@ -6,7 +6,7 @@ const addEvent = async (
   userId: string,
   sub: "course" | "mod" | "review" | "school",
   subId: string,
-  type: "view" | "like"
+  type: "view"
 ) => {
   const response = await axios.post(baseUrl, {
     userId,

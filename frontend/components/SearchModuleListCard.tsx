@@ -1,11 +1,15 @@
 import { Module } from "../types";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { ADD_MODULE_FOR_COMPARISON } from "../redux/constants";
 
 import StarFilledIcon from "../icons/StarFilledIcon";
-import { codeBlue, compareOrange, descriptionGreen, ratingsYellow } from "../styles/colors";
+import {
+  codeBlue,
+  compareOrange,
+  descriptionGreen,
+  ratingsYellow,
+} from "../styles/colors";
 
 interface ModuleListCardProps {
   module: Module;
@@ -20,23 +24,31 @@ const SearchModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
   const navigateToModuleReviewPage = () => {
     router.push({
       pathname: "/module-review",
-      query: { id: _id }
-    })
-  }
+      query: { id: _id },
+    });
+  };
 
   const onCompare = () => {
     dispatch({
       type: ADD_MODULE_FOR_COMPARISON,
       payload: {
         id: _id,
-        code
-      }
-    })
-  }
+        code,
+      },
+    });
+  };
 
   return (
     <div style={styles.container}>
-      <div style={styles.moduleCode} onClick={navigateToModuleReviewPage}>{code}</div>
+      <div
+        style={{
+          ...styles.moduleCode,
+          fontSize: `${code.length < 8 ? 23 : 18}px`,
+        }}
+        onClick={navigateToModuleReviewPage}
+      >
+        {code}
+      </div>
       <div style={styles.infoContainer} onClick={navigateToModuleReviewPage}>
         <div style={styles.moduleInfoContainer}>
           <div style={styles.moduleTitle}>{title}</div>
@@ -44,10 +56,12 @@ const SearchModuleListCard: React.FC<ModuleListCardProps> = ({ module }) => {
         </div>
         <div style={styles.reviewStarContainer}>
           <StarFilledIcon style={styles.starIcon} />
-          <span style={styles.reviewNumber}>{star}</span>
+          <span style={styles.reviewNumber}>{star.toFixed(1)}</span>
         </div>
       </div>
-      <div style={styles.compareButton} onClick={onCompare}>vs</div>
+      <div style={styles.compareButton} onClick={onCompare}>
+        vs
+      </div>
     </div>
   );
 };
@@ -75,7 +89,7 @@ const styles = {
     alignItems: "center",
     fontSize: "23px",
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-    zIndex: 1
+    zIndex: 1,
   },
   compareButton: {
     position: "absolute" as "absolute",
@@ -92,7 +106,7 @@ const styles = {
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
     cursor: "pointer",
     zIndex: 1,
-    fontSize: 18
+    fontSize: 18,
   },
   infoContainer: {
     backgroundColor: descriptionGreen,
@@ -102,7 +116,7 @@ const styles = {
     marginLeft: 60,
     padding: "25px 20px 25px 60px",
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",
-    width: "100%"
+    width: "100%",
   },
   moduleInfoContainer: {
     padding: "0px 30px",

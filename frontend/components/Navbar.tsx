@@ -1,26 +1,27 @@
 import { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SEARCH_TERM } from "../redux/constants";
-import "../styles/antd.less";
+import { triggerRequireLoginMessage } from "../utils/helpers";
 
+import "../styles/antd.less";
 import { Dropdown, Menu, Input } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { codeBlue } from "../styles/colors";
 import ProfileButton from "./ProfileButton";
 import Button from "./Button";
 
-
 const { Search } = Input;
 
 interface NavBarProps {
-  setAddModuleModalVisibility: Dispatch<SetStateAction<boolean>>
+  setAddModuleModalVisibility: Dispatch<SetStateAction<boolean>>;
 }
 
 const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const menu = (
     <Menu>
@@ -34,8 +35,16 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
     dispatch({ type: SEARCH_TERM, payload: searchTerm });
     router.push({
       pathname: "/search",
-      query: { s: searchTerm }
-    })
+      query: { s: searchTerm },
+    });
+  };
+
+  const toggleAddModModalVisibility = () => {
+    if (!isLoggedIn) {
+      triggerRequireLoginMessage();
+    } else {
+      setAddModuleModalVisibility(true);
+    }
   };
 
   return (
@@ -63,13 +72,15 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
             <DownOutlined />
           </div>
         </Dropdown>
-        <Button style={styles.addModuleButton} onClick={() => setAddModuleModalVisibility(true)}>
+        <Button
+          style={styles.addModuleButton}
+          onClick={toggleAddModModalVisibility}
+        >
           Add Module
         </Button>
-        <ProfileButton/>
+        <ProfileButton />
       </div>
     </div>
-
   );
 };
 
@@ -90,20 +101,20 @@ const styles = {
   },
   logo: {
     flex: 1,
-    cursor: "pointer"
+    cursor: "pointer",
   },
   searchContainer: {
     flex: 1,
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   searchBar: {
-    width: 200
+    width: 200,
   },
   actionsContainer: {
     display: "flex",
     flex: 1,
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   addModuleButton: {
     display: "flex",
@@ -112,8 +123,8 @@ const styles = {
     padding: 10,
     backgroundColor: codeBlue,
     color: "#fff",
-    borderRadius: 8
-  }
-}
+    borderRadius: 8,
+  },
+};
 
 export default Navbar;

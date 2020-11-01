@@ -1,4 +1,5 @@
 import axios from "axios";
+import queryString from "query-string";
 const baseUrl = "http://localhost:8080/api/planned-mod";
 
 const addPlannedMod = async (userId, modId, semester) => {
@@ -36,7 +37,8 @@ const removePlannedMod = async (plannedModId) => {
 };
 
 const fetchPlannedMods = async (userId) => {
-  const response = await axios.get(`${baseUrl}/user/${userId}`, {
+  const query = queryString.stringify({ id: userId })
+  const response = await axios.get(`${baseUrl}/user/?${query}`, {
     withCredentials: true,
   });
 

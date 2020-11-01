@@ -13,20 +13,23 @@ interface CommentsModalProps extends ModalState {
 const CommentsModal: React.FC<CommentsModalProps> = ({
   comments,
   isModalVisible,
-  setModalVisibility
+  setModalVisibility,
 }) => {
+  const renderComments = () =>
+    comments.map((comment, index) => {
+      return <CommentCard comment={comment} key={index} />;
+    });
 
-
-  const renderComments = () => comments.map((comment, index) => {
-    return <CommentCard comment={comment} key={index} />
-  })
+  const renderNoCommentsFeedback = () => (
+    <>No comments yet. You can be the first!</>
+  );
 
   return (
     <Modal
       isOpen={isModalVisible}
       style={{
         overlay: styles.overlay,
-        content: styles.content
+        content: styles.content,
       }}
     >
       <div style={styles.header}>
@@ -40,21 +43,21 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
         style={{
           maxHeight: "70vh",
           overflowY: "scroll",
-          padding: 10
+          padding: 10,
         }}
       >
-        {renderComments()}
+        {comments.length === 0 ? renderNoCommentsFeedback() : renderComments()}
       </div>
     </Modal>
-  )
-}
+  );
+};
 
 const styles = {
   overlay: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(232, 232, 232, 0.5)"
+    backgroundColor: "rgba(232, 232, 232, 0.5)",
   },
   content: {
     position: "static",
@@ -72,13 +75,13 @@ const styles = {
     alignItems: "center",
     fontSize: 25,
     marginBottom: 10,
-    padding: "0px 10px"
+    padding: "0px 10px",
   },
   closeButton: {
     color: "#fff",
     transform: "scale(0.8)",
     cursor: "pointer",
-  }
-}
+  },
+};
 
 export default CommentsModal;

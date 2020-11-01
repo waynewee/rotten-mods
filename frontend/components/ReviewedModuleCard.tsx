@@ -3,6 +3,7 @@ import { Review } from "../types";
 
 import PenIcon from "../icons/PenFilledIcon";
 import ModulePill from "./ModulePill";
+import { reviewBlue } from "../styles/colors";
 
 const ReviewedModuleCard: React.FC = () => {
   const personalReviews: Review[] = useSelector((state) => state.personalModules.reviews);
@@ -33,7 +34,7 @@ const styles = {
   container: {
     flex: 1,
     padding: 30,
-    backgroundColor: "#289FA7",
+    backgroundColor: reviewBlue,
     color: "#fff",
     borderRadius: 15,
     boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.25)",

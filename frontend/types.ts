@@ -23,7 +23,7 @@ export interface Rating {
 
 export interface Review {
   userName: string;
-  likes?: number;
+  // likes?: number;
   comments?: Comment[];
   text: string;
   acadYearTaken: number;
@@ -48,6 +48,7 @@ export interface Review {
     name: string;
     _id: string;
   };
+  createdAt: string;
 }
 
 export interface Comment {

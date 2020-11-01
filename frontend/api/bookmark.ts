@@ -1,8 +1,10 @@
 import axios from "axios";
+import queryString from "query-string";
 const baseUrl = "http://localhost:8080/api/bookmark";
 
 const getBookmarks = async (userId) => {
-  const response = await axios.get(`${baseUrl}/user/${userId}`, {
+  const query = queryString.stringify({ id: userId })
+  const response = await axios.get(`${baseUrl}/user/?${query}`, {
     withCredentials: true,
   });
   return response.data;
