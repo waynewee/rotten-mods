@@ -16,7 +16,7 @@ export default async function userRouter(req: Request, res: Response ){
         result = await UserHandler.findById(id)
         break
       case 'POST':
-        await requireLogin(req, res)
+        // await requireLogin(req, res)
         result = await UserHandler.create(request.body)
         break
       case 'DELETE':
