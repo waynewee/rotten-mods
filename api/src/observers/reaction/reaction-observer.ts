@@ -28,49 +28,43 @@ const reactionSubs = [
   Reply
 ]
 
-class ReactionObserver {
+export async function notify(reaction: any, remove = false){
 
-  static notify(reaction: any, remove = false){
+  let promises:any = []
 
-    let promises:any = []
+  for (let i = 0; i < reactionSubs.length; i++ ){
 
-    for (let i = 0; i < reactionSubs.length; i++ ){
+    const sub:any = reactionSubs[i]
+    const subType = reactionSubTypes[i]
 
-      const sub:any = reactionSubs[i]
-      const subType = reactionSubTypes[i]
+    if(reaction.sub == sub.modelName){
 
-      if(reaction.sub == sub.modelName){
+      return sub.findOne({ _id: reaction.subId})
+      .then( (subObj: any) => {
+        
+        const reactionType = reaction.type
 
-        return sub.findOne({ _id: reaction.subId})
-        .then( (subObj: any) => {
-          
-          const reactionType = reaction.type
-  
-          if( !subObj.reaction ){
-            subObj.reaction = {}
-          }
+        if( !subObj.reaction ){
+          subObj.reaction = {}
+        }
 
-          if( !subObj.reaction[reactionType] ){
-            subObj.reaction[reactionType] = {}
-          }
+        if( !subObj.reaction[reactionType] ){
+          subObj.reaction[reactionType] = {}
+        }
 
-          if( remove ){
-            subObj.reaction[reactionType].count -= 1
-          } else {
-            subObj.reaction[reactionType].count += 1
-          }
+        if( remove ){
+          subObj.reaction[reactionType].count -= 1
+        } else {
+          subObj.reaction[reactionType].count += 1
+        }
 
-          
-          promises.push(subObj.save())
+        
+        promises.push(subObj.save())
 
-        })
-      }
+      })
     }
-
-    return Promise.all(promises)
-
   }
 
-}
+  return Promise.all(promises)
 
-export default ReactionObserver
+}

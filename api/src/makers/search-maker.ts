@@ -2,9 +2,9 @@ import { validateLimit, validatePage } from "../validators/index"
 
 export default async function makeSearch(searchInfo: any){
 
-  const transformed = transform(searchInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(searchInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

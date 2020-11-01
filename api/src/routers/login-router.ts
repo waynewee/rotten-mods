@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import LoginHandler from "../handlers/login-handler";
+import * as LoginHandler from "../handlers/login-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
 

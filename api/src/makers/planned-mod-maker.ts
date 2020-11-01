@@ -7,9 +7,9 @@ import {
 
 export default async function makePlannedMod(plannedModInfo: any){
 
-  const transformed = transform(plannedModInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(plannedModInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

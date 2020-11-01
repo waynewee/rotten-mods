@@ -25,85 +25,79 @@ const ratingSubs = [
   Review
 ]
 
-class RatingObserver {
+export async function notify(rating: any){
 
-  static notify(rating: any){
+  let promises:any = []
 
-    let promises:any = []
+  for (let i = 0; i < ratingSubs.length; i++ ){
 
-    for (let i = 0; i < ratingSubs.length; i++ ){
+    const sub:any = ratingSubs[i]
 
-      const sub:any = ratingSubs[i]
+    if(rating.sub == sub.modelName){
 
-      if(rating.sub == sub.modelName){
+      sub.findOne({ _id: rating.subId})
+      .then( (subObj: any) => {
+        
+        const ratingType = rating.type
 
-        sub.findOne({ _id: rating.subId})
-        .then( (subObj: any) => {
-          
-          const ratingType = rating.type
+        if( !subObj.rating ){
+          subObj.rating = {}
+        }
 
-          if( !subObj.rating ){
-            subObj.rating = {}
-          }
+        if( !subObj.rating[ratingType] ){
+          subObj.rating[ratingType] = {}
+        }
 
-          if( !subObj.rating[ratingType] ){
-            subObj.rating[ratingType] = {}
-          }
-  
-          subObj.rating[ratingType].count += 1
+        subObj.rating[ratingType].count += 1
 
-          const count = subObj.rating[ratingType].count
+        const count = subObj.rating[ratingType].count
 
-          subObj.rating[ratingType].value = ((subObj.rating[ratingType].value * (count - 1)) + rating.value)/count
+        subObj.rating[ratingType].value = ((subObj.rating[ratingType].value * (count - 1)) + rating.value)/count
 
-          promises.push(subObj.save())
+        promises.push(subObj.save())
 
-        })
-      }
+      })
     }
-
-    return Promise.all(promises)
-
   }
 
-  static notifyOfUpdate(oldRatingValue: number, rating: any){
-
-    let promises:any = []
-
-    for (let i = 0; i < ratingSubs.length; i++ ){
-
-      const sub:any = ratingSubs[i]
-
-      if(rating.sub == sub.modelName){
-        sub.findOne({ _id: rating.subId})
-        .then( (subObj: any) => {
-          
-          const ratingType = rating.type
-
-          if( !subObj.rating ){
-            subObj.rating = {}
-          }
-
-          if( !subObj.rating[ratingType] ){
-            subObj.rating[ratingType] = {}
-          }
-
-          const count = subObj.rating[ratingType].count
-          const currValue = count * subObj.rating[ratingType].value
-          const newValue = (currValue - oldRatingValue + rating.value)/count 
-
-          subObj.rating[ratingType].value = newValue
-
-          promises.push(subObj.save())
-
-        })
-      }
-    }
-
-    return Promise.all(promises)
-
-  }
+  return Promise.all(promises)
 
 }
 
-export default RatingObserver
+export async function notifyOfUpdate(oldRatingValue: number, rating: any){
+
+  let promises:any = []
+
+  for (let i = 0; i < ratingSubs.length; i++ ){
+
+    const sub:any = ratingSubs[i]
+
+    if(rating.sub == sub.modelName){
+      sub.findOne({ _id: rating.subId})
+      .then( (subObj: any) => {
+        
+        const ratingType = rating.type
+
+        if( !subObj.rating ){
+          subObj.rating = {}
+        }
+
+        if( !subObj.rating[ratingType] ){
+          subObj.rating[ratingType] = {}
+        }
+
+        const count = subObj.rating[ratingType].count
+        const currValue = count * subObj.rating[ratingType].value
+        const newValue = (currValue - oldRatingValue + rating.value)/count 
+
+        subObj.rating[ratingType].value = newValue
+
+        promises.push(subObj.save())
+
+      })
+    }
+  }
+
+  return Promise.all(promises)
+
+}

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import ReactionHandler from "../handlers/reaction-handler";
+import * as ReactionHandler from "../handlers/reaction-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
 

@@ -28,44 +28,37 @@ const eventSubs = [
   Reply
 ]
 
-class EventObserver {
+export async function notify(event: any){
 
-  static notify(event: any){
+  let promises:any = []
 
-    let promises:any = []
+  for (let i = 0; i < eventSubs.length; i++ ){
 
-    for (let i = 0; i < eventSubs.length; i++ ){
+    const sub:any = eventSubs[i]
 
-      const sub:any = eventSubs[i]
-      const subType = eventSubTypes[i]
+    if(event.sub == sub.modelName){
 
-      if(event.sub == sub.modelName){
+      return sub.findOne({ _id: event.subId})
+      .then( (subObj: any) => {
+        
+        const eventType = event.type
 
-        return sub.findOne({ _id: event.subId})
-        .then( (subObj: any) => {
-          
-          const eventType = event.type
-  
-          if( !subObj.event ){
-            subObj.event = {}
-          }
+        if( !subObj.event ){
+          subObj.event = {}
+        }
 
-          if( !subObj.event[eventType] ){
-            subObj.event[eventType] = {}
-          }
+        if( !subObj.event[eventType] ){
+          subObj.event[eventType] = {}
+        }
 
-          subObj.event[eventType].count += 1
-          
-          promises.push(subObj.save())
+        subObj.event[eventType].count += 1
+        
+        promises.push(subObj.save())
 
-        })
-      }
+      })
     }
-
-    return Promise.all(promises)
-
   }
 
-}
+  return Promise.all(promises)
 
-export default EventObserver
+}

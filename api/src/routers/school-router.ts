@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import SchoolHandler from "../handlers/school-handler";
+import * as SchoolHandler from "../handlers/school-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
 import { requireLogin } from "../middleware";

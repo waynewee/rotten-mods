@@ -3,9 +3,9 @@ import { capitalize, lowerCase, upperCase } from "../helpers/string-methods"
 
 export default async function makeCourse(courseInfo: any){
  
-  const transformed = transform(courseInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(courseInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 
@@ -31,12 +31,10 @@ function transform(courseInfo: any){
 async function validate(courseInfo: any){
 
   const {
-    name,
-    shortName
+    name
   } = courseInfo
 
   requireParam(name, 'name')
-  requireParam(shortName, 'shortName')
 
   return courseInfo 
 

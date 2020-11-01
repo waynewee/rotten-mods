@@ -9,9 +9,9 @@ import {
 
 export default async function makeMod(modInfo: any){
 
-  const transformed = transform(modInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(modInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

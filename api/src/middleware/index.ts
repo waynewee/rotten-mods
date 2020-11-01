@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express"
-import { AuthenticationError } from "./errors";
-import { decrypt } from "./helpers/encrypt-decrypt";
+import { AuthenticationError } from "../errors";
+import { decrypt } from "../helpers/encrypt-decrypt";
 
-import User from './models/user'
+import User from '../models/user'
 
 export async function requireLogin(req: Request, res: Response){
 

@@ -12,9 +12,9 @@ const allowedTypes = ["difficulty", "star"]
 
 export default async function makeRating(ratingInfo: any){
 
-  const transformed = transform(ratingInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(ratingInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 

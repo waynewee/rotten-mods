@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 
 import { adaptRequest } from '../helpers/adapt-request'
-import ModHandler from '../handlers/mod-handler'
+import * as ModHandler from '../handlers/mod-handler'
 import { requireLogin } from "../middleware";
 
 export default async function modRouter(req: Request, res: Response ){

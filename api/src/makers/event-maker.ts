@@ -11,9 +11,9 @@ const allowedTypes = ["click", "view"]
 
 export default async function makeEvent(eventInfo: any){
 
-  const transformed = transform(eventInfo)
-  const validated = await validate(transformed)
-  const normalized = normalize(validated)
+  const validated = await validate(eventInfo)
+  const transformed = await transform(validated)
+  const normalized = normalize(transformed)
 
   return normalized
 
