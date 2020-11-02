@@ -16,7 +16,7 @@ export default async function replyRouter(req: Request, res: Response ){
         id?
           result = await ReplyHandler.findById(id)
           :
-          result = await ReplyHandler.findByReviewId(request.query)
+          result = await ReplyHandler.findByReviewId(request.query.reviewId)
         break
       case 'POST':
         await requireLogin(req)
