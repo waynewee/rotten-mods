@@ -37,8 +37,6 @@ const StudyPlanCard: React.FC = () => {
     );
   }, [selectedSemester]);
 
-  console.log(viewablePlannedMods);
-
   const menu = (
     <Menu>
       <Menu.Item key={1}>

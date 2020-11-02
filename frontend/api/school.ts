@@ -1,6 +1,8 @@
 import axios from "axios";
 import queryString from "query-string";
-const baseUrl = "http://localhost:8080/api/school";
+import { serverDomain } from "../config";
+
+const baseUrl = `${serverDomain}/api/school`;
 
 const searchSchools = async (searchTerm: string) => {
   const query = queryString.stringify({

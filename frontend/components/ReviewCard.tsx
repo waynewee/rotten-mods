@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Review } from "../types";
-import eventApi from "../api/event";
 import commentApi from "../api/comment";
 import reactionApi from "../api/reaction";
 import { triggerRequireLoginMessage } from "../utils/helpers";
@@ -29,7 +28,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     false
   );
   const [comments, setComments] = useState([]);
-  const [isLikedByUser, setIsLikedByUser] = useState(false);
+  const [userLikeReactionId, setUserLikeReactionId] = useState("");
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.user?._id);
@@ -39,14 +38,14 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     text,
     acadYearTaken,
     semesterTaken,
-    event,
+    reaction,
     _id,
     rating,
   } = review;
-  const { name } = user;
-  const like = event?.like?.count ?? 0;
-  const difficulty = rating?.difficulty ?? 3;
-  const star = rating?.star ?? 3;
+  const name = user?.name;
+  const like = reaction?.like?.count ?? 0;
+  const difficulty = rating?.difficulty.value ?? 3;
+  const star = rating?.star.value ?? 3;
 
   useEffect(() => {
     fetchComments();
@@ -60,11 +59,15 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
   const checkIsLikedByUser = async () => {
     try {
-      const event = await eventApi.getEvent("review", _id, userId, "like");
-      console.log(event);
-      setIsLikedByUser(true);
+      const likeReaction = await reactionApi.getReaction(
+        "review",
+        _id,
+        userId,
+        "like"
+      );
+      setUserLikeReactionId(likeReaction._id);
     } catch (err) {
-      setIsLikedByUser(false);
+      setUserLikeReactionId("");
     }
   };
 
@@ -74,14 +77,14 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
       return;
     }
 
-    if (!isLikedByUser) {
+    if (!userLikeReactionId) {
       await reactionApi.addReaction("review", _id, userId, "like");
       updateReviews();
       checkIsLikedByUser();
     } else {
-      // await eventApi.deleteEvent(user._id, "review", _id, "like");
-      // updateReviews();
-      // checkIsLikedByUser();
+      await reactionApi.deleteReaction(userLikeReactionId);
+      updateReviews();
+      checkIsLikedByUser();
     }
   };
 
@@ -114,7 +117,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                 <LikeOutlinedIcon
                   style={{
                     ...styles.icon,
-                    color: isLikedByUser ? ratingsYellow : "#fff",
+                    color: userLikeReactionId ? ratingsYellow : "#fff",
                   }}
                 />
               </Button>

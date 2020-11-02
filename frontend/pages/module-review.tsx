@@ -24,7 +24,6 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   initialModule,
   reviews,
 }) => {
-  console.log("Reviews", reviews);
   const [module, setModule] = useState(initialModule);
   const [reviewsList, setReviewsList] = useState(reviews);
   const [numberOfReviews, setNumberOfReviews] = useState(20);
@@ -41,7 +40,6 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   // Analytics
   useEffect(() => {
     checkIsRatedByUser();
-    updateReviews();
     eventApi.addEvent(userId, "mod", module._id, "view");
   }, []);
 

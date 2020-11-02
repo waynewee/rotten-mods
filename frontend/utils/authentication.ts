@@ -76,7 +76,7 @@ async function signUp(values) {
   }
 }
 
-async function logIn(values, dispatch) {
+async function logIn(values) {
   const { emailaddress, password } = values;
   const data = await authApi.logIn(emailaddress, password).catch((error) => {
     throw error;
@@ -84,7 +84,6 @@ async function logIn(values, dispatch) {
   if (data) {
     const { name, currentYear, courseId, _id } = data;
     const courseData = await courseApi.getCourse(courseId);
-    console.log(courseData);
     const user: User = {
       fullName: name,
       yearOfStudy: currentYear,
@@ -95,7 +94,7 @@ async function logIn(values, dispatch) {
     window.localStorage.setItem("ROTTENMODS_EMAIL", emailaddress);
     window.localStorage.setItem("ROTTENMODS_PASSWORD", password);
 
-    dispatch({
+    store.dispatch({
       type: LOG_USER_IN,
       payload: user,
     });

@@ -1,5 +1,7 @@
 import axios from "axios";
-const baseUrl = "http://localhost:8080/api/user";
+import { serverDomain } from "../config";
+
+const baseUrl = `${serverDomain}/api/user`;
 
 const getUser = async (userId) => {
   const response = await axios.get(`${baseUrl}/${userId}`);

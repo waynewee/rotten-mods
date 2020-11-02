@@ -48,13 +48,10 @@ const ReduxApp: React.FC<AppProps> = ({ Component, pageProps }) => {
     const password = window.localStorage.getItem("ROTTENMODS_PASSWORD");
 
     if (email && password) {
-      authService.logIn(
-        {
-          emailaddress: email,
-          password,
-        },
-        dispatch
-      );
+      authService.logIn({
+        emailaddress: email,
+        password,
+      });
     }
   };
 

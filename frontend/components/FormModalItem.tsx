@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 import { Input, InputNumber, Rate, Select, AutoComplete, Tag } from "antd";
 const { TextArea } = Input;
@@ -21,9 +21,16 @@ interface FormModalItemProps {
     | "autocomplete"
     | "prereq";
   label: string;
-  value: string | number | boolean[] | string[];
+  value: string | number | boolean[] | string[] | SearchOption[];
   setValue?: Dispatch<SetStateAction<any>>;
   options?: any[];
+  searchTerm?: string;
+  setSearchTerm?: Dispatch<SetStateAction<any>>;
+}
+
+interface SearchOption {
+  value: string;
+  id: string;
 }
 
 const FormModalItem: React.FC<FormModalItemProps> = ({
@@ -32,11 +39,16 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
   value,
   setValue,
   options,
+  searchTerm,
+  setSearchTerm,
 }) => {
   const [firstIsChecked, setFirstIsChecked] = useState(0);
   const [secondIsChecked, setSecondIsChecked] = useState(0);
-  const [searchOptions, setSearchOptions] = useState(options ?? []);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchOptions, setSearchOptions] = useState<SearchOption[]>(options ?? []);
+
+  useEffect(() => {
+    setSearchOptions(options);
+  }, [options]);
 
   const toggleCheckbox = (index) => (event) => {
     const newValue = parseInt(event.target.value) === 0 ? 1 : 0;
@@ -193,30 +205,25 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
   );
 
   const renderPrereq = () => {
-    const removeCode = (removedCode) => {
-      const filteredCodes = (value as string[]).filter(
-        (code) => code !== removedCode
-      );
+    const removeCode = (removedMod) => {
+      const filteredCodes = (value as SearchOption[]).filter((mod) => mod.id !== removedMod.id);
       setValue(filteredCodes);
     };
 
     const renderTags = () => {
-      return (value as string[]).map((code) => (
-        <Tag closable onClose={() => removeCode(code)} key={code}>
-          {code}
+      console.log(value);
+      return (value as SearchOption[]).map((mod) => (
+        <Tag closable onClose={() => removeCode(mod)} key={mod.id}>
+          {mod.value}
         </Tag>
       ));
     };
 
     const addModule = (code) => {
-      setValue((value as string[]).concat([code]));
+      const modArr = searchOptions.filter((mod) => mod.value === code);
+      setValue((value as SearchOption[]).concat(modArr));
       setSearchTerm("");
     };
-
-    const onSearch = (searchText) =>
-      setSearchOptions(
-        options.filter((item) => item.value.includes(searchText.toUpperCase()))
-      );
 
     const onChange = (newSearchTerm) => setSearchTerm(newSearchTerm);
 
@@ -226,7 +233,7 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
           style={styles.input}
           onSelect={addModule}
           options={searchOptions}
-          onSearch={onSearch}
+          // onSearch={onSearch}
           value={searchTerm}
           onChange={onChange}
         />

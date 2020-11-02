@@ -1,10 +1,12 @@
 import axios from "axios";
 import queryString from "query-string";
-const baseUrl = "http://localhost:8080/api/bookmark";
+import { serverDomain } from "../config";
+
+const baseUrl = `${serverDomain}/api/bookmark`;
 
 const getBookmarks = async (userId) => {
-  const query = queryString.stringify({ id: userId })
-  const response = await axios.get(`${baseUrl}/user/?${query}`, {
+  const query = queryString.stringify({ userId });
+  const response = await axios.get(`${baseUrl}/?${query}`, {
     withCredentials: true,
   });
   return response.data;

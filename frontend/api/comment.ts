@@ -1,5 +1,8 @@
 import axios from "axios";
-const baseUrl = "http://localhost:8080/api/reply";
+import queryString from "query-string";
+import { serverDomain } from "../config";
+
+const baseUrl = `${serverDomain}/api/reply`;
 
 const addComment = async (userId: string, text: string, reviewId: string) => {
   await axios.post(
@@ -16,7 +19,8 @@ const addComment = async (userId: string, text: string, reviewId: string) => {
 };
 
 const getCommentsOfReview = async (reviewId) => {
-  const response = await axios.get(`${baseUrl}/review/${reviewId}`);
+  const query = queryString.stringify({ reviewId })
+  const response = await axios.get(`${baseUrl}/?${query}`);
   return response.data;
 };
 

@@ -30,14 +30,11 @@ export interface Review {
   semesterTaken: 1 | 2;
   workload: number;
   rating: {
-    difficulty: number;
-    star: number;
+    difficulty: Rating;
+    star: Rating;
   };
-  event: {
+  reaction: {
     like: {
-      count: number;
-    };
-    view: {
       count: number;
     };
   };
@@ -85,4 +82,14 @@ export interface PlannedMods {
 export interface School {
   _id: string;
   name: string;
+}
+
+export interface Reaction {
+  _id: string;
+  userId: string;
+  sub: "mod" | "review" | "school" | "course";
+  subId: string;
+  type: "like" | "love" | "dislike";
+  createdAt: string;
+  updatedAt: string;
 }

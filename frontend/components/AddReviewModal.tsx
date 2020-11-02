@@ -28,8 +28,14 @@ const yearMinusOne = currentAYSecondYear - 1;
 const initialReviewState = {
   text: "",
   rating: {
-    difficulty: 3,
-    star: 3,
+    difficulty: {
+      count: 1,
+      value: 3.0,
+    },
+    star: {
+      count: 1,
+      value: 3.0,
+    },
   },
   workload: 10,
   semesterTaken: 1,
@@ -50,9 +56,9 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
 
   const [text, setText] = useState(initialReview.text);
   const [difficulty, setDifficulty] = useState(
-    initialReview.rating?.difficulty
+    initialReview.rating?.difficulty?.value
   );
-  const [ratings, setRatings] = useState(initialReview.rating?.star);
+  const [ratings, setRatings] = useState(initialReview.rating?.star?.value);
   const [semester, setSemester] = useState(initialReview.semesterTaken);
   const [year, setYear] = useState(initialReview.acadYearTaken);
   const [submitText, setSubmitText] = useState("Submit");
@@ -68,62 +74,28 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
       return;
     }
 
-    const reviewToSubmit = {
+    const requestBody = {
       text,
       semesterTaken: semester,
       acadYearTaken: year as string,
+      modId,
+      userId,
+      rating: {
+        difficulty: {
+          count: 1,
+          value: difficulty,
+        },
+        star: {
+          count: 1,
+          value: ratings,
+        },
+      },
     };
 
     if (reviewByUser) {
-      const reviewPromise = await reviewApi.updateReviewOfModule(
-        reviewToSubmit,
-        modId,
-        userId,
-        reviewByUser._id
-      );
-      const difficultyPromise = reviewApi.updateRating(
-        difficulty,
-        "difficulty",
-        userId,
-        modId,
-        "mod",
-        ratingsByUser._id //TODO: change to difficulty rating _id
-      );
-      const starPromise = reviewApi.updateRating(
-        ratings,
-        "star",
-        userId,
-        modId,
-        "mod",
-        ratingsByUser._id
-      );
-
-      await Promise.all([reviewPromise, difficultyPromise, starPromise]);
+      await reviewApi.updateReviewOfModule(requestBody, reviewByUser._id);
     } else {
-      const reviewPromise = reviewApi.addReviewOfModule(
-        reviewToSubmit,
-        modId,
-        userId
-      );
-      const difficultyPromise = reviewApi.addRating(
-        difficulty,
-        "difficulty",
-        userId,
-        modId,
-        "mod"
-      );
-      const starPromise = ratingsByUser
-        ? reviewApi.updateRating(
-            ratings,
-            "star",
-            userId,
-            modId,
-            "mod",
-            ratingsByUser._id
-          )
-        : reviewApi.addRating(ratings, "star", userId, modId, "mod");
-
-      await Promise.all([reviewPromise, difficultyPromise, starPromise]);
+      await reviewApi.addReviewOfModule(requestBody);
     }
 
     setModalVisibility(false);
