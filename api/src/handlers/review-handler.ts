@@ -1,16 +1,19 @@
 import makeReview from '../makers/review-maker'
 import Review from '../models/review'
+import User from '../models/user'
 import { ObjectNotFoundError } from '../errors'
+import { transformReviews } from '../transformers/review-transformer'
 
 
 export async function findByUserId( userId: string ){
-  const review = await Review.find({ userId })
-  return review
+  const reviews = await Review.find({ userId })
+  return reviews
 }
 
 export async function findByModId( modId: string ){
-  const review = await Review.find({ modId })
-  return review
+  const reviews = await Review.find({ modId })
+  const transformedReviews = await transformReviews(reviews)
+  return transformedReviews
 }
 
 export async function findById(id: string){
