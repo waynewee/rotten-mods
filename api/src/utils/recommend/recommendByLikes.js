@@ -18,6 +18,8 @@ to generate recommendation
 - recommend
 - for each mod
 -- call recommendation index (user, module)
+
+
 */
 
 //calculate jaccard index
@@ -30,7 +32,7 @@ function jaccardIndex(user, users) {
       { $match: {_id : user}}
     ])
     .then( res => {
-      console.log("res is: ", res);
+      //console.log("res is: ", res);
         return Event.aggregate([
           { $match: {sub : "mod"}},
           { $match: {userId : {"$in": users}}},
@@ -45,7 +47,7 @@ function jaccardIndex(user, users) {
           { $group: { _id : 0, total: {$sum: "$jaccard"}}},
         ])
         .then( res2 =>{
-          console.log(res2)
+          //console.log("jcind", res2)
           return res2[0].total
         })
     })
@@ -99,6 +101,7 @@ function likedUsers(module) {
     ])
     .then( res => {
       res = res.map( r => r._id)
+      //console.log("liked users", res);
       return res
     })
 
@@ -124,6 +127,7 @@ function recommendationIndex(user, module) {
     .then( u => {
       return jaccardIndex(user, u)
       .then( indx => {
+          console.log("index", indx/u.length);
         return indx/u.length
       })
     })
@@ -143,7 +147,66 @@ function recommendationIndex(user, module) {
 }
 
 function recommend(user) {
+    console.log("recommending");
+    return Mod.find({})
+    .then( modules => {
 
+    const recs = {}
+
+    m = modules[0]
+    console.log(m);
+    console.log(likedUsers(m));
+    return likedUsers(m._id)
+        .then( u => {
+          console.log(u);
+          return jaccardIndex(user, u)
+          .then( indx => {
+            //console.log("index", indx/u.length);
+            return indx/u.length
+          }).then(id => {
+            console.log("id is ", id);
+            recs.module.code = id
+            
+            
+            const newRecommendation = new Recommendation({
+                userId: user._id,
+                recommendations: recs, //store key value pair of mod code to rec idx
+                type: recommendationTypesEnum.likes
+            })
+            return newRecommendation.save()
+          })
+        })
+      })
+  }
+    /*
+    return Promise.all(
+      modules.map( m => {
+        return likedUsers(m._id)
+        .then( u => {
+          return jaccardIndex(user, u)
+          .then( indx => {
+            //console.log("index", indx/u.length);
+            return indx/u.length
+          }).then(id => {
+            console.log("id is ", id);
+            recs.module.code = id
+            
+            
+            const newRecommendation = new Recommendation({
+                userId: user._id,
+                recommendations: recs, //store key value pair of mod code to rec idx
+                type: recommendationTypesEnum.likes
+            })
+            return newRecommendation.save()
+          })
+        })
+      })
+    )
+  })
+}*/
+
+
+/*
   return Mod.find({})
   .then( modules => {
 
@@ -151,9 +214,31 @@ function recommend(user) {
 
     return Promise.all(
       modules.map( m => {
+        return likedUsers(m._id)
+        .then( u => {
+          return jaccardIndex(user, u)
+          .then( indx => {
+            //console.log("index", indx/u.length);
+            return indx/u.length
+          }).then(id => {
+            console.log("id is ", id);
+            recs.module.code = id
+            
+            
+            const newRecommendation = new Recommendation({
+                userId: user._id,
+                recommendations: recs, //store key value pair of mod code to rec idx
+                type: recommendationTypesEnum.likes
+            });
+            return newRecommendation.save()
+          })
+        })
+        /*
         return recommendationIndex(user, m._id)
         .then( idx => {
+            console.log("idx", idx);
           recs.module.code = idx
+          console.log(recs);
         })
       })
     )
@@ -185,14 +270,14 @@ function recommend(user) {
                 recommendations: recs, //store key value pair of mod code to rec idx
                 type: recommendationTypesEnum.likes
             });
-            resolve(newRecommendation.save());*/
+            resolve(newRecommendation.save());
             resolve(recs);
         });
     });
-}
+}*/
 
 //likedUsers(ObjectId("5f9b1c53c497871dbf23e702"));
 //totalLikes(ObjectId("5f9b1c53c497871dbf23e702"));
 //recommendationIndex(ObjectId("5f9b64e79aa8ac9046e1278b"), ObjectId("5f9b64ec9aa8ac9046e13389"));
-recommend(ObjectId("5f98f8e007b1a55d80fa8410"));
+recommend(ObjectId("5f9e59989c6da802dd9813cc"));
 
