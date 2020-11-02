@@ -1027,6 +1027,28 @@
       }
     },
     "/reply": {
+      "get": {
+        "tags": ["reply"],
+        "summary": "gets all replies for a review",
+        "description": "Returns a list of replies to a review",
+        "parameters": [{
+          "name": "reviewId",
+          "in": "query",
+          "description": "OID of the review",
+          "required": true
+        }],
+        "responses" : {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ReplyArray"
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
       "post": {
         "tags": ["reply"],
         "summary": "creates a reply",
@@ -1128,30 +1150,6 @@
           },
           "403":{
             "description": "Not authorized"
-          }
-        }
-      }
-    },
-    "/reply/review/{reviewId}":{
-      "get": {
-        "tags": ["reply"],
-        "summary": "gets all replies for a review",
-        "description": "Returns a list of replies to a review",
-        "parameters": [{
-          "name": "reviewId",
-          "in": "path",
-          "description": "OID of the review",
-          "required": true
-        }],
-        "responses" : {
-          "200":{
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/ReplyArray"
-            }
-          },
-          "500": {
-            "description": "Error"
           }
         }
       }
@@ -2250,6 +2248,12 @@
         "acadYearTaken":{
           "type": "number",
           "example": "19/20"
+        },
+        "rating": {
+          "$ref": "#/definitions/RatingObj"
+        },
+        "event": {
+          "$ref": "#/definitions/EventObj"
         }
       }
     },
