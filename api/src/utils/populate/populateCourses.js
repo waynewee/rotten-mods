@@ -5,11 +5,12 @@ const { mongoUri } = require('../../../dist/config')
 mongoose.connect(mongoUri)
 
 const Course = require('../../../dist/src/models/course').default
+const makeCourse = require('../../../dist/src/makers/course-maker').default
 
-function populateCourse(){
+async function populateCourse(){
 
   return Course.remove({})
-  .then(() => {
+  .then(async () => {
 
     console.log("Populating courses")
     const promises = []
@@ -28,9 +29,11 @@ function populateCourse(){
     
     for( let i = 0; i < courses.length; i++ ){
   
-      const newCourse = new Course({
+      const course = await makeCourse({
         name: courses[i]
       })
+
+      const newCourse = new Course(course)
     
       promises.push(newCourse.save())
     }

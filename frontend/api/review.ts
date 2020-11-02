@@ -1,73 +1,53 @@
 import axios from "axios";
 import queryString from "query-string";
+import { serverDomain } from "../config";
+import { Rating } from "../types";
 
-const reviewBaseUrl = "http://localhost:8080/api/review";
-const ratingBaseUrl = "http://localhost:8080/api/rating";
+const reviewBaseUrl = `${serverDomain}/api/review`;
+const ratingBaseUrl = `${serverDomain}/api/rating`;
 
 interface ReviewToSubmit {
   text: string;
   semesterTaken: number;
   acadYearTaken: string;
-  // workload: number;
+  modId: string;
+  userId: string;
+  rating: {
+    difficulty: Rating;
+    star: Rating;
+  };
 }
 
-const getReviewsOfModule = async (modId) => {
-  const response = await axios.get(`${reviewBaseUrl}/mod/${modId}`);
+const getReviewsOfModule = async (
+  modId: string,
+  limit: number = 10,
+  page: number = 1
+) => {
+  const query = queryString.stringify({ modId });
+  const response = await axios.get(`${reviewBaseUrl}/?${query}`);
   return response.data;
 };
 
-const getReviewsOfUser = async (userId) => {
-  const response = await axios.get(`${reviewBaseUrl}/user/${userId}`, {
+const getReviewsOfUser = async (userId: string) => {
+  const query = queryString.stringify({ userId });
+  const response = await axios.get(`${reviewBaseUrl}/?${query}`, {
     withCredentials: true,
   });
   return response.data;
 };
 
-const addReviewOfModule = async (
-  review: ReviewToSubmit,
-  modId: string,
-  userId: string
-) => {
-  const { text, semesterTaken, acadYearTaken } = review;
-  const response = await axios.post(
-    reviewBaseUrl,
-    {
-      text,
-      modId,
-      userId,
-      semesterTaken,
-      acadYearTaken,
-      // workload,
-    },
-    {
-      withCredentials: true,
-    }
-  );
+const addReviewOfModule = async (body: ReviewToSubmit) => {
+  const response = await axios.post(reviewBaseUrl, body, {
+    withCredentials: true,
+  });
 
   return response.status;
 };
 
-const updateReviewOfModule = async (
-  review: ReviewToSubmit,
-  modId: string,
-  userId: string,
-  reviewId: string
-) => {
-  const { text, semesterTaken, acadYearTaken } = review;
-  const response = await axios.put(
-    `${reviewBaseUrl}/${reviewId}`,
-    {
-      text,
-      modId,
-      userId,
-      semesterTaken,
-      acadYearTaken,
-      // workload,
-    },
-    {
-      withCredentials: true,
-    }
-  );
+const updateReviewOfModule = async (body: ReviewToSubmit, reviewId: string) => {
+  const response = await axios.put(`${reviewBaseUrl}/${reviewId}`, body, {
+    withCredentials: true,
+  });
 
   return response.status;
 };
@@ -96,9 +76,10 @@ const addRating = async (
   return response.status;
 };
 
-const getRating = async (subscriberType, userId, ratingType) => {
+const getRating = async (subscriberType, subscriberId, userId, ratingType) => {
   const query = queryString.stringify({
     sub: subscriberType,
+    subId: subscriberId,
     userId,
     type: ratingType,
   });

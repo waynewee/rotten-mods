@@ -7,6 +7,7 @@ import {
   FETCH_PERSONAL_REVIEWS,
 } from "../redux/constants";
 import { store } from "../redux/store";
+import { message } from "antd";
 
 export const updatePersonalBookmarks = async (userId) => {
   if (!userId) return;
@@ -36,4 +37,8 @@ export const updatePersonalReviews = async (userId) => {
     type: FETCH_PERSONAL_REVIEWS,
     payload: data,
   });
+};
+
+export const triggerRequireLoginMessage = () => {
+  message.warning("You need to login first!");
 };

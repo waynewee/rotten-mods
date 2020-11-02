@@ -1,31 +1,20 @@
-import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
+const mongoose = require('mongoose')
 
-import {RatingObjSchema} from '../publishers/rating/ratingPubSchema'
-import { EventObjSchema } from '../publishers/event/eventPubSchema'
+import {RatingObjSchema} from '../observers/rating/rating-observer-schema'
+import { EventObjSchema } from '../observers/event/event-observer-schema'
+import { ReactionObjSchema } from "../observers/reaction/reaction-observer-schema"
 
-export const SchoolSchema = createSchema({
-  name: Type.string({ required: true }),
-  shortName: Type.string({ required: true }), 
+const SchoolSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  shortName: { type: String, required: true },
   rating: RatingObjSchema,
-  event: EventObjSchema
+  event: EventObjSchema,
+  reaction: ReactionObjSchema
 },{
-  timestamps: true
+  timestamps: true,
+  usePushEach: true
 })
 
-export type SchoolDoc = ExtractDoc<typeof SchoolSchema> 
-
-const School = typedModel('School', SchoolSchema, undefined, undefined, {
-  getShortName(name: string){
-    const prepositions = ["of"]
-
-    return name.split(" ").reduce((acc, curr) => {
-      if( prepositions.includes(curr.toLowerCase())){
-        return acc
-      }
-      return acc + curr.split("")[0].toUpperCase()
-    },"")
-
-  }
-});
+const School = mongoose.model('school', SchoolSchema)
 
 export default School

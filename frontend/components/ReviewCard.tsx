@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Review } from "../types";
-import eventApi from "../api/event";
 import commentApi from "../api/comment";
+import reactionApi from "../api/reaction";
+import { triggerRequireLoginMessage } from "../utils/helpers";
 
 import AddCommentModal from "./AddCommentModal";
 import Button from "./Button";
@@ -27,12 +28,24 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     false
   );
   const [comments, setComments] = useState([]);
-  const userId = useSelector((state) => state.auth.user?._id);
-  const [isLikedByUser, setIsLikedByUser] = useState(false);
+  const [userLikeReactionId, setUserLikeReactionId] = useState("");
 
-  const { user, text, acadYearTaken, semesterTaken, event, _id } = review;
-  const { name } = user;
-  const like = event?.like?.count ?? 0;
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userId = useSelector((state) => state.auth.user?._id);
+
+  const {
+    user,
+    text,
+    acadYearTaken,
+    semesterTaken,
+    reaction,
+    _id,
+    rating,
+  } = review;
+  const name = user?.name;
+  const like = reaction?.like?.count ?? 0;
+  const difficulty = rating?.difficulty.value ?? 3;
+  const star = rating?.star.value ?? 3;
 
   useEffect(() => {
     fetchComments();
@@ -40,29 +53,46 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   }, []);
 
   const fetchComments = async () => {
-    const fetchedComments = await commentApi.getCommentsOfReview(review._id);
+    const fetchedComments = await commentApi.getCommentsOfReview(_id);
     setComments(fetchedComments);
   };
 
   const checkIsLikedByUser = async () => {
     try {
-      const event = await eventApi.getEvent("review", _id, userId, "like");
-      console.log(event);
-      setIsLikedByUser(true);
+      const likeReaction = await reactionApi.getReaction(
+        "review",
+        _id,
+        userId,
+        "like"
+      );
+      setUserLikeReactionId(likeReaction._id);
     } catch (err) {
-      setIsLikedByUser(false);
+      setUserLikeReactionId("");
     }
   };
 
   const onLikeReview = async () => {
-    if (!isLikedByUser) {
-      await eventApi.addEvent(user._id, "review", _id, "like");
+    if (!isLoggedIn) {
+      triggerRequireLoginMessage();
+      return;
+    }
+
+    if (!userLikeReactionId) {
+      await reactionApi.addReaction("review", _id, userId, "like");
       updateReviews();
       checkIsLikedByUser();
     } else {
-      await eventApi.deleteEvent(user._id, "review", _id, "like");
+      await reactionApi.deleteReaction(userLikeReactionId);
       updateReviews();
       checkIsLikedByUser();
+    }
+  };
+
+  const toggleCommentModalVisibility = () => {
+    if (!isLoggedIn) {
+      triggerRequireLoginMessage();
+    } else {
+      setAddCommentModalVisibility(true);
     }
   };
 
@@ -76,9 +106,9 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             AY{acadYearTaken}, Sem {semesterTaken}
           </span>
           <span style={styles.divider}>|</span>
-          <span>Difficulty: </span>
+          <span>Difficulty: {difficulty.toFixed(1)}</span>
           <span style={styles.divider}>|</span>
-          <span>Rating: </span>
+          <span>Rating: {star.toFixed(1)}</span>
         </div>
         {showActions && (
           <div style={styles.actionsBar}>
@@ -87,7 +117,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                 <LikeOutlinedIcon
                   style={{
                     ...styles.icon,
-                    color: isLikedByUser ? ratingsYellow : "#fff",
+                    color: userLikeReactionId ? ratingsYellow : "#fff",
                   }}
                 />
               </Button>
@@ -95,7 +125,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             </div>
             <span style={{ margin: "0px 10px" }}>|</span>
             <div style={styles.action}>
-              <Button onClick={() => setAddCommentModalVisibility(true)}>
+              <Button onClick={toggleCommentModalVisibility}>
                 <CommentOutlinedIcon style={styles.icon} />
               </Button>
               <Button onClick={() => setCommentsModalVisibility(true)}>

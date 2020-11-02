@@ -1,46 +1,27 @@
-import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
+import { EventObjSchema } from "../observers/event/event-observer-schema";
+import { RatingObjSchema } from "../observers/rating/rating-observer-schema";
+import { ReactionObjSchema } from "../observers/reaction/reaction-observer-schema"
 
-import {RatingObjSchema} from "../publishers/rating/ratingPubSchema"
-import { EventObjSchema } from '../publishers/event/eventPubSchema'
-import { acadSemType } from './types';
+const mongoose = require('mongoose')
 
-export const ModSchema = createSchema({
-  code: Type.string({ required: true }),
-  schoolId: Type.objectId(),
-  title: Type.string({required: true }),
-  acadYear: Type.string(),
-  semester: Type.array().of(acadSemType),
-  description: Type.string({}),
-  credit: Type.number(),
-  workload: Type.number(),
+const ModSchema = new mongoose.Schema({
+  code: { type: String, required: true },
+  schoolId: { type: String },
+  title: { type: String, required: true },
+  acadYear: { type: String },
+  semester: [ Number ],
+  description: { type: String },
+  credit: {type: Number},
+  workload: {type: Number},
   rating: RatingObjSchema,
   event: EventObjSchema,
-  prereqs: Type.array().of(Type.objectId())
+  reaction: ReactionObjSchema,
+  prereqs: [ String ]
 },{
-  timestamps: true
+  timestamps: true,
+  usePushEach: true
 })
 
-export type ModDoc = ExtractDoc<typeof ModSchema> 
-
-const Mod = typedModel('Mod', ModSchema, undefined, undefined, {
-  getPreReqDetails: function(mods: Array<any>){
-    return mods.reduce((acc: Array<string>, curr) => {
-      if( curr.prereqs ){
-        return acc.concat(curr.prereqs.map( (prereqId: { toString: () => any; }) => prereqId.toString()))
-      }
-      return acc
-    },[])
-  },
-  findByIds: async function(ids: Array<any>){
-
-    if( ids.length == 0 ){
-      return []
-    }
-
-    return Mod.find({
-      $or: ids.map( id => ({ _id: id }))
-    })
-  }
-});
+const Mod = mongoose.model('mod', ModSchema)
 
 export default Mod

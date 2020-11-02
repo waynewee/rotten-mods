@@ -1,12 +1,14 @@
 import axios from "axios";
 import queryString from "query-string";
-const baseUrl = "http://localhost:8080/api/school";
+import { serverDomain } from "../config";
+
+const baseUrl = `${serverDomain}/api/school`;
 
 const searchSchools = async (searchTerm: string) => {
   const query = queryString.stringify({
     s: searchTerm,
     page: 1,
-    limit: 1000,
+    limit: 100,
   });
   const response = await axios.get(`${baseUrl}/?${query}`);
   return response.data;

@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 import { ModalState } from "../types";
 import { useSelector } from "react-redux";
-import { School, Module } from "../types";
+import { School } from "../types";
 import moduleApi from "../api/module";
 
 import FormModal from "./FormModal";
 import FormModalItem from "./FormModalItem";
 import { codeBlue } from "../styles/colors";
+import { message } from "antd";
+
+interface SearchOptions {
+  value: string;
+  id: string;
+}
 
 const AddModuleModal: React.FC<ModalState> = ({
   isModalVisible,
@@ -17,10 +23,14 @@ const AddModuleModal: React.FC<ModalState> = ({
   const [description, setDescription] = useState("");
   const [university, setUniversity] = useState("");
   const [credit, setCredit] = useState(4);
-  const [semesters, setSemesters] = useState([false, false]);
+  const [semesters, setSemesters] = useState<[boolean, boolean]>([
+    false,
+    false,
+  ]);
   const [workload, setWorkload] = useState(10);
-  const [modulePrereqs, setModulePrereqs] = useState([]);
-  const [allModules, setAllModules] = useState([]);
+  const [modulePrereqs, setModulePrereqs] = useState<SearchOptions[]>([]);
+  const [allModules, setAllModules] = useState<SearchOptions[]>([]);
+  const [prereqSearchTerm, setPrereqSearchTerm] = useState("");
 
   const schools: School[] = useSelector((state) => state.schools);
   const schoolsAutocompleteOptions = schools.map((school) => ({
@@ -29,10 +39,10 @@ const AddModuleModal: React.FC<ModalState> = ({
 
   useEffect(() => {
     getAllModules();
-  }, []);
+  }, [prereqSearchTerm]);
 
   const getAllModules = async () => {
-    const modules = await moduleApi.searchModule("", 6000);
+    const modules = await moduleApi.searchModule(prereqSearchTerm, 20);
     const moduleCodes = modules.map((mod) => ({
       value: mod.code,
       id: mod._id,
@@ -41,10 +51,13 @@ const AddModuleModal: React.FC<ModalState> = ({
   };
 
   const onSubmit = () => {
+    if (!validateForm()) {
+      return;
+    }
+
     const schoolId = schools.find((school) => school.name === university)?._id;
-    const prereqs = modulePrereqs.map((code) => {
-      return allModules.find((mod) => mod.value === code)?.id;
-    });
+    console.log(allModules);
+    const prereqs = modulePrereqs.map((mod) => mod.id);
     const semester = semesters.reduce((acc, sem, index) => {
       if (sem) acc.push(index + 1);
       return acc;
@@ -60,10 +73,15 @@ const AddModuleModal: React.FC<ModalState> = ({
       workload,
       prereqs,
     };
-    
+
     moduleApi.addModule(newModule);
     setModalVisibility(false);
     resetState();
+    message.success(`Successfully added module ${code}`);
+  };
+
+  const validateForm = () => {
+    return code && title && university && description && credit && workload;
   };
 
   const resetState = () => {
@@ -135,6 +153,8 @@ const AddModuleModal: React.FC<ModalState> = ({
         value={modulePrereqs}
         setValue={setModulePrereqs}
         options={allModules}
+        searchTerm={prereqSearchTerm}
+        setSearchTerm={setPrereqSearchTerm}
       />
     </FormModal>
   );

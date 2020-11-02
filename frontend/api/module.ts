@@ -1,16 +1,18 @@
 import axios from "axios";
 import queryString from "query-string";
-const baseUrl = "http://localhost:8080/api/mod";
+import { serverDomain } from "../config";
+
+const baseUrl = `${serverDomain}/api/mod`;
 
 const getModule = async (id) => {
   const response = await axios.get(`${baseUrl}/${id}`);
   return response.data;
 };
 
-const searchModule = async (searchTerm, limit = 10) => {
+const searchModule = async (searchTerm, limit = 10, page = 1) => {
   const query = {
-    s: searchTerm,
-    page: 1,
+    searchTerm,
+    page,
     limit,
   };
 
@@ -30,9 +32,9 @@ interface NewModule {
   workload: number;
   prereqs: string[];
 }
+
 const addModule = async (module: NewModule) => {
-  const response = await axios.post(baseUrl, module, { withCredentials: true });
-  console.log(response);
+  await axios.post(baseUrl, module, { withCredentials: true });
 };
 
 export default { getModule, searchModule, addModule };

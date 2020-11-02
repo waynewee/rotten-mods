@@ -42,6 +42,10 @@
       "description": "A ranking on a scale given to an object"
     },
     {
+      "name": "reaction",
+      "description": "A reaction of a user to an object"
+    },
+    {
       "name": "review",
       "description": "A review given to an object"
     },
@@ -65,6 +69,29 @@
   ],
   "paths": {
     "/bookmark":{
+      "get":{
+        "tags":["bookmark"],
+        "summary": "gets all bookmarks for a user",
+        "description": "Returns a list of appropriate bookmarks",
+        "parameters":[{
+          "in": "query",
+          "name": "userId",
+          "description": "OID of the user",
+          "required": true,
+          "example": "512345678910111211314151"
+        }],
+        "responses" : {
+          "200": {
+            "description": "Success",
+            "schema":{
+              "$ref": "#/definitions/BookmarkArray"
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
       "post":{
         "tags": ["bookmark"],
         "summary": "creates a bookmark",
@@ -111,39 +138,6 @@
           },
           "403":{
             "description": "Not authorized"
-          }
-        }
-      }
-    },
-    "/bookmark/user/{userId}":{
-      "get":{
-        "tags":["bookmark"],
-        "summary": "gets all bookmarks for a user",
-        "description": "Returns a list of appropriate bookmarks",
-        "parameters":[{
-          "in": "query",
-          "name": "page",
-          "description": "Page number",
-          "schema":{
-            "type": "integer"
-          }
-        },{
-          "in": "query",
-          "name": "limit",
-          "description":"Maximum number of results returned",
-          "schema": {
-            "type": "Integer"
-          }
-        }],
-        "responses" : {
-          "200": {
-            "description": "Success",
-            "schema":{
-              "$ref": "#/definitions/BookmarkArray"
-            }
-          },
-          "500": {
-            "description": "Error"
           }
         }
       }
@@ -591,6 +585,30 @@
       }
     },
     "/planned-mod":{
+      "get": {
+        "tags": ["planned mod"],
+        "summary": "finds a all planned mods by userId",
+        "description": "Returns a list of planned mods",
+        "parameters": [{
+          "name": "userId",
+          "in": "query",
+          "description": "OID of the user",
+          "required": true,
+          "example": "512345678910111211314151"
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PlannedModArray"
+            }
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+
+      },
       "post":{
         "tags": ["planned mod"],
         "summary": "adds a module to a user's study plan",
@@ -677,32 +695,6 @@
             "description":"Not authorized"
           }
         }
-      }
-    },
-    "/planned-mod/user/{userId}":{
-      "get": {
-        "tags": ["planned mod"],
-        "summary": "finds a all planned mods by userId",
-        "description": "Returns a list of planned mods",
-        "parameters": [{
-          "name": "userId",
-          "in": "path",
-          "description": "OID of the user",
-          "required": true,
-          "example": "512345678910111211314151"
-        }],
-        "responses": {
-          "200":{
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/PlannedModArray"
-            }
-          },
-          "500":{
-            "description": "Error"
-          }
-        }
-
       }
     },
     "/logout":{
@@ -809,135 +801,10 @@
           }
         }
       },
-      "delete": {
-        "tags": ["rating"],
-        "summary": "deletes a rating",
-        "description": "",
-        "parameters":[{
-          "in": "body",
-          "name": "body",
-          "description": "Rating Object",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/RatingCreate"
-          }
-        },{
-          "in": "body",
-          "name": "sub",
-          "description": "Type of subscriber to the rating",
-          "required": "true",
-          "schema" : {
-            "type": "string",
-            "enum": ["mod", "school", "course"]
-          }
-        },{
-          "in": "body",
-          "name": "subId",
-          "description": "OID of subscriber object",
-          "required": "true",
-          "schema":{
-            "type": "string",
-            "example": "512345678910111211314151"
-          }
-        },{
-          "in": "body",
-          "name": "type",
-          "description": "Type of rating",
-          "required": "true",
-          "schema":{
-            "type": "string",
-            "enum": ["difficulty", "star"]
-          }
-        },{
-          "in": "body",
-          "name": "value",
-          "description": "Rating number",
-          "required": "true",
-          "schema":{
-            "type": "integer",
-            "example": 4
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "500": {
-            "description": "Error"
-          },
-          "403":{
-            "description":"Not authorized"
-          }
-        }
-      }
-    },
-    "/rating/{ratingId}":{
-      "put": {
-        "tags": ["rating"],
-        "summary": "updates a rating",
-        "description": "",
-        "parameters":[{
-          "in": "path",
-          "name": "ratingId",
-          "description": "OID of the rating",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": "512345678910111211314151"
-          }
-        },{
-          "in": "body",
-          "name": "body",
-          "description": "Rating Object",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/RatingCreate"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "500": {
-            "description": "Error"
-          },
-          "403":{
-            "description":"Not authorized"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["rating"],
-        "summary": "delete a rating by OID",
-        "description": "",
-        "parameters":[{
-          "in": "path",
-          "name": "ratingId",
-          "description": "OID of the rating",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": "512345678910111211314151"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "500": {
-            "description": "Error"
-          },
-          "403":{
-            "description":"Not authorized"
-          }
-        }
-      }
-    },
-    "/rating/find":{
       "get":{
         "tags": ["rating"],
-        "summary": "checks for an rating",
-        "description": "Checks if an rating exists for a user, an rating type and a sub type",
+        "summary": "gets a rating",
+        "description": "Gets a rating",
         "parameters":[{
           "in": "query",
           "name": "sub",
@@ -977,7 +844,10 @@
         }],
         "responses": {
           "200": {
-            "description": "Rating found"
+            "description": "Rating found",
+            "schema":{
+              "$ref": "#/definitions/Rating"
+            }
           },
           "404":{
             "description": "Rating not found"
@@ -988,7 +858,197 @@
         }
       }
     },
+    "/rating/{ratingId}":{
+      "put": {
+        "tags": ["rating"],
+        "summary": "updates a rating",
+        "description": "",
+        "parameters":[{
+          "in": "path",
+          "name": "ratingId",
+          "description": "OID of the rating",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "body",
+          "name": "body",
+          "description": "Rating Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/RatingCreate"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      }
+    },
+    "/reaction":{
+      "post": {
+        "tags": ["reaction"],
+        "summary": "creates a reaction",
+        "description": "",
+        "parameters":[{
+          "in": "body",
+          "name": "body",
+          "description": "Reaction Object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/ReactionCreate"
+          }
+        },{
+          "in": "body",
+          "name": "sub",
+          "description": "Type of subscriber to the reaction",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["mod", "school", "course"]
+          }
+        },{
+          "in": "body",
+          "name": "subId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "body",
+          "name": "type",
+          "description": "Type of reaction",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["love", "like", "dislike"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403":{
+            "description":"Not authorized"
+          }
+        }
+      },
+      "get":{
+        "tags": ["reaction"],
+        "summary": "gets a reaction",
+        "description": "Gets a reaction",
+        "parameters":[{
+          "in": "query",
+          "name": "sub",
+          "description": "Type of subscriber to the reaction",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "enum": ["mod", "school", "course"]
+          }
+        },{
+          "in": "query",
+          "name": "subId",
+          "description": "OID of the subscriber",
+          "required": "true",
+          "schema" : {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "userId",
+          "description": "OID of subscriber object",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "type",
+          "description": "Type of reaction",
+          "required": "true",
+          "schema":{
+            "type": "string",
+            "enum": ["like", "love", "dislike"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Reaction found",
+            "schema":{
+              "$ref": "#/definitions/Reaction"
+            }
+          },
+          "404":{
+            "description": "Reaction not found"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/reaction/{reactionId}":{
+      "delete":{
+        "tags": ["reaction"],
+        "summary": "deletes a reaction by OID",
+        "description": "",
+        "parameters": [{
+          "name": "reactionId",
+          "in": "path",
+          "description": "OID of the reaction",
+          "required": true,
+          "example": "512345678910111211314151"
+        }],
+        "responses": {
+          "200":{
+            "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+      }
+    },
     "/reply": {
+      "get": {
+        "tags": ["reply"],
+        "summary": "gets all replies for a review",
+        "description": "Returns a list of replies to a review",
+        "parameters": [{
+          "name": "reviewId",
+          "in": "query",
+          "description": "OID of the review",
+          "required": true
+        }],
+        "responses" : {
+          "200":{
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ReplyArray"
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
       "post": {
         "tags": ["reply"],
         "summary": "creates a reply",
@@ -1090,30 +1150,6 @@
           },
           "403":{
             "description": "Not authorized"
-          }
-        }
-      }
-    },
-    "/reply/review/{reviewId}":{
-      "get": {
-        "tags": ["reply"],
-        "summary": "gets all replies for a review",
-        "description": "Returns a list of replies to a review",
-        "parameters": [{
-          "name": "reviewId",
-          "in": "path",
-          "description": "OID of the review",
-          "required": true
-        }],
-        "responses" : {
-          "200":{
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/ReplyArray"
-            }
-          },
-          "500": {
-            "description": "Error"
           }
         }
       }
@@ -1814,6 +1850,9 @@
         "event": {
           "$ref": "#/definitions/EventObj"
         },
+        "reaction":{
+          "$ref": "#/definitions/ReactionObj"
+        },
         "createdAt" : {
           "type": "string",
           "format": "date-time"
@@ -1903,9 +1942,13 @@
         "$ref": "#/definitions/PlannedMod"
       }
     },
-    "RatingDelete":{
+    "Rating":{
       "type": "object",
       "properties":{
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
         "userId":{
           "type": "string",
           "example": "512345678910111211314151"
@@ -1921,7 +1964,24 @@
         "type": {
           "type": "string",
           "example": "difficulty"
+        },
+        "value": {
+          "type": "integer",
+          "example": 4
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v":{
+          "type": "integer",
+          "format": "int32"
         }
+        
       }
     },
     "RatingCreate": {
@@ -1970,6 +2030,82 @@
         "value": {
           "type": "number",
           "example": 4.3
+        }
+      }
+    },
+    "Reaction":{
+      "type":"object",
+      "properties":{
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "userId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "sub": {
+          "type": "string",
+          "example": "mod"
+        },
+        "subId": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "type": {
+          "type": "string",
+          "example": "love"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v":{
+          "type": "integer",
+          "format": "int32"
+        }
+        
+      }
+    },
+    "ReactionCreate":{
+      "userId":{
+        "type": "string",
+        "example": "512345678910111211314151"
+      },
+      "sub": {
+        "type": "string",
+        "example": "mod"
+      },
+      "subId": {
+        "type": "string",
+        "example": "512345678910111211314151"
+      },
+      "type": {
+        "type": "string",
+        "example": "love"
+      }
+    },
+    "ReactionObj":{
+      "type": "object",
+      "properties": {
+        "difficulty":{
+          "$ref":"#/definitions/ReactionProp"
+        },
+        "star":{
+          "$ref":"#/definitions/ReactionProp"
+        }
+      }
+    },
+    "ReactionProp":{
+      "type": "object",
+      "properties":{
+        "count": {
+          "type": "integer",
+          "example": 15
         }
       }
     },
@@ -2112,6 +2248,12 @@
         "acadYearTaken":{
           "type": "number",
           "example": "19/20"
+        },
+        "rating": {
+          "$ref": "#/definitions/RatingObj"
+        },
+        "event": {
+          "$ref": "#/definitions/EventObj"
         }
       }
     },

@@ -1,5 +1,8 @@
 import axios from "axios";
-const baseUrl = "http://localhost:8080/api/planned-mod";
+import queryString from "query-string";
+import { serverDomain } from "../config";
+
+const baseUrl = `${serverDomain}/api/planned-mod`;
 
 const addPlannedMod = async (userId, modId, semester) => {
   await axios.post(
@@ -36,7 +39,8 @@ const removePlannedMod = async (plannedModId) => {
 };
 
 const fetchPlannedMods = async (userId) => {
-  const response = await axios.get(`${baseUrl}/user/${userId}`, {
+  const query = queryString.stringify({ userId });
+  const response = await axios.get(`${baseUrl}/?${query}`, {
     withCredentials: true,
   });
 

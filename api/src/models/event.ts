@@ -1,23 +1,12 @@
-import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
-import { eventSubTypes } from '../publishers/event/eventPub'
-export enum eventTypesEnum {
-  like = 'like',
-  view = 'view'
-}
+const mongoose = require('mongoose')
 
-const eventTypes = [ eventTypesEnum.like, eventTypesEnum.view ]
-
-export const EventSchema = createSchema({
-  userId: Type.objectId({ required: true }),
-  subId: Type.objectId({ required: true }),
-  sub: Type.string({ required: true, enum: eventSubTypes }),
-  type: Type.string({ required:true, enum: eventTypes })
-},{
-  timestamps: true
+const EventSchema = new mongoose.Schema({
+  userId: { type: String, required: false },
+  subId: { type: String, required: true },
+  sub: { type: String, required: true },
+  type: { type: String, required: true }
 })
 
-export type EventDoc = ExtractDoc<typeof EventSchema> 
-
-const Event = typedModel('Event', EventSchema);
+const Event = mongoose.model('event', EventSchema)
 
 export default Event

@@ -1,12 +1,14 @@
 import axios from "axios";
 import queryString from "query-string";
-const baseUrl = "http://localhost:8080/api/event";
+import { serverDomain } from "../config";
+
+const baseUrl = `${serverDomain}/api/event`;
 
 const addEvent = async (
   userId: string,
   sub: "course" | "mod" | "review" | "school",
   subId: string,
-  type: "view" | "like"
+  type: "view"
 ) => {
   const response = await axios.post(baseUrl, {
     userId,
@@ -25,7 +27,7 @@ const getEvent = async (subscriberType, subscriberId, userId, eventType) => {
     userId,
     type: eventType,
   });
-  const response = await axios.get(`${baseUrl}/find/?${query}`);
+  const response = await axios.get(`${baseUrl}/?${query}`);
 
   return response.data;
 };

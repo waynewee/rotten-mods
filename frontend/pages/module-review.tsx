@@ -12,21 +12,28 @@ import { Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import ModuleInformation from "../components/ModuleInformation";
 import ReviewList from "../components/ReviewList";
+import Button from "../components/Button";
+import SeeMoreButton from "../components/SeeMoreButton";
 
 interface ModuleReviewProps {
-  module: Module;
+  initialModule: Module;
   reviews: Review[];
 }
 
-const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
+const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
+  initialModule,
+  reviews,
+}) => {
+  const [module, setModule] = useState(initialModule);
   const [reviewsList, setReviewsList] = useState(reviews);
+  const [numberOfReviews, setNumberOfReviews] = useState(20);
   const [isAddReviewModalVisible, setAddReviewModalVisibility] = useState(
     false
   );
   const [isAddRatingsModalVisible, setAddRatingsModalVisibility] = useState(
     false
   );
-  const [ratingByUser, setRatingByUser] = useState(null);
+  const [ratingsByUser, setRatingsByUser] = useState(null);
   const userId = useSelector((state) => state.auth.user?._id);
   const reviewByUser = reviewsList.find((review) => review.userId === userId);
 
@@ -41,21 +48,67 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
     setReviewsList(newReviews);
   };
 
+  const updateModule = async () => {
+    const updatedModule = await moduleApi.getModule(module._id);
+    updatedModule.prereqs = module.prereqs;
+    setModule(updatedModule);
+  };
+
   const checkIsRatedByUser = async () => {
     try {
-      const rating = await reviewApi.getRating("mod", userId, "star");
-      setRatingByUser(rating);
+      const rating = await reviewApi.getRating(
+        "mod",
+        module._id,
+        userId,
+        "star"
+      );
+      setRatingsByUser(rating);
     } catch (err) {
-      setRatingByUser(null);
+      setRatingsByUser(null);
     }
+  };
+
+  const compareNewest = (firstReview: Review, secondReview: Review): number => {
+    const firstReviewCreatedAtDate = new Date(firstReview.createdAt);
+    const secondReviewCreatedAtDate = new Date(secondReview.createdAt);
+    return firstReviewCreatedAtDate > secondReviewCreatedAtDate ? 1 : -1;
+  };
+
+  const compareOldest = (firstReview: Review, secondReview: Review): number => {
+    const firstReviewCreatedAtDate = new Date(firstReview.createdAt);
+    const secondReviewCreatedAtDate = new Date(secondReview.createdAt);
+    return firstReviewCreatedAtDate < secondReviewCreatedAtDate ? 1 : -1;
+  };
+
+  const compareLikes = (firstReview: Review, secondReview: Review): number => {
+    const firstReviewLikes = firstReview.event?.like?.count ?? 0;
+    const secondReviewLikes = secondReview.event?.like?.count ?? 0;
+    return secondReviewLikes - firstReviewLikes;
+  };
+
+  const sortReviews = (compareFunction) => {
+    const cloneReviews = reviewsList.concat([]);
+    cloneReviews.sort(compareFunction);
+    setReviewsList(cloneReviews);
+  };
+
+  const fetchMoreReviews = async () => {
+    const moreReviews = await reviewApi.getReviewsOfModule(module._id);
+    setReviewsList(moreReviews);
+    setNumberOfReviews(numberOfReviews + 10);
   };
 
   const menu = (
     <Menu>
-      <Menu.Item>Newest</Menu.Item>
-      <Menu.Item>Oldest</Menu.Item>
-      <Menu.Item>Most Likes</Menu.Item>
-      <Menu.Item>Most Comments</Menu.Item>
+      <Menu.Item>
+        <Button onClick={() => sortReviews(compareNewest)}>Newest</Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button onClick={() => sortReviews(compareOldest)}>Oldest</Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button onClick={() => sortReviews(compareLikes)}>Most Likes</Button>
+      </Menu.Item>
     </Menu>
   );
 
@@ -79,6 +132,9 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
           </Dropdown>
         </div>
         <ReviewList updateReviews={updateReviews} reviews={reviewsList} />
+        {reviewsList.length >= 10 && (
+          <SeeMoreButton fetchMoreData={fetchMoreReviews} />
+        )}
         <AddReviewModal
           code={module.code}
           modId={module._id}
@@ -86,13 +142,16 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({ module, reviews }) => {
           isModalVisible={isAddReviewModalVisible}
           setModalVisibility={setAddReviewModalVisibility}
           reviewByUser={reviewByUser}
+          updateModule={updateModule}
+          ratingsByUser={ratingsByUser}
         />
         <AddRatingsModal
           code={module.code}
           modId={module._id}
           isModalVisible={isAddRatingsModalVisible}
           setModalVisibility={setAddRatingsModalVisibility}
-          ratingsByUser={ratingByUser}
+          ratingsByUser={ratingsByUser}
+          updateModule={updateModule}
         />
       </>
     ) : (
@@ -130,50 +189,21 @@ const styles = {
 ModuleReviewPage.getInitialProps = async ({ query }) => {
   const moduleId: string = query.id as string;
   try {
-    const module = await moduleApi.getModule(moduleId);
+    const initialModule = await moduleApi.getModule(moduleId);
     const prereqs = await Promise.all(
-      module.prereqs.map(async (prereqId) => {
+      initialModule.prereqs.map(async (prereqId) => {
         const mod = await moduleApi.getModule(prereqId);
         return mod.code;
       })
     );
-    module.prereqs = prereqs;
+    initialModule.prereqs = prereqs;
 
-    const reviews = await reviewApi.getReviewsOfModule(module._id);
+    const reviews = await reviewApi.getReviewsOfModule(initialModule._id, 10);
 
-    return { module, reviews };
+    return { initialModule, reviews };
   } catch (err) {
-    return { module: null, reviews: [] };
+    return { initialModule: null, reviews: [] };
   }
 };
 
 export default ModuleReviewPage;
-
-// const dummyReviews: Review[] = [
-//   {
-//     userName: "Thomas Tan",
-//     likes: 79,
-//     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendum purus, sed ultricies nunc. Proin et purus odio. Etiam ex elit, consectetur placerat feugiat non, luctus eu justo. Vestibulum quis accumsan orci. Morbi ante massa, semper in mi eleifend, tempor posuere quam. In odio nulla, tristique et lorem vitae, mollis dictum ipsum. Sed sollicitudin augue quis turpis hendrerit laoreet. Nam facilisis turpis leo, in lobortis lorem lobortis vel. Maecenas scelerisque ante vel elit lobortis lobortis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla ac imperdiet erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Mauris eu purus at urna facilisis eleifend. Ut dapibus, ex vitae vehicula suscipit, enim lacus vulputate tortor, vel convallis diam dui quis est. Duis cursus velit enim, vitae interdum nisi facilisis ut. In porttitor lacus vulputate lacinia semper. Vivamus consectetur felis vitae felis maximus sodales. Sed scelerisque blandit consectetur. Duis nec dictum ligula, quis lobortis ipsum. Ut rhoncus, nulla quis cursus euismod, quam metus pellentesque nulla, sit amet gravida felis libero id urna. Aenean a nunc imperdiet, vestibulum nibh nec, pretium tortor. Mauris magna nisl, porta eget orci eu, sodales gravida nulla. Sed eleifend dapibus libero quis fermentum. Vivamus non hendrerit augue.",
-//     yearTaken: 2020,
-//     semesterTaken: 1,
-//     workload: 10,
-//     rating: {
-//       difficulty: 5,
-//       star: 5
-//     },
-//     _id: "1"
-//   },
-//   {
-//     userName: "Susan Lim",
-//     likes: 24,
-//     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget bibendum purus, sed ultricies nunc. Proin et purus odio. Etiam ex elit, consectetur placerat feugiat non, luctus eu justo. Vestibulum quis accumsan orci. Morbi ante massa, semper in mi eleifend, tempor posuere quam. In odio nulla, tristique et lorem vitae, mollis dictum ipsum. Sed sollicitudin augue quis turpis hendrerit laoreet. Nam facilisis turpis leo, in lobortis lorem lobortis vel. Maecenas scelerisque ante vel elit lobortis lobortis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
-//     yearTaken: 2020,
-//     semesterTaken: 1,
-//     workload: 10,
-//     rating: {
-//       difficulty: 5,
-//       star: 5
-//     },
-//     _id: "2"
-//   }
-// ]

@@ -1,24 +1,22 @@
-import { createSchema, Type, typedModel, ExtractDoc } from 'ts-mongoose';
+const mongoose = require('mongoose')
+import { EventObjSchema } from '../observers/event/event-observer-schema'
+import {RatingObjSchema} from '../observers/rating/rating-observer-schema'
+import { ReactionObjSchema } from '../observers/reaction/reaction-observer-schema'
 
-import { validateString } from '../helpers/validators' 
-import { EventObjSchema } from '../publishers/event/eventPubSchema'
-import {RatingObjSchema} from '../publishers/rating/ratingPubSchema'
-import { acadSemType } from './types';
-
-export const ReviewSchema = createSchema({
-  userId: Type.objectId({ required: true }),
-  text: Type.string({ required: true, validate: validateString }),
-  modId: Type.objectId({ required: true}),
-  acadYearTaken: Type.string(),
-  semesterTaken: acadSemType,
+const ReviewSchema = new mongoose.Schema({
+  userId: { type: String, required: true },
+  text: { type: String, required: true },
+  modId: { type: String, required: true },
+  acadYearTaken: { type: String },
+  semesterTaken: { type: Number},
   event: EventObjSchema,
   rating: RatingObjSchema,
+  reaction: ReactionObjSchema
 },{
+  usePushEach: true,
   timestamps: true
 })
 
-export type ReviewDoc = ExtractDoc<typeof ReviewSchema> 
-
-const Review = typedModel('Review', ReviewSchema);
+const Review = mongoose.model('review', ReviewSchema)
 
 export default Review

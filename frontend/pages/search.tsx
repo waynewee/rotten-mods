@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import modApi from "../api/module";
 import { Module } from "../types";
@@ -6,20 +7,40 @@ import { Module } from "../types";
 import ModuleCompareModal from "../components/ModuleCompareModal";
 import SectionTitle from "../components/SectionTitle";
 import SearchModuleList from "../components/SearchModuleList";
+import SeeMoreButton from "../components/SeeMoreButton";
+import { descriptionGreen } from "../styles/colors";
 
 interface SearchProps {
-  searchResults: Module[];
+  initialSearchResults: Module[];
 }
 
-const Search: NextPage<SearchProps> = ({ searchResults }) => {
+const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
+  const [searchResults, setSearchResults] = useState(initialSearchResults);
+  const [numberOfResults, setNumberOfResults] = useState(20);
   const searchTerm = useSelector((state) => state.search.searchTerm);
 
-  console.log("Search Results:", searchResults);
+  useEffect(() => {
+    setNumberOfResults(10);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    setSearchResults(initialSearchResults);
+  }, [initialSearchResults]);
+
+  const fetchMoreSearchResults = async () => {
+    const results = await modApi.searchModule(searchTerm, numberOfResults);
+    setSearchResults(results);
+    setNumberOfResults(numberOfResults + 10);
+  };
 
   return (
     <>
       <SectionTitle title={`Search results for "${searchTerm}"`} />
       <SearchModuleList modules={searchResults} />
+      <SeeMoreButton
+        fetchMoreData={fetchMoreSearchResults}
+        style={{ backgroundColor: descriptionGreen }}
+      />
       <SectionTitle title={`Similar results to "${searchTerm}"`} />
       <SearchModuleList />
       <ModuleCompareModal />
@@ -30,12 +51,11 @@ const Search: NextPage<SearchProps> = ({ searchResults }) => {
 Search.getInitialProps = async ({ query }) => {
   const searchTerm = query.s;
   try {
-    const searchResults = await modApi.searchModule(searchTerm);
-    return { searchResults };
+    const initialSearchResults = await modApi.searchModule(searchTerm);
+    return { initialSearchResults };
   } catch (err) {
-    return { searchResults: [] }
+    return { initialSearchResults: [] };
   }
-
-}
+};
 
 export default Search;

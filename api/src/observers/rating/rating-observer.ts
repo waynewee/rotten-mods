@@ -1,0 +1,103 @@
+import Mod from '../../models/mod'
+import School from '../../models/school'
+import Course from '../../models/course'
+import Review from '../../models/review'
+import Rating from '../../models/rating'
+
+enum ratingSubTypesEnum {
+  mod = "mod",
+  school = "school",
+  course = "course",
+  review = "review"
+}
+
+export const ratingSubTypes = [
+  ratingSubTypesEnum.mod, 
+  ratingSubTypesEnum.school, 
+  ratingSubTypesEnum.course,
+  ratingSubTypesEnum.review
+]
+
+const ratingSubs = [
+  Mod, 
+  School, 
+  Course,
+  Review
+]
+
+export async function notify(rating: any){
+
+  let promises:any = []
+
+  for (let i = 0; i < ratingSubs.length; i++ ){
+
+    const sub:any = ratingSubs[i]
+
+    if(rating.sub == sub.modelName){
+
+      sub.findOne({ _id: rating.subId})
+      .then( (subObj: any) => {
+        
+        const ratingType = rating.type
+
+        if( !subObj.rating ){
+          subObj.rating = {}
+        }
+
+        if( !subObj.rating[ratingType] ){
+          subObj.rating[ratingType] = {}
+        }
+
+        subObj.rating[ratingType].count += 1
+
+        const count = subObj.rating[ratingType].count
+
+        subObj.rating[ratingType].value = ((subObj.rating[ratingType].value * (count - 1)) + rating.value)/count
+
+        promises.push(subObj.save())
+
+      })
+    }
+  }
+
+  return Promise.all(promises)
+
+}
+
+export async function notifyOfUpdate(oldRatingValue: number, rating: any){
+
+  let promises:any = []
+
+  for (let i = 0; i < ratingSubs.length; i++ ){
+
+    const sub:any = ratingSubs[i]
+
+    if(rating.sub == sub.modelName){
+      sub.findOne({ _id: rating.subId})
+      .then( (subObj: any) => {
+        
+        const ratingType = rating.type
+
+        if( !subObj.rating ){
+          subObj.rating = {}
+        }
+
+        if( !subObj.rating[ratingType] ){
+          subObj.rating[ratingType] = {}
+        }
+
+        const count = subObj.rating[ratingType].count
+        const currValue = count * subObj.rating[ratingType].value
+        const newValue = (currValue - oldRatingValue + rating.value)/count 
+
+        subObj.rating[ratingType].value = newValue
+
+        promises.push(subObj.save())
+
+      })
+    }
+  }
+
+  return Promise.all(promises)
+
+}
