@@ -1,8 +1,14 @@
 import { Response } from 'express'
-import { encrypt } from './encrypt-decrypt'
+import { hash } from './hash'
 
-export function setCookie(res: Response, str: string){
-  res.cookie('token', encrypt(str), {
+export async function setCookie(res: Response, str: string){
+
+  const hashedStr = await hash(str)
+
+  res.cookie('token', {
+    token: hashedStr,
+    value: str
+  }, {
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true
   })

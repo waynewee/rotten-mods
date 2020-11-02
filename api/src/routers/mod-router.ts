@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 
 import { adaptRequest } from '../helpers/adapt-request'
 import * as ModHandler from '../handlers/mod-handler'
-import { requireLogin } from "../middleware";
+import { requireLogin } from "../helpers/require-login";
 
 export default async function modRouter(req: Request, res: Response ){
   const request = adaptRequest(req)
@@ -22,15 +22,15 @@ export default async function modRouter(req: Request, res: Response ){
         
         break
       case 'POST':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await ModHandler.create(request.body)
         break
       case 'PUT':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await ModHandler.update(id, request.body)
         break
       case 'DELETE':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await ModHandler.remove(id)
         break
       default:

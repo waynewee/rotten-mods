@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express"
 import { AuthenticationError } from "../errors";
-import { decrypt } from "../helpers/encrypt-decrypt";
+import { hash } from './hash'
 
 import User from '../models/user'
+import { verify } from "./verify-password";
 
-export async function requireLogin(req: Request, res: Response){
+export async function requireLogin(req: Request){
 
   const { token } = req.cookies;
 
@@ -14,7 +15,13 @@ export async function requireLogin(req: Request, res: Response){
 
 
   try {
-    const userId = decrypt(token)
+    const userId = token.value
+    
+    const authenticated = await verify(userId, token.token)
+
+    if( !authenticated ){
+      throw new AuthenticationError("User")
+    }
   
     const user = await User.findOne({ _id: userId })
     

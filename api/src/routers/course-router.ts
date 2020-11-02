@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import * as CourseHandler from "../handlers/course-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
-import { requireLogin } from "../middleware";
+import { requireLogin } from "../helpers/require-login";
 
 export default async function courseRouter(req: Request, res: Response ){
   const request = adaptRequest(req)
@@ -19,15 +19,15 @@ export default async function courseRouter(req: Request, res: Response ){
           result = await CourseHandler.search(request.query)
         break
       case 'POST':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await CourseHandler.create(request.body)
         break
       case 'DELETE':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await CourseHandler.remove(id)
         break
       case 'PUT':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await CourseHandler.update(id, request.body)
         break
       default:

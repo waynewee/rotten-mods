@@ -19,7 +19,7 @@ export async function handleLogin(loginInfo: {
     throw new AuthenticationError('User')
   }
 
-  setCookie(res, user._id.toString())
+  await setCookie(res, user._id.toString())
 
   return user
 }

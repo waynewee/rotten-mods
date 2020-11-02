@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import * as RatingHandler from "../handlers/rating-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
-import { requireLogin } from "../middleware";
+import { requireLogin } from "../helpers/require-login";
 
 export default async function ratingRouter(req: Request, res: Response ){
   const request = adaptRequest(req)
@@ -15,11 +15,11 @@ export default async function ratingRouter(req: Request, res: Response ){
         result = await RatingHandler.findByInfo(request.query)
         break
       case 'POST':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await RatingHandler.create(request.body)
         break
       case 'PUT':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await RatingHandler.update(id, request.body)
         break
       default:

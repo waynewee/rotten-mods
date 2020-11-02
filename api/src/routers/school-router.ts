@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import * as SchoolHandler from "../handlers/school-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
-import { requireLogin } from "../middleware";
+import { requireLogin } from "../helpers/require-login";
 
 export default async function schoolRouter(req: Request, res: Response ){
   const request = adaptRequest(req)
@@ -19,15 +19,15 @@ export default async function schoolRouter(req: Request, res: Response ){
           result = await SchoolHandler.search(request.query)
         break
       case 'POST':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await SchoolHandler.create(request.body)
         break
       case 'DELETE':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await SchoolHandler.remove(id)
         break
       case 'PUT':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await SchoolHandler.update(id, request.body)
         break
       default:

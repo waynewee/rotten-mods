@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import * as ReviewHandler from "../handlers/review-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
-import { requireLogin } from "../middleware";
+import { requireLogin } from "../helpers/require-login";
 
 export default async function reviewRouter(req: Request, res: Response ){
   const request = adaptRequest(req)
@@ -22,15 +22,15 @@ export default async function reviewRouter(req: Request, res: Response ){
             result = await ReviewHandler.findByUserId(request.query.userId)
         break
       case 'POST':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await ReviewHandler.create(request.body)
         break
       case 'DELETE':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await ReviewHandler.remove(id)
         break
       case 'PUT':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await ReviewHandler.update(id, request.body)
         break
       default:

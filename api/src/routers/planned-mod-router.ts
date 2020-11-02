@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import * as PlannedModHandler from "../handlers/planned-mod-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
-import { requireLogin } from "../middleware";
+import { requireLogin } from "../helpers/require-login";
 
 export default async function plannedModRouter(req: Request, res: Response ){
   const request = adaptRequest(req)
@@ -17,15 +17,15 @@ export default async function plannedModRouter(req: Request, res: Response ){
         break
       case 'POST':
         console.log("HELLO")
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await PlannedModHandler.create(request.body)
         break
       case 'PUT':
-        await requireLogin(req,res)
+        await requireLogin(req)
         result = await PlannedModHandler.update(id, request.body)
         break
       case 'DELETE':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await PlannedModHandler.remove(id)
         break
       default:

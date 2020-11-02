@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import * as BookmarkHandler from "../handlers/bookmark-handler";
 
 import { adaptRequest } from '../helpers/adapt-request'
-import { requireLogin } from "../middleware";
+import { requireLogin } from "../helpers/require-login";
 
 export default async function bookmarkRouter(req: Request, res: Response ){
   const request = adaptRequest(req)
@@ -16,11 +16,11 @@ export default async function bookmarkRouter(req: Request, res: Response ){
         result = await BookmarkHandler.findByUserId(request.query.userId)
         break
       case 'POST':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await BookmarkHandler.create(request.body)
         break
       case 'DELETE':
-        await requireLogin(req, res)
+        await requireLogin(req)
         result = await BookmarkHandler.remove(id)
         break
       default:
