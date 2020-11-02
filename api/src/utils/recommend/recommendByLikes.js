@@ -7,7 +7,6 @@ mongoose.connect(mongoUri)
 const Event = require('../../../dist/src/models/Event').default
 const Mod = require('../../../dist/src/models/mod').default
 var _ = require('lodash');
-var ObjectId = require('mongodb').ObjectId;
 
 //calculate jaccard index
 function jaccardIndex(user, users) {
@@ -67,7 +66,8 @@ async function recommend(user) {
   results = []
   Mod.find({}).then(modules => {
     modules.map(m => {
-      users = likedUsers(m._id).then(u => {
+      users = likedUsers(m._id.toString()).then(u => {
+        console.log(u)
         index = jaccardIndex(user, u).then(ind => {
           var recIndex
           if(u.length == 0) {
@@ -84,18 +84,19 @@ async function recommend(user) {
     })
   })
 
-  await new Promise(resolve => setTimeout(resolve, 25000));
+  await new Promise(resolve => setTimeout(resolve, 50000));
   results.sort(function(a, b) {
     return b.recIndex - a.recIndex
   })
-  //console.log(results)
+  console.log(results)
   return results
 }
 
 /*
 To generate recommendations for a user:
 - call recommend(userId)
+Empty array will be returned if there is 
 */
 //e.g.
-//recommend(ObjectId("5f9fb505cdffb80f9dc63387"))
+recommend("5fa038928f3f8b1ee6b8a9ee")
 
