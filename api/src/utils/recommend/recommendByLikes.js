@@ -6,8 +6,6 @@ mongoose.connect(mongoUri)
 
 const Event = require('../../../dist/src/models/Event').default
 const Mod = require('../../../dist/src/models/mod').default
-const Recommendation = require('../../../dist/src/models/Recommendation').default
-const { recommendationTypesEnum } = require('../../../dist/src/models/Recommendation')
 var _ = require('lodash');
 var ObjectId = require('mongodb').ObjectId;
 
