@@ -67,7 +67,7 @@ async function recommend(user) {
   Mod.find({}).then(modules => {
     modules.map(m => {
       users = likedUsers(m._id.toString()).then(u => {
-        console.log(u)
+        //console.log(u)
         index = jaccardIndex(user, u).then(ind => {
           var recIndex
           if(u.length == 0) {
@@ -88,13 +88,16 @@ async function recommend(user) {
   results.sort(function(a, b) {
     return b.recIndex - a.recIndex
   })
-  console.log(results)
-  return results
+  //console.log(results)
+  const recommendedMods = results.map(r => r.code)
+  console.log(recommendedMods)
+  return recommendedMods
 }
 
 /*
 To generate recommendations for a user:
 - call recommend(userId)
+- returns array of modIds sorted in descending order of recIndex
 Empty array will be returned if there is 
 */
 //e.g.
