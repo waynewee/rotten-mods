@@ -98,7 +98,7 @@ async function recommend(user) {
 To generate recommendations for a user:
 - call recommend(userId)
 - returns array of modIds sorted in descending order of recIndex
-Empty array will be returned if there is 
+Empty array will be returned if user does not share similarity with any user
 */
 //e.g.
 recommend("5fa038928f3f8b1ee6b8a9ee")
