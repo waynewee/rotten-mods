@@ -2,7 +2,7 @@
 import makeCourse from '../makers/course-maker'
 import Course from '../models/course'
 import { ObjectNotFoundError } from '../errors'
-import makeSearch from '../makers/search-maker'
+import makeSearchQuery from '../makers/search-maker'
 
 export async function findById(id: string){
     
@@ -53,9 +53,9 @@ export async function remove(id: string){
 
 export async function search(searchInfo: any){
 
-  const search = await makeSearch(searchInfo)
+  const searchQuery = await makeSearchQuery(searchInfo)
 
-  const { limit, page, searchTerm } = search
+  const { limit, page, searchTerm } = searchQuery
 
   const results = await Course.find({
     $or: [

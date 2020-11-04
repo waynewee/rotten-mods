@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const RecommendationSchema = new mongoose.Schema({
-  userId: { type: String, required: true },
+  userId: { type: String },
   modIds: [ String ],
   type: { type: String, required: true }
 },{

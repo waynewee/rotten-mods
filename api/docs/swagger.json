@@ -46,6 +46,10 @@
       "description": "A reaction of a user to an object"
     },
     {
+      "name": "recommendation",
+      "description": "A list of module recommendations"
+    },
+    {
       "name": "review",
       "description": "A review given to an object"
     },
@@ -1019,6 +1023,39 @@
         "responses": {
           "200":{
             "description": "Success"
+          },
+          "500":{
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/recommendation":{
+      "get":{
+        "tags": ["recommendation"],
+        "summary": "gets modules recommendations by type and userId",
+        "description": "Returns a recommendation with a list of modules",
+        "parameters": [{
+          "name": "type",
+          "in": "query",
+          "description": "Type of recommendation",
+          "required": true,
+          "schema" : {
+            "type": "string",
+            "enum": ["most-rated", "most-viewed", "top-rated", "similarity"]
+          }
+        },{
+          "name": "userId",
+          "in": "query",
+          "description": "OID of the user",
+          "required": true
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "schema":{
+              "$ref":"#/definitions/Recommendation"
+            }
           },
           "500":{
             "description": "Error"
@@ -2106,6 +2143,42 @@
         "count": {
           "type": "integer",
           "example": 15
+        }
+      }
+    },
+    "Recommendation":{
+      "type": "object",
+      "properties":{
+        "_id": {
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "modIds":{
+          "type": "array",
+          "example": ["512345678910111211314151", "512345678910111211314152"]
+        },
+        "mods":{
+          "$ref":"#/definitions/ModArray"
+        },
+        "userId":{
+          "type": "string",
+          "example": "512345678910111211314151"
+        },
+        "type":{
+          "type": "string",
+          "example": "similarity"
+        },
+        "createdAt" : {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "_v":{
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

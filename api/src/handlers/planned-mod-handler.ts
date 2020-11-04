@@ -3,7 +3,7 @@ import makePlannedMod from '../makers/planned-mod-maker'
 import PlannedMod from '../models/planned-mod'
 import Mod from '../models/mod'
 import { ObjectNotFoundError } from '../errors'
-import makeSearch from '../makers/search-maker'
+import makeSearchQuery from '../makers/search-maker'
 
 
 export async function findByUserId(userId: string){
@@ -69,9 +69,9 @@ export async function remove(id: string){
 
 export async function search(searchInfo: any){
 
-  const search = await makeSearch(searchInfo)
+  const searchQuery = await makeSearchQuery(searchInfo)
 
-  const { limit, page, searchTerm } = search
+  const { limit, page, searchTerm } = searchQuery
 
   const results = await PlannedMod.find({
     $or: [

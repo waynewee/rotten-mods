@@ -103,3 +103,5 @@ function recommend(dataset, user) {
     return recommendationEngine(dataset, user, pearsonCorrelation);
 }
 
+module.exports = recommend
+

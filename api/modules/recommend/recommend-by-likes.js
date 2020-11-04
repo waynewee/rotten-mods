@@ -16,6 +16,11 @@ function jaccardIndex(user, users) {
     { $match: {_id : user}}
   ])
   .then( res => {
+
+      if(!res[0]){
+        return 0
+      }
+
       return Reaction.aggregate([
         { $match: {sub : "mod", type: "like", userId : {"$in": users}}},
         { $group: { _id : "$userId", mods: {$push: "$subId"}}},
@@ -59,7 +64,6 @@ async function recommend(user) {
     -> add {code, index} to results array
   return results
   */
-  console.log("generate recommendations")
   results = []
   Mod.find({}).then(modules => {
     modules.map(m => {
@@ -73,9 +77,9 @@ async function recommend(user) {
             recIndex = ind / u.length
           }
           if(recIndex != 0) {
-            var code = m.code
+            var id = m._id.toString()
             //console.log(m._id)
-            results.push({code, recIndex})
+            results.push({id, recIndex})
           }
         })
       })
@@ -86,8 +90,7 @@ async function recommend(user) {
   results.sort(function(a, b) {
     return b.recIndex - a.recIndex
   })
-  const recommendedMods = results.map(r => r.code)
-  console.log(recommendedMods)
+  const recommendedMods = results.map(r => r.id)
   return recommendedMods
 }
 
@@ -97,6 +100,7 @@ To generate recommendations for a user:
 - returns array of modIds sorted in descending order of recIndex
 Empty array will be returned if user does not share similarity with any user
 */
-//e.g.
-recommend("5fa277c87e1806c9863e8da0")
+// //e.g.
+// recommend("5f9cc0c2ce0c7528e03b0ced")
 
+module.exports = recommend
