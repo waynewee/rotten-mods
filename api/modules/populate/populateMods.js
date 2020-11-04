@@ -1,6 +1,6 @@
-const Mod = require('../../../dist/src/models/mod').default
+const Mod = require('../../dist/src/models/mod').default
 
-const nusModsData = require('../nusModules.json') 
+const nusModsData = require('../../src/utils/nusModules.json') 
 
 function populateMods(){
 

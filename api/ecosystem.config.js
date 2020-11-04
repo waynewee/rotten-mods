@@ -19,7 +19,7 @@ module.exports = {
     // runs general cron job
     {
       name      : 'cron',
-      script    : './dist/src/modules/cron.js',
+      script    : './modules/cron/index.js',
       time: true,
       log_date_format: "YYYY-MM-DD HH:mm:ss.SSS Z",
 

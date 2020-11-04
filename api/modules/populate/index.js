@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const { mongoUri } = require('../../../dist/config')
+const { mongoUri } = require('../../dist/config')
 const { populateCourse } = require('./populateCourses')
 const { populateLikes, populateViews } = require('./populateEvents')
 const { populateMods } = require('./populateMods')
