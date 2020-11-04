@@ -84,7 +84,7 @@ async function recommend(user) {
     })
   })
 
-  await new Promise(resolve => setTimeout(resolve, 50000));
+  await new Promise(resolve => setTimeout(resolve, 10000));
   results.sort(function(a, b) {
     return b.recIndex - a.recIndex
   })
