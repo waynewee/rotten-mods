@@ -2,15 +2,15 @@
 
 const mongoose = require('mongoose')
 
-const { mongoUri } = require('../../dist/config')
+const { mongoUri } = require('../../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Event = require('../../dist/src/models/Event').default
-const User = require('../../dist/src/models/User').default
-const Mod = require('../../dist/src/models/Mod').default
-const Recommendation = require('../../dist/src/models/Recommendation').default
-const { recommendationTypesEnum } = require('../../dist/src/models/Recommendation')
+const Event = require('../../../dist/src/models/Event').default
+const User = require('../../../dist/src/models/User').default
+const Mod = require('../../../dist/src/models/Mod').default
+const Recommendation = require('../../../dist/src/models/Recommendation').default
+const { recommendationTypesEnum } = require('../../../dist/src/models/Recommendation')
 var _ = require('lodash');
 
 var pearsonCorrelation = function(dataset,p1,p2){
@@ -102,4 +102,6 @@ function recommendationEngine(dataset,person,distance) {
 function recommend(dataset, user) {
     return recommendationEngine(dataset, user, pearsonCorrelation);
 }
+
+module.exports = recommend
 

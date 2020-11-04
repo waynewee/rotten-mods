@@ -4,16 +4,15 @@ const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Rating = require('../../dist/src/models/Rating').default
+const Event = require('../../dist/src/models/Event').default
 const Mod = require('../../dist/src/models/mod').default
-var _ = require('lodash');
 
 function recommend() {
-  return Rating.aggregate([
+  return Event.aggregate([
     { $match: {sub : "mod"}},
-    { $match: {type : "star"}},
-    { $group: {_id : "$subId", avgRating: {$avg: "$value"}}},
-    { $sort: {avgRating : -1}},
+    { $match: {type : "view"}},
+    { $group: {_id : "$subId", views: {$sum: 1}}},
+    { $sort: {views : -1}},
     {$limit: 10}
   ]).then(res => {
     res = res.map(r => r._id)
@@ -22,7 +21,7 @@ function recommend() {
       { $project: {_id: {$toString: "$_id"}, code: 1}},
       { $match: {_id : {"$in": res}}},
     ]).then(res2 => {
-      res2 = res2.map(r => r.code)
+      res2 = res2.map(r => r._id)
       console.log(res2)
       return res2
     })
@@ -30,9 +29,8 @@ function recommend() {
 }
 
 /*
-To generate all time 10* highest rated modules as recommendations:
+To generate all time 10* most viewed modules as recommendations:
 - call recommend()
-- returns array of mods sorted in descending order of rating
+- returns array of mods sorted in descending order of view count
 */
-recommend()
-
+module.exports = recommend

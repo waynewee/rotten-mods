@@ -66,8 +66,6 @@ function populateReactions(reactionType){
 function populateLikes(){ return populateReactions( "like" )}
 function populateDislikes(){ return populateReactions("dislike")}
 
-populateLikes()
-
 module.exports = {
   populateDislikes,
   populateLikes
