@@ -1,25 +1,23 @@
 const mongoose = require('mongoose')
 
-const { mongoUri } = require('../../../dist/config')
+const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
-
-const Event = require('../../../dist/src/models/Event').default
-const Mod = require('../../../dist/src/models/mod').default
-var _ = require('lodash');
+const Reaction = require('../../dist/src/models/Reaction').default
+const Mod = require('../../dist/src/models/mod').default
+//var _ = require('lodash');
 
 //calculate jaccard index
 function jaccardIndex(user, users) {
   // mods liked by user
-  return Event.aggregate([ 
-    { $match: {sub : "mod"}},
+  return Reaction.aggregate([ 
+    { $match: {sub : "mod", type: "like"}},
     { $group: {_id : "$userId", subId: {$push: "$subId"}}},
     { $match: {_id : user}}
   ])
   .then( res => {
-      return Event.aggregate([
-        { $match: {sub : "mod"}},
-        { $match: {userId : {"$in": users}}},
+      return Reaction.aggregate([
+        { $match: {sub : "mod", type: "like", userId : {"$in": users}}},
         { $group: { _id : "$userId", mods: {$push: "$subId"}}},
         { $project: {
             "intersect": {"$size": { "$setIntersection": [res[0].subId, "$mods"]}}, 
@@ -42,9 +40,8 @@ function jaccardIndex(user, users) {
 
 //filter users who liked a mod
 function likedUsers(module) {
-  return Event.aggregate([
-    { $match: { type : "view"}},
-    { $match: { subId : module}},
+  return Reaction.aggregate([
+    { $match: { type : "like", subId : module}},
     { $group: { _id: '$userId'}}
   ])
   .then( res => {
@@ -77,6 +74,7 @@ async function recommend(user) {
           }
           if(recIndex != 0) {
             var code = m.code
+            console.log(m._id)
             results.push({code, recIndex})
           }
         })
@@ -84,11 +82,10 @@ async function recommend(user) {
     })
   })
 
-  await new Promise(resolve => setTimeout(resolve, 10000));
+  await new Promise(resolve => setTimeout(resolve, 80000));
   results.sort(function(a, b) {
     return b.recIndex - a.recIndex
   })
-  //console.log(results)
   const recommendedMods = results.map(r => r.code)
   console.log(recommendedMods)
   return recommendedMods
@@ -101,5 +98,5 @@ To generate recommendations for a user:
 Empty array will be returned if user does not share similarity with any user
 */
 //e.g.
-recommend("5fa038928f3f8b1ee6b8a9ee")
+recommend("5fa277c87e1806c9863e8da0")
 
