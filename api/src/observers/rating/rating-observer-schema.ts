@@ -1,11 +1,11 @@
-import { createSchema, Type } from 'ts-mongoose';
-//all observers must use this schema
-export const RatingPropSchema = createSchema({
-  count: Type.number({default: 0}),
-  value: Type.number({default: 0, min: 0, max: 5})
+const mongoose = require('mongoose')
+
+export const RatingPropSchema = new mongoose.Schema({
+  count: {type: Number, default: 0},
+  value: { type: Number, min: 1, max: 5 }
 })
 
-export const RatingObjSchema = createSchema({
+export const RatingObjSchema = new mongoose.Schema({
   difficulty: RatingPropSchema,
   star : RatingPropSchema
 })

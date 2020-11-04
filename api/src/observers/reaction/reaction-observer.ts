@@ -35,7 +35,6 @@ export async function notify(reaction: any, remove = false){
   for (let i = 0; i < reactionSubs.length; i++ ){
 
     const sub:any = reactionSubs[i]
-    const subType = reactionSubTypes[i]
 
     if(reaction.sub == sub.modelName){
 

@@ -1,3 +1,2 @@
-import { Type } from 'ts-mongoose'
-
-export const acadSemType =  Type.number({ min: 1, max: 8 })
+const mongoose = require('mongoose')
+export const acadSemType = new mongoose.Schema({ min: 1, max: 8 })
