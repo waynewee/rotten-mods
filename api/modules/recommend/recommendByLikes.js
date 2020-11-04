@@ -74,7 +74,7 @@ async function recommend(user) {
           }
           if(recIndex != 0) {
             var code = m.code
-            console.log(m._id)
+            //console.log(m._id)
             results.push({code, recIndex})
           }
         })
@@ -82,7 +82,7 @@ async function recommend(user) {
     })
   })
 
-  await new Promise(resolve => setTimeout(resolve, 80000));
+  await new Promise(resolve => setTimeout(resolve, 10000));
   results.sort(function(a, b) {
     return b.recIndex - a.recIndex
   })

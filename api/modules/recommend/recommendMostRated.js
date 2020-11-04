@@ -1,12 +1,11 @@
 const mongoose = require('mongoose')
 
-const { mongoUri } = require('../../../dist/config')
+const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Rating = require('../../../dist/src/models/Rating').default
-const Mod = require('../../../dist/src/models/mod').default
-var _ = require('lodash');
+const Rating = require('../../dist/src/models/Rating').default
+const Mod = require('../../dist/src/models/mod').default
 
 function recommend() {
   return Rating.aggregate([
