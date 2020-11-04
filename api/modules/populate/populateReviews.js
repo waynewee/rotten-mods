@@ -1,20 +1,21 @@
 const mongoose = require('mongoose')
 
-const { mongoUri } = require('../../../dist/config')
+const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Rating = require('../../../dist/src/models/Rating').default
-const Mod = require('../../../dist/src/models/mod').default
-const User = require('../../../dist/src/models/user').default
+const Review = require('../../dist/src/models/review').default
+const User = require('../../dist/src/models/user').default
+const Mod = require('../../dist/src/models/mod').default
 
-function populateRatings(ratingType){
+function populateReviews(){
 
-  return Rating.remove({})
+  return Review.remove({})
   .then(() => {
-    console.log("Populating ratings")
+
     const promises = []
-  
+
+    console.log("Populating reviews")
     // create views
     for( let i = 0; i < 100; i++ ){
       
@@ -42,17 +43,15 @@ function populateRatings(ratingType){
             const user = users[0]
             const mod = mods[0]
   
-            const value = Math.floor(Math.random() * 5) + 0
-
-            const newRating = new Rating({
-              type: ratingType,
+            const newReview = new Review({
+              text: "This is a fake review",
               userId: user._id,
-              value,
-              sub: "mod",
-              subId: mod._id
+              modId: mod._id,
+              acadYearTaken: 4,
+              semesterTaken: 1
             })
   
-            return newRating.save()
+            return newReview.save()
   
           })
         })
@@ -62,15 +61,13 @@ function populateRatings(ratingType){
     }
 
     return Promise.all(promises)
-
   })
 
 }
 
-function populateDifficulty(){ return populateRatings( "difficulty" )}
-function populateStar(){ return populateRatings("star")}
-
 module.exports = {
-  populateStar,
-  populateDifficulty
+  populateReviews
 }
+
+
+

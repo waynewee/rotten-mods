@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
-const { mongoUri } = require('../../../dist/config')
+const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Course = require('../../../dist/src/models/course').default
-const makeCourse = require('../../../dist/src/makers/course-maker').default
+const Course = require('../../dist/src/models/course').default
+const makeCourse = require('../../dist/src/makers/course-maker').default
 
 async function populateCourse(){
 
