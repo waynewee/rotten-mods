@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
-const Reaction = require('../../dist/src/models/Reaction').default
+const Reaction = require('../../dist/src/models/reaction').default
 const Mod = require('../../dist/src/models/mod').default
 //var _ = require('lodash');
 

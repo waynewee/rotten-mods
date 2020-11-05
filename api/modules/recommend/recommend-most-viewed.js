@@ -4,7 +4,7 @@ const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Event = require('../../dist/src/models/Event').default
+const Event = require('../../dist/src/models/event').default
 const Mod = require('../../dist/src/models/mod').default
 
 function recommend() {

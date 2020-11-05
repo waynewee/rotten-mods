@@ -6,11 +6,11 @@ const { mongoUri } = require('../../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Event = require('../../../dist/src/models/Event').default
-const User = require('../../../dist/src/models/User').default
-const Mod = require('../../../dist/src/models/Mod').default
-const Recommendation = require('../../../dist/src/models/Recommendation').default
-const { recommendationTypesEnum } = require('../../../dist/src/models/Recommendation')
+const Event = require('../../../dist/src/models/event').default
+const User = require('../../../dist/src/models/user').default
+const Mod = require('../../../dist/src/models/mod').default
+const Recommendation = require('../../../dist/src/models/recommendation').default
+const { recommendationTypesEnum } = require('../../../dist/src/models/recommendation')
 var _ = require('lodash');
 
 var pearsonCorrelation = function(dataset,p1,p2){
