@@ -1,0 +1,1 @@
+{"ast":null,"code":"import axios from \"axios\";\nimport { serverDomain } from \"../config\";\nconst baseUrl = `${serverDomain}/api/user`;\n\nconst getUser = async userId => {\n  const response = await axios.get(`${baseUrl}/${userId}`);\n  return response.data;\n};\n\nexport default {\n  getUser\n};","map":null,"metadata":{},"sourceType":"module"}
