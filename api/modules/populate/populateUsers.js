@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 const randomString = require('randomstring')
 
-const { mongoUri } = require('../../../dist/config')
+const { mongoUri } = require('../../dist/config')
 
-const { hash } = require('../../../dist/src/helpers/hash')
+const { hash } = require('../../dist/src/helpers/hash')
 
 mongoose.connect(mongoUri)
 
-const User = require('../../../dist/src/models/user').default
+const User = require('../../dist/src/models/user').default
 
 function populateUsers(){
 

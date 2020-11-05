@@ -1,6 +1,6 @@
 import { validateLimit, validatePage } from "../validators/index"
 
-export default async function makeSearch(searchInfo: any){
+export default async function makeSearchQuery(searchInfo: any){
 
   const validated = await validate(searchInfo)
   const transformed = await transform(validated)

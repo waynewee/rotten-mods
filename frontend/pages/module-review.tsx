@@ -81,8 +81,8 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   };
 
   const compareLikes = (firstReview: Review, secondReview: Review): number => {
-    const firstReviewLikes = firstReview.event?.like?.count ?? 0;
-    const secondReviewLikes = secondReview.event?.like?.count ?? 0;
+    const firstReviewLikes = firstReview.reaction?.like?.count ?? 0;
+    const secondReviewLikes = secondReview.reaction?.like?.count ?? 0;
     return secondReviewLikes - firstReviewLikes;
   };
 

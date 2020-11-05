@@ -1,10 +1,10 @@
-import { createSchema, Type } from 'ts-mongoose';
-//all observers must use this schema
-export const EventPropSchema = createSchema({
-  count: Type.number({default: 0})
+const mongoose = require('mongoose')
+
+export const EventPropSchema = new mongoose.Schema({
+  count: { type: Number, default: 0}
 })
 
-export const EventObjSchema = createSchema({
+export const EventObjSchema = new mongoose.Schema({
   click: EventPropSchema,
   view: EventPropSchema
 })

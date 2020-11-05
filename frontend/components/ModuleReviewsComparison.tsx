@@ -11,10 +11,10 @@ const ModuleReviewsComparison: React.FC<ModuleReviewsComparisonProps> = ({ first
   return (
     <div style={styles.container}>
       <div style={{ ...styles.reviewsContainer, borderWidth: "0px 1px 0px 0px" }}>
-        <ReviewList reviews={firstModuleReviews} showActions={false} />
+        <ReviewList reviews={firstModuleReviews} showActions={false} updateReviews={()=>{}} />
       </div>
       <div style={{ ...styles.reviewsContainer, borderWidth: "0px 0px 0px 1px" }}>
-        <ReviewList reviews={secondModuleReviews} showActions={false} />
+        <ReviewList reviews={secondModuleReviews} showActions={false} updateReviews={()=>{}}/>
       </div>
     </div >
   )

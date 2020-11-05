@@ -1,23 +1,22 @@
 const mongoose = require('mongoose')
 
-const { mongoUri } = require('../../../dist/config')
+const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Review = require('../../../dist/src/models/review').default
-const User = require('../../../dist/src/models/user').default
-const Mod = require('../../../dist/src/models/mod').default
+const Reaction = require('../../dist/src/models/Reaction').default
+const Mod = require('../../dist/src/models/mod').default
+const User = require('../../dist/src/models/user').default
 
-function populateReviews(){
+function populateReactions(reactionType){
 
-  return Review.remove({})
+  return Reaction.remove({})
   .then(() => {
-
+    console.log("Populating reactions")
     const promises = []
-
-    console.log("Populating reviews")
+  
     // create views
-    for( let i = 0; i < 100; i++ ){
+    for( let i = 0; i < 500; i++ ){
       
       promises.push(
         User.aggregate([
@@ -43,15 +42,14 @@ function populateReviews(){
             const user = users[0]
             const mod = mods[0]
   
-            const newReview = new Review({
-              text: "This is a fake review",
+            const newReaction = new Reaction({
+              type: reactionType,
               userId: user._id,
-              modId: mod._id,
-              acadYearTaken: 4,
-              semesterTaken: 1
+              subId: mod._id,
+              sub: "mod"
             })
   
-            return newReview.save()
+            return newReaction.save()
   
           })
         })
@@ -61,13 +59,14 @@ function populateReviews(){
     }
 
     return Promise.all(promises)
-  })
 
+  })
 }
+
+function populateLikes(){ return populateReactions( "like" )}
+function populateDislikes(){ return populateReactions("dislike")}
 
 module.exports = {
-  populateReviews
+  populateDislikes,
+  populateLikes
 }
-
-
-

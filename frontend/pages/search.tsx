@@ -42,7 +42,7 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
         style={{ backgroundColor: descriptionGreen }}
       />
       <SectionTitle title={`Similar results to "${searchTerm}"`} />
-      <SearchModuleList />
+      <SearchModuleList modules={[]}/>
       <ModuleCompareModal />
     </>
   );

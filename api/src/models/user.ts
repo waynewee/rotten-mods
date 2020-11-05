@@ -7,10 +7,12 @@ const UserSchema = new mongoose.Schema({
   schoolStartDate: { type: Date, format: "YYYY-MM-DD" },
   schoolId: { type: String },
   courseId: { type: String },
-  currentYear: {type: Number, min: 1, max: 8 }
+  currentYear: {type: Number, min: 1, max: 8 },
+  computedRecsFlag: { type: Boolean, default: false }
 },{
   timestamps: true,
-  usePushEach: true
+  usePushEach: true,
+  useFindAndModify: true
 })
 
 const User = mongoose.model('user', UserSchema)

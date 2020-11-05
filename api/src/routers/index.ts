@@ -15,6 +15,7 @@ import logoutRouter from './logout-router'
 import reviewRouter from './review-router'
 import replyRouter from './reply-router'
 import reactionRouter from './reaction-router'
+import recommendationRouter from './recommendation-router'
 
 router.all('/mod', modRouter)
 router.all('/mod/:id', modRouter)
@@ -50,5 +51,7 @@ router.all('/reply/:id', replyRouter)
 
 router.all('/reaction', reactionRouter)
 router.all('/reaction/:id', reactionRouter)
+
+router.all('/recommendation', recommendationRouter)
 
 export default router

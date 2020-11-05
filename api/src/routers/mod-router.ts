@@ -7,8 +7,6 @@ import { requireLogin } from "../helpers/require-login";
 export default async function modRouter(req: Request, res: Response ){
   const request = adaptRequest(req)
 
-
-
   try {
     let result;
     const { id } = request.params

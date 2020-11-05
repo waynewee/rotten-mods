@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
-const { mongoUri } = require('../../../dist/config')
+const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const School = require('../../../dist/src/models/school').default
-const makeSchool = require('../../../dist/src/makers/school-maker').default
+const School = require('../../dist/src/models/school').default
+const makeSchool = require('../../dist/src/makers/school-maker').default
 
 async function populateSchools(){
 
