@@ -437,7 +437,7 @@
         "description": "Returns a list of appropriate modules",
         "parameters":[{
           "in": "query",
-          "name": "s",
+          "name": "searchTerm",
           "description": "Search term - case insensititve module title or code",
           "schema": {
             "type": "string",
