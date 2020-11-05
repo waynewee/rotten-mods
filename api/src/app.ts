@@ -19,7 +19,7 @@ app.set("port", process.env.PORT || 8080);
 app.use(bodyParser.json());
 //add corsOpts here
 app.use(cors({ 
-  origin: "http://localhost:3000", 
+  origin: config.origin, 
   credentials: true, 
   methods: ['GET', 'PUT', 'POST', 'DELETE'], 
   allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"] 

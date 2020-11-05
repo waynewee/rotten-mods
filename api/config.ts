@@ -1,13 +1,15 @@
 const production = process.env.NODE_ENV === 'production'
 
-let mongoUri
+let mongoUri = 'mongodb://127.0.0.1:27017/rotten-mods'
+let origin
 
 if( production ){
-  mongoUri = 'mongodb://127.0.0.1:27017/rotten-mods';
+  origin = 'http://ec2-52-77-214-145.ap-southeast-1.compute.amazonaws.com'
 } else {
-  mongoUri = 'mongodb://127.0.0.1:27017/rotten-mods';
+  origin = 'http://localhost:3000'
 }
 
 export {
-  mongoUri
+  mongoUri,
+  origin
 }
