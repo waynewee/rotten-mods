@@ -21,7 +21,7 @@ const ModuleCompareModal: React.FC = () => {
     (state) => state.compare.secondModuleCode
   );
   const hasModuleToCompare =
-    firstModuleId || secondModuleId ? "visible" : "hidden";
+    firstModuleId || secondModuleId ? "visible" : "hidden" ;
 
   const navigateToModuleComparisonPage = () => {
     if (firstModuleId && secondModuleId) {
@@ -33,7 +33,7 @@ const ModuleCompareModal: React.FC = () => {
   };
 
   return (
-    <div style={{ visibility: `${hasModuleToCompare}`, ...styles.container }}>
+    <div style={{ visibility: hasModuleToCompare, ...styles.container }}>
       <div style={styles.modalContainer}>
         <div style={styles.modulesContainer}>
           <ModuleCompareCode code={firstModuleCode} order={FIRST} />
