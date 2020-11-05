@@ -5,6 +5,8 @@ import StudyPlanCard from "../components/StudyPlanCard";
 import { User } from "../types";
 import ReviewedModuleCard from "../components/ReviewedModuleCard";
 import SearchModuleList from "../components/SearchModuleList";
+import { Module } from "../types";
+
 
 
 import { useSelector } from "react-redux";
@@ -23,7 +25,7 @@ const Profile: React.FC = () => {
         <ReviewedModuleCard />
       </div>
       <SectionTitle title={`Modules you might be interested in`} />
-      <SearchModuleList />
+      <SearchModuleList modules={[]}/>
     </>
   );
 };
