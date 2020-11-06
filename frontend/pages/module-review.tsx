@@ -20,6 +20,12 @@ interface ModuleReviewProps {
   reviews: Review[];
 }
 
+const compareNewest = (firstReview: Review, secondReview: Review): number => {
+  const firstReviewCreatedAtDate = new Date(firstReview.createdAt);
+  const secondReviewCreatedAtDate = new Date(secondReview.createdAt);
+  return firstReviewCreatedAtDate < secondReviewCreatedAtDate ? 1 : -1;
+};
+
 const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   initialModule,
   reviews,
@@ -68,16 +74,10 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
     }
   };
 
-  const compareNewest = (firstReview: Review, secondReview: Review): number => {
-    const firstReviewCreatedAtDate = new Date(firstReview.createdAt);
-    const secondReviewCreatedAtDate = new Date(secondReview.createdAt);
-    return firstReviewCreatedAtDate > secondReviewCreatedAtDate ? 1 : -1;
-  };
-
   const compareOldest = (firstReview: Review, secondReview: Review): number => {
     const firstReviewCreatedAtDate = new Date(firstReview.createdAt);
     const secondReviewCreatedAtDate = new Date(secondReview.createdAt);
-    return firstReviewCreatedAtDate < secondReviewCreatedAtDate ? 1 : -1;
+    return firstReviewCreatedAtDate > secondReviewCreatedAtDate ? 1 : -1;
   };
 
   const compareLikes = (firstReview: Review, secondReview: Review): number => {
@@ -199,6 +199,7 @@ ModuleReviewPage.getInitialProps = async ({ query }) => {
     initialModule.prereqs = prereqs;
 
     const reviews = await reviewApi.getReviewsOfModule(initialModule._id, 10);
+    reviews.sort(compareNewest);
 
     return { initialModule, reviews };
   } catch (err) {
