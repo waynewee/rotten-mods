@@ -16,7 +16,7 @@ interface SearchProps {
 
 const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
   const [searchResults, setSearchResults] = useState(initialSearchResults);
-  const [numberOfResults, setNumberOfResults] = useState(20);
+  const [numberOfResults, setNumberOfResults] = useState(10);
   const searchTerm = useSelector((state) => state.search.searchTerm);
 
   useEffect(() => {
@@ -28,7 +28,8 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
   }, [initialSearchResults]);
 
   const fetchMoreSearchResults = async () => {
-    const results = await modApi.searchModule(searchTerm, numberOfResults);
+    const results = await modApi.searchModule(searchTerm, numberOfResults + 10);
+    console.log("Results:", results);
     setSearchResults(results);
     setNumberOfResults(numberOfResults + 10);
   };
@@ -42,7 +43,7 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
         style={{ backgroundColor: descriptionGreen }}
       />
       <SectionTitle title={`Similar results to "${searchTerm}"`} />
-      <SearchModuleList modules={[]}/>
+      <SearchModuleList modules={[]} />
       <ModuleCompareModal />
     </>
   );
