@@ -5,79 +5,83 @@ import SectionTitle from "../components/SectionTitle";
 import ModuleCompareModal from "../components/ModuleCompareModal";
 import { useSelector } from "react-redux";
 import recommendationApi from "../api/recommendations";
-import { Module, Review } from "../types";
 import moduleApi from "../api/module";
 
 import { useEffect, useState } from "react";
 
-
-
-
-
-
 const Home: NextPage = ({}) => {
-
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.user?._id);
-  
-  const [trendingModules, setTrendingModules] = useState([]); 
-  const [popularModules, setPopularModules] = useState([]); 
-  const [recommendedModules, setRecommendedModules] = useState([]); 
 
+  const [trendingModules, setTrendingModules] = useState([]);
+  const [popularModules, setPopularModules] = useState([]);
+  const [recommendedModules, setRecommendedModules] = useState([]);
 
   useEffect(() => {
     fetchAllRecommendations();
   }, [userId]);
 
-
   const fetchAllRecommendations = async () => {
-    recommendationApi.getRecommendedModules(userId)
-    .then(response => {
-      console.log("the response is " + response);
-      setRecommendedModules(response.mods);
-    })
-    .catch(error => {
-      console.log("the error is" + error)
-    })
+    const backupModules = await moduleApi.searchModule("cs1");
+
+    const concatBackup = (modulesToRecommend, setModulesMethod) => {
+      if (modulesToRecommend.length < 3) {
+        const sufficientModules = modulesToRecommend.concat(backupModules);
+        setModulesMethod(sufficientModules);
+      } else {
+        setModulesMethod(modulesToRecommend);
+      }
+    };
 
     const mostRatedModules = await recommendationApi.getMostRatedModules();
-    setPopularModules(mostRatedModules.mods);
+    concatBackup(mostRatedModules.mods, setPopularModules);
     const mostViewedModules = await recommendationApi.getMostViewedModules();
-    setTrendingModules(mostViewedModules.mods);
+    concatBackup(mostViewedModules.mods, setTrendingModules);
 
+    try {
+      if (userId) {
+        const recommendedModules = await recommendationApi.getRecommendedModules(
+          userId
+        );
+        concatBackup(recommendedModules.mods, setRecommendedModules);
+      }
+    } catch (err) {
+      console.log("User has insufficient activities to get recommended");
+    }
+  };
 
-  }
-  
   const renderRecommendedModules = () => {
     if (userId) {
       if (recommendedModules.length > 0) {
-        console.log(recommendedModules);
+        console.log("Recommended:", recommendedModules);
         return (
           <>
-            <SectionTitle title="Recommended For You" />  
-            <HomeModuleList modules ={recommendedModules} /> 
-          </>)
-
-      } else {
-        return (<>
-          <SectionTitle title="Recommended For You" />  
-          <p style={{textAlign : "center", paddingTop: "20px"}}>Sorry we do not have enough information to recommend modules for you!</p> 
+            <SectionTitle title="Recommended For You" />
+            <HomeModuleList modules={recommendedModules} />
           </>
-        )
-       
+        );
+      } else {
+        return (
+          <>
+            <SectionTitle title="Recommended For You" />
+            <p style={{ textAlign: "center", paddingTop: "20px" }}>
+              Sorry we do not have enough information about you to recommend
+              modules for you!
+            </p>
+          </>
+        );
       }
     }
-  }
-
-
+  };
 
   return (
     <>
       <ModuleCompareModal />
       <SectionTitle title="Trending Modules" />
-      <HomeModuleList modules ={trendingModules}/>
+      <HomeModuleList modules={trendingModules} />
       <SectionTitle title="Popular Modules" />
-      <HomeModuleList modules ={popularModules}/>
-      {renderRecommendedModules()}
+      <HomeModuleList modules={popularModules} />
+      {isLoggedIn && renderRecommendedModules()}
     </>
   );
 };

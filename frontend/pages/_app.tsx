@@ -29,7 +29,6 @@ const ReduxApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   useEffect(() => {
     attemptLogin();
     fetchAllSchools();
-
   }, []);
 
   // Fetch all personal modules if user is logged in

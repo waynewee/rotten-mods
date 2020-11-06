@@ -11,15 +11,13 @@ const logIn = async (email, password) => {
     password,
   });
 
-  console.log(response);
-
   return response.data;
 };
 
 const logOut = async () => {
   const response = await axios.get(logoutBaseUrl);
   return response;
-}
+};
 
 const signUp = async (
   name,
@@ -50,5 +48,5 @@ const signUp = async (
 export default {
   logIn,
   signUp,
-  logOut
+  logOut,
 };

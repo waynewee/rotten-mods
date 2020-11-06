@@ -3,15 +3,16 @@ import { Module } from "../types";
 import ArrowButton from "./ArrowButton";
 import HomeModuleListCard from "./HomeModuleListCard";
 
-
 interface HomeModuleListProps {
   modules: Module[];
 }
 
-const HomeModuleList: React.FC<HomeModuleListProps> = ({modules}) => {
+const HomeModuleList: React.FC<HomeModuleListProps> = ({ modules }) => {
   const numberOfModuleCardsInView = 3;
   const [index, setIndex] = useState(0);
-  const allModuleCards = modules.map((module, index) => <HomeModuleListCard module={module} key={index}/>);
+  const allModuleCards = modules.map((module, index) => (
+    <HomeModuleListCard module={module} key={index} />
+  ));
   const moduleCardsInThrees = allModuleCards.slice(index, index + 3);
   const scrollLeft = () => {
     if (index - numberOfModuleCardsInView <= 0) {
@@ -19,25 +20,27 @@ const HomeModuleList: React.FC<HomeModuleListProps> = ({modules}) => {
     } else {
       setIndex(index - numberOfModuleCardsInView);
     }
-  }
+  };
 
   const scrollRight = () => {
-    if (index + numberOfModuleCardsInView > allModuleCards.length - numberOfModuleCardsInView) {
+    if (
+      index + numberOfModuleCardsInView >
+      allModuleCards.length - numberOfModuleCardsInView
+    ) {
       setIndex(allModuleCards.length - numberOfModuleCardsInView);
     } else {
       setIndex(index + numberOfModuleCardsInView);
     }
-  }
+  };
 
   return (
     <div style={{ display: "flex", alignItems: "center", marginBottom: 20 }}>
       <ArrowButton direction="left" onClick={scrollLeft} />
       {moduleCardsInThrees}
       <ArrowButton direction="right" onClick={scrollRight} />
-    </div >
+    </div>
   );
-}
-
+};
 
 export default HomeModuleList;
 
@@ -49,7 +52,6 @@ export default HomeModuleList;
 
 // const [offset, setOffset] = useState(widthOfModuleCard);
 // const carouselRef = useRef(null);
-
 
 // const scrollToRef = (offset: number) => carouselRef.current.scrollTo(offset, 0);
 
@@ -88,6 +90,5 @@ export default HomeModuleList;
 //     <div style={{ display: "flex", alignItems: "center", marginLeft: 10, cursor: "pointer" }} onClick={scrollRight}>{">"}</div>
 
 //   </div >
-
 
 // );
