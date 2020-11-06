@@ -101,14 +101,22 @@ async function logIn(values) {
   }
 }
 
-const logOut = () => {
-  window.localStorage.removeItem("ROTTENMODS_EMAIL");
-  window.localStorage.removeItem("ROTTENMODS_PASSWORD");
-  message.success("Successfully Logged Out");
+async function logOut() {
+  // const response = await authApi.logOut().catch((error) => {
+  //   throw error;
+  // });
 
-  store.dispatch({
-    type: LOG_USER_OUT,
-  });
+    window.localStorage.removeItem("ROTTENMODS_EMAIL");
+    window.localStorage.removeItem("ROTTENMODS_PASSWORD");
+
+    message.success("Successfully Logged Out");
+
+    store.dispatch({
+      type: LOG_USER_OUT,
+    });
+
+  
+
 };
 
 export default {
