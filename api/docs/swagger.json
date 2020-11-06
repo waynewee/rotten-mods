@@ -702,7 +702,7 @@
       }
     },
     "/logout":{
-      "get":{
+      "post":{
         "tags": ["logout"],
         "summary": "logs an existing user out",
         "description": "",

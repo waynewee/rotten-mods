@@ -7,12 +7,14 @@ export async function findByTypeAndUserId({ userId, type }: {userId: string, typ
 
   const recommendationQuery = await makeRecommendationQuery({ userId, type })
 
-  const result = await Recommendation.findOne({
+  const results = await Recommendation.find({
     $and: [
       { userId: recommendationQuery.userId },
       { type: recommendationQuery.type }
     ]
-  })
+  }).sort({ createdAt: -1 })
+
+  const result = results[0]
 
   if( !result ){
     throw new ObjectNotFoundError("Recommendation") 

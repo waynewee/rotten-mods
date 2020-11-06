@@ -4,7 +4,7 @@ const { mongoUri } = require('../../dist/config')
 
 mongoose.connect(mongoUri)
 
-const Rating = require('../../dist/src/models/Rating').default
+const Rating = require('../../dist/src/models/rating').default
 const Mod = require('../../dist/src/models/mod').default
 
 function recommend() {

@@ -12,7 +12,7 @@ async function computeRecsByLikes(){
   console.log("computing recommendations by likes")
   
   //get all users that have not had recommendations computed for
-  const users = await User.find({ computedRecsFlag: false })
+  const users = await User.find({})
 
   console.log(`Got ${users.length} users`)
   
@@ -29,8 +29,6 @@ async function computeRecsByLikes(){
     })
 
     await recommendation.save()
-
-    await User.updateOne({ _id: userId}, { $set: { computedRecsFlag: true }})
     
   }
 
