@@ -2277,7 +2277,7 @@
           "$ref": "#/definitions/EventObj"
         },
         "rating":{
-          "$ref": "#/definitions/RatingObj"
+          "$ref": "#/definitions/Rating"
         },
         "createdAt" : {
           "type": "string",
@@ -2324,9 +2324,6 @@
         },
         "rating": {
           "$ref": "#/definitions/RatingObj"
-        },
-        "event": {
-          "$ref": "#/definitions/EventObj"
         }
       }
     },

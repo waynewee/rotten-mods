@@ -22,8 +22,6 @@ export async function validateModId(modId: string){
     return
   }
 
-  console.log(modId)
-
   const mod = await Mod.findById(modId)
 
   if( !mod ){
@@ -38,8 +36,6 @@ export async function validateReviewId(reviewId: string){
     return
   }
 
-  console.log(reviewId)
-
   const review = await Review.findById(reviewId)
 
   if( !review ){
@@ -53,8 +49,6 @@ export async function validateReplyId(replyId: string){
   if( !replyId ){
     return
   }
-
-  console.log(replyId)
 
   const reply = await Reply.findById(replyId)
 

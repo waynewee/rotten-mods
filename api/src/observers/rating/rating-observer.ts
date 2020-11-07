@@ -3,6 +3,7 @@ import School from '../../models/school'
 import Course from '../../models/course'
 import Review from '../../models/review'
 import Rating from '../../models/rating'
+import { InvalidParameterError, ObjectNotFoundError } from '../../errors'
 
 enum ratingSubTypesEnum {
   mod = "mod",
@@ -25,7 +26,7 @@ const ratingSubs = [
   Review
 ]
 
-export async function notify(rating: any){
+export async function notify(rating: any, remove = false){
 
   let promises:any = []
 
@@ -48,11 +49,30 @@ export async function notify(rating: any){
           subObj.rating[ratingType] = {}
         }
 
-        subObj.rating[ratingType].count += 1
+        if( remove ){
 
-        const count = subObj.rating[ratingType].count
+          if(!subObj.rating[ratingType].count || subObj.rating[ratingType].count == 0 ){
+            throw new ObjectNotFoundError("Rating")
+          } 
 
-        subObj.rating[ratingType].value = ((subObj.rating[ratingType].value * (count - 1)) + rating.value)/count
+          const count = subObj.rating[ratingType].count
+
+          subObj.rating[ratingType].value = ((subObj.rating[ratingType].value) * count - rating.value)/(count - 1)
+          subObj.rating[ratingType].count -= 1
+
+          
+        } else {
+
+          subObj.rating[ratingType].count = subObj.rating[ratingType].count || 0
+          subObj.rating[ratingType].value = subObj.rating[ratingType].value || 0
+
+          const count = subObj.rating[ratingType].count
+          
+          subObj.rating[ratingType].value = ((subObj.rating[ratingType].value * count + rating.value)/(count + 1))
+          subObj.rating[ratingType].count += 1
+        
+        }
+
 
         promises.push(subObj.save())
 
@@ -86,8 +106,13 @@ export async function notifyOfUpdate(oldRatingValue: number, rating: any){
           subObj.rating[ratingType] = {}
         }
 
+        if(!subObj.rating[ratingType].count || subObj.rating[ratingType].count == 0 ){
+          throw new ObjectNotFoundError("Rating")
+        } 
+
         const count = subObj.rating[ratingType].count
         const currValue = count * subObj.rating[ratingType].value
+
         const newValue = (currValue - oldRatingValue + rating.value)/count 
 
         subObj.rating[ratingType].value = newValue

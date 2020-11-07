@@ -16,6 +16,18 @@ export async function create(ratingInfo: any){
 
 }
 
+export async function findById(ratingId: string){
+
+  const rating = await Rating.findOne({ _id: ratingId })
+
+  if( !rating ){
+    throw new ObjectNotFoundError("Rating")
+  }
+
+  return rating
+
+}
+
 export async function findByInfo(ratingInfo: any){
     
   const {
@@ -53,11 +65,27 @@ export async function update(id: string, ratingInfo: any){
     ...ratingInfo
   }
 
-  const mod = await makeRating(updatedRatingInfo)
+  const rating = await makeRating(updatedRatingInfo)
 
-  const rating = await Rating.updateOne({_id: id}, mod)
+  const result = await Rating.updateOne({_id: id}, rating)
 
   await notifyOfUpdate(existingRating.value, updatedRatingInfo)
 
-  return rating
+  return result
+}
+
+export async function remove(id: string){
+  
+  const rating = await Rating.findOne({_id: id})
+
+  if( !rating ){
+    throw new ObjectNotFoundError("Rating")
+  }
+
+  const result = await Rating.deleteOne({ _id: id })
+
+  await notify(rating, true)
+
+  return result
+
 }
