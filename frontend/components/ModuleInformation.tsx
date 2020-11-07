@@ -103,7 +103,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
       return;
     }
     setAddRatingsModalVisibility(true);
-  }
+  };
 
   const toggleAddReviewModal = () => {
     if (!isLoggedIn) {
@@ -111,7 +111,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
       return;
     }
     setAddReviewModalVisibility(true);
-  }
+  };
 
   return (
     <div style={styles.container}>
