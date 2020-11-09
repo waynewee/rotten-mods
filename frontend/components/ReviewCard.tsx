@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import { Review } from "../types";
 import commentApi from "../api/comment";
 import reactionApi from "../api/reaction";
-import { triggerRequireLoginMessage } from "../utils/helpers";
+import reviewApi from "../api/review";
+import { triggerRequireLoginMessage, fetchRatings } from "../utils/helpers";
 
 import AddCommentModal from "./AddCommentModal";
 import Button from "./Button";
@@ -29,6 +30,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   );
   const [comments, setComments] = useState([]);
   const [userLikeReactionId, setUserLikeReactionId] = useState("");
+  const [difficulty, setDifficulty] = useState(3);
+  const [star, setStar] = useState(3);
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.user?._id);
@@ -40,14 +43,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     semesterTaken,
     reaction,
     _id,
-    rating,
+    ratingIds,
   } = review;
   const name = user?.name;
   const like = reaction?.like?.count ?? 0;
-  const difficulty = rating?.difficulty.value ?? 3;
-  const star = rating?.star.value ?? 3;
-
+  
   useEffect(() => {
+    fetchRatings(ratingIds, setStar, setDifficulty);
     fetchComments();
     checkIsLikedByUser();
   }, []);

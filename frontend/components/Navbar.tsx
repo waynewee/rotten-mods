@@ -64,14 +64,6 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
       </div>
 
       <div style={styles.actionsContainer}>
-        <Dropdown overlay={menu}>
-          <div style={{ marginRight: 20 }}>
-            <a style={{ color: "#595959", marginRight: 6, fontSize: 18 }}>
-              NUS
-            </a>
-            <DownOutlined />
-          </div>
-        </Dropdown>
         <Button
           style={styles.addModuleButton}
           onClick={toggleAddModModalVisibility}

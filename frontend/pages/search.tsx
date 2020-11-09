@@ -16,7 +16,7 @@ interface SearchProps {
 
 const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
   const [searchResults, setSearchResults] = useState(initialSearchResults);
-  const [numberOfResults, setNumberOfResults] = useState(10);
+  const [numberOfResults, setNumberOfResults] = useState(11); // the presence of that 11th result is an indicator that there are more than 10 results
   const searchTerm = useSelector((state) => state.search.searchTerm);
 
   useEffect(() => {
@@ -29,7 +29,6 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
 
   const fetchMoreSearchResults = async () => {
     const results = await modApi.searchModule(searchTerm, numberOfResults + 10);
-    console.log("Results:", results);
     setSearchResults(results);
     setNumberOfResults(numberOfResults + 10);
   };
@@ -37,11 +36,14 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
   return (
     <>
       <SectionTitle title={`Search results for "${searchTerm}"`} />
-      <SearchModuleList modules={searchResults} />
-      <SeeMoreButton
-        fetchMoreData={fetchMoreSearchResults}
-        style={{ backgroundColor: descriptionGreen }}
-      />
+      <SearchModuleList modules={searchResults.slice(0, numberOfResults - 1)} />
+      {searchResults.length == numberOfResults && (
+        <SeeMoreButton
+          fetchMoreData={fetchMoreSearchResults}
+          style={{ backgroundColor: descriptionGreen }}
+        />
+      )}
+
       <SectionTitle title={`Similar results to "${searchTerm}"`} />
       <SearchModuleList modules={[]} />
       <ModuleCompareModal />

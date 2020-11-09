@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import bookmarkApi from "../api/bookmark";
 import plannedModApi from "../api/planned-mod";
 import reviewApi from "../api/review";
@@ -41,4 +42,19 @@ export const updatePersonalReviews = async (userId) => {
 
 export const triggerRequireLoginMessage = () => {
   message.warning("You need to login first!");
+};
+
+export const fetchRatings = (
+  ratingIds: string[],
+  setStar: Dispatch<SetStateAction<number>>,
+  setDifficulty: Dispatch<SetStateAction<number>>
+): void => {
+  ratingIds.forEach(async (id) => {
+    const rating = await reviewApi.getRatingById(id);
+    if (rating.type == "star") {
+      setStar(rating.value);
+    } else if (rating.type == "difficulty") {
+      setDifficulty(rating.value);
+    }
+  });
 };

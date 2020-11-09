@@ -6,16 +6,18 @@ import { Rating } from "../types";
 const reviewBaseUrl = `${serverDomain}/api/review`;
 const ratingBaseUrl = `${serverDomain}/api/rating`;
 
+interface RatingInReview {
+  type: string;
+  value: number;
+}
+
 interface ReviewToSubmit {
   text: string;
   semesterTaken: number;
   acadYearTaken: string;
   modId: string;
   userId: string;
-  rating: {
-    difficulty: Rating;
-    star: Rating;
-  };
+  ratings: RatingInReview[];
 }
 
 const getReviewsOfModule = async (
@@ -76,6 +78,11 @@ const addRating = async (
   return response.status;
 };
 
+const getRatingById = async (id: string) => {
+  const response = await axios.get(`${ratingBaseUrl}/${id}`);
+  return response.data;
+};
+
 const getRating = async (subscriberType, subscriberId, userId, ratingType) => {
   const query = queryString.stringify({
     sub: subscriberType,
@@ -114,6 +121,7 @@ export default {
   getReviewsOfUser,
   addReviewOfModule,
   addRating,
+  getRatingById,
   getRating,
   updateRating,
   updateReviewOfModule,

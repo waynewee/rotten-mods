@@ -49,7 +49,7 @@ const HomeModuleListCard: React.FC<HomeModuleListCardProps> = ({ module }) => {
           {title}
         </div>
         <div style={styles.ratings}>
-          <StarFilledIcon style={styles.ratingsIcon} /> {star}
+          <StarFilledIcon style={styles.ratingsIcon} /> {star.toFixed(1)}
         </div>
       </div>
     </div>

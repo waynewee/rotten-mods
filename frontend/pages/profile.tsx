@@ -1,20 +1,35 @@
+import { useState, useEffect } from "react";
+import { User } from "../types";
+import { useSelector } from "react-redux";
+import recommendationApi from "../api/recommendations";
+import {
+  updatePersonalBookmarks,
+  updatePersonalReviews,
+  updatedPersonalPlannedModules,
+} from "../utils/helpers";
+
 import SectionTitle from "../components/SectionTitle";
 import ProfileCard from "../components/ProfileCard";
 import BookmarkedModuleCard from "../components/BookmarkedModuleCard";
 import StudyPlanCard from "../components/StudyPlanCard";
-import { User } from "../types";
 import ReviewedModuleCard from "../components/ReviewedModuleCard";
 import SearchModuleList from "../components/SearchModuleList";
-import { Module } from "../types";
-
-
-
-import { useSelector } from "react-redux";
-
 
 const Profile: React.FC = () => {
+  const user: User = useSelector((state) => state.auth.user);
+  const [recommendedModules, setRecommendedModules] = useState([]);
 
-  const user : User = useSelector(state => state.auth.user);
+  useEffect(() => {
+    fetchRecommendedMods();
+    updatePersonalBookmarks(user._id);
+    updatePersonalReviews(user._id);
+    updatedPersonalPlannedModules(user._id);
+  }, []);
+
+  const fetchRecommendedMods = async () => {
+    const mods = await recommendationApi.getMostViewedModules(); // TODO: to change to Similarity
+    setRecommendedModules(mods.mods);
+  };
 
   return (
     <>
@@ -25,14 +40,14 @@ const Profile: React.FC = () => {
         <ReviewedModuleCard />
       </div>
       <SectionTitle title={`Modules you might be interested in`} />
-      <SearchModuleList modules={[]}/>
+      <SearchModuleList modules={recommendedModules} />
     </>
   );
 };
 
 const styles = {
   container: {
-    display: "flex"
-  }
-}
+    display: "flex",
+  },
+};
 export default Profile;

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { useSelector } from "react-redux";
-import { Module } from "../types";
+import { Module, Review } from "../types";
 import bookmarkApi from "../api/bookmark";
 import plannedModApi from "../api/planned-mod";
 import {
@@ -25,17 +25,20 @@ import PenFilledIcon from "../icons/PenFilledIcon";
 import Button from "./Button";
 import { codeBlue, descriptionGreen, ratingsYellow } from "../styles/colors";
 import AddPlannedModModal from "./AddPlannedModModal";
+import { message } from "antd";
 
 interface ModuleInformationProps {
   module: Module;
   setAddReviewModalVisibility: Dispatch<SetStateAction<boolean>>;
   setAddRatingsModalVisibility: Dispatch<SetStateAction<boolean>>;
+  reviewByUser?: Review;
 }
 
 const ModuleInformation: React.FC<ModuleInformationProps> = ({
   module,
   setAddReviewModalVisibility,
   setAddRatingsModalVisibility,
+  reviewByUser
 }) => {
   const [
     isAddPlannedModModalVisible,
@@ -102,6 +105,12 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
       triggerRequireLoginMessage();
       return;
     }
+
+    if (reviewByUser) {
+      message.error("You have posted a Review before. Edit your Review instead!");
+      return;
+    }
+
     setAddRatingsModalVisibility(true);
   };
 
