@@ -57,7 +57,7 @@ export async function notify(rating: any, remove = false){
 
           const count = subObj.rating[ratingType].count
 
-          subObj.rating[ratingType].value = ((subObj.rating[ratingType].value) * count - rating.value)/(count - 1)
+          subObj.rating[ratingType].value = count - 1 == 0? undefined: ((subObj.rating[ratingType].value) * count - rating.value)/(count - 1)
           subObj.rating[ratingType].count -= 1
 
           

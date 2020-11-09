@@ -1194,8 +1194,17 @@
     "/review":{
       "get":{
         "tags": ["review"],
-        "summary":"gets all reviews",
+        "summary":"gets a list of reviews",
         "description":"Returns a list of reviews",
+        "parameters":[{
+          "name": "userId",
+          "in": "query",
+          "description": "Filter by OID of user. Cannot be used with modId"
+        },{
+          "name": "modId",
+          "in": "query",
+          "description": "Filter by OID of mod. Cannot be used with userId"
+        }],
         "responses": {
           "200": {
             "description":"Success",
@@ -1310,88 +1319,6 @@
           },
           "403":{
             "description": "Not authorized"
-          }
-        }
-      }
-    },
-    "/review/mod/{modId}":{
-      "get":{
-        "tags": ["review"],
-        "summary": "paginate reviews for single module",
-        "description": "Returns a list of reviews",
-        "parameters":[{
-          "in": "path",
-          "name": "modId",
-          "description": "OID of the module",
-          "schema": {
-            "type": "string",
-            "example": "512345678910111211314151"
-          }
-        },{
-          "in": "query",
-          "name": "page",
-          "description": "Page number",
-          "schema":{
-            "type": "integer"
-          }
-        },{
-          "in": "query",
-          "name": "limit",
-          "description":"Maximum number of results returned",
-          "schema": {
-            "type": "Integer"
-          }
-        }],
-        "responses": {
-          "200":{
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Review"
-            }
-          },
-          "500":{
-            "description": "Error"
-          }
-        }
-      }
-    },
-    "/review/user/{userId}":{
-      "get":{
-        "tags": ["review"],
-        "summary": "paginate reviews for single module",
-        "description": "Returns a list of reviews by a user",
-        "parameters":[{
-          "in": "path",
-          "name": "userId",
-          "description": "OID of the user",
-          "schema": {
-            "type": "string",
-            "example": "512345678910111211314151"
-          }
-        },{
-          "in": "query",
-          "name": "page",
-          "description": "Page number",
-          "schema":{
-            "type": "integer"
-          }
-        },{
-          "in": "query",
-          "name": "limit",
-          "description":"Maximum number of results returned",
-          "schema": {
-            "type": "Integer"
-          }
-        }],
-        "responses": {
-          "200":{
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Review"
-            }
-          },
-          "500":{
-            "description": "Error"
           }
         }
       }
@@ -2276,8 +2203,9 @@
         "event": {
           "$ref": "#/definitions/EventObj"
         },
-        "rating":{
-          "$ref": "#/definitions/Rating"
+        "ratingIds":{
+          "type": "array",
+          "example": ["512345678910111211314151", "512345678910111211314152"]
         },
         "createdAt" : {
           "type": "string",
@@ -2290,6 +2218,25 @@
         "_v":{
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "ReviewRatingArray":{
+      "type":"array",
+      "items":{
+        "$ref":"#/definitions/ReviewRating"
+      }
+    },
+    "ReviewRating":{
+      "type": "object",
+      "properties":{
+        "type":{
+          "type": "string",
+          "example": "star"
+        },
+        "value":{
+          "type": "number",
+          "example": 5
         }
       }
     },
@@ -2322,8 +2269,8 @@
           "type": "number",
           "example": "19/20"
         },
-        "rating": {
-          "$ref": "#/definitions/RatingObj"
+        "ratings": {
+          "$ref": "#/definitions/ReviewRatingArray"
         }
       }
     },

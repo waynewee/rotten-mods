@@ -39,10 +39,12 @@ export async function findByInfo(ratingInfo: any){
 
 
   const rating = await Rating.findOne({
-    sub,
-    subId,
-    type,
-    userId
+    $and: [
+      { sub },
+      { subId },
+      { type },
+      { userId }
+    ]
   })
 
   if(!rating){
@@ -52,6 +54,43 @@ export async function findByInfo(ratingInfo: any){
   return rating
 
 }
+
+export async function updateByInfo(ratingInfo: any){
+
+  const {
+    sub,
+    subId,
+    type,
+    userId
+  } = ratingInfo
+
+  const existingRating = await Rating.findOne({
+    $and: [
+      { sub },
+      { subId },
+      { type },
+      { userId }
+    ]
+   })
+
+  if( !existingRating){
+    throw new ObjectNotFoundError('Rating')
+  }
+
+  const updatedRatingInfo = {
+    ...existingRating._doc,
+    ...ratingInfo
+  }
+
+  const rating = await makeRating(updatedRatingInfo)
+
+  const result = await Rating.updateOne({_id: existingRating._id }, rating)
+
+  await notifyOfUpdate(existingRating.value, updatedRatingInfo)
+
+  return result
+}
+
 
 export async function update(id: string, ratingInfo: any){
   const existingRating = await Rating.findOne({ _id: id })

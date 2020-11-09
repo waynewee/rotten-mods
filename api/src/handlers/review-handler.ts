@@ -50,9 +50,12 @@ export async function update(id: string, reviewInfo: any){
 
   const result = await Review.updateOne({_id: id}, review)
 
-  const ratingInfo = createRatingInfo(review)
+  const ratings = getRatingsInfoFromReview(review)
 
-  await RatingHandler.update(review.ratingId, ratingInfo)
+  for( let i = 0; i < ratings.length; i++ ){
+    await RatingHandler.updateByInfo(ratings[i])
+  }
+
 
   return result
 }
@@ -62,11 +65,18 @@ export async function create(reviewInfo: any){
   const review = await makeReview(reviewInfo)
   const newReview = new Review(review)
   
-  const ratingInfo = createRatingInfo(review)
+  const ratings = getRatingsInfoFromReview(review)
 
-  const rating = await RatingHandler.create(ratingInfo)
+  const ratingIds = []
+
+  for( let i = 0; i < ratings.length; i++ ){
+    
+    const rating = await RatingHandler.create(ratings[i])
+    ratingIds.push(rating._id.toString())
+  }
+
   
-  newReview.ratingId = rating._id
+  newReview.ratingIds = ratingIds
 
   return newReview.save()
 
@@ -80,35 +90,45 @@ export async function remove(id: string){
     throw new ObjectNotFoundError("Review")
   }
 
-  const { ratingId } = review
-
+  
   const result = await Review.deleteOne({_id: id})
+  
+  const { ratingIds } = review
 
-  await RatingHandler.remove(ratingId)
+  for( let i = 0; i < ratingIds.length; i++ ){
+    await RatingHandler.remove(ratingIds[i])
+  }
+  
 
   return result 
 }
 
-function createRatingInfo(reviewInfo: any){
+function getRatingsInfoFromReview(reviewInfo: any){
 
   const { 
     userId,
     modId
   } = reviewInfo
 
-  const {
-    type,
-    value
-  } = reviewInfo.rating
-
   const sub = "mod"
+  const subId = modId
 
-  return {
-    userId,
-    sub,
-    subId: modId,
-    type,
-    value
-  }
+  const ratings = reviewInfo.ratings
+
+  const ratingsInfo = ratings.map( (rating: any) => {
+
+    const { type, value } = rating
+
+    return ({
+      userId, 
+      type,
+      value,
+      sub,
+      subId,
+    })
+    
+  })
+
+  return ratingsInfo
 
 }
