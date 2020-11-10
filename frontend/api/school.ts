@@ -14,6 +14,18 @@ const searchSchools = async (searchTerm: string) => {
   return response.data;
 };
 
+const addSchool = async (schoolName) => {
+  const response = await axios.post(
+    baseUrl, 
+    {"name" : schoolName},
+    {
+      withCredentials: true
+    }
+  );
+  console.log(response);
+  return response.data;
+};
+
 export default {
-  searchSchools,
+  searchSchools, addSchool
 };

@@ -15,7 +15,7 @@ const logIn = async (email, password) => {
 };
 
 const logOut = async () => {
-  const response = await axios.get(logoutBaseUrl);
+  const response = await axios.post(logoutBaseUrl);
   return response;
 };
 

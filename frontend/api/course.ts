@@ -8,4 +8,15 @@ const getCourse = async (courseId) => {
   return response.data;
 };
 
-export default { getCourse };
+const addCourse = async (courseName) => {
+  const response = await axios.post(
+    baseUrl, 
+    {"name" : courseName},
+    {
+      withCredentials: true
+    }
+  );
+  return response.data;
+};
+
+export default { getCourse, addCourse };

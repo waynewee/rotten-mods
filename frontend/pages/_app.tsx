@@ -14,14 +14,9 @@ import { FETCH_SCHOOLS } from "../redux/constants";
 import Head from "next/head";
 import Modal from "react-modal";
 import NavBar from "../components/Navbar";
-import AddModuleModal from "../components/AddModuleModal";
 
 const ReduxApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   Modal.setAppElement("#body");
-
-  const [isAddModuleModalVisible, setAddModuleModalVisibility] = useState(
-    false
-  );
 
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.user?._id);
@@ -73,12 +68,8 @@ const ReduxApp: React.FC<AppProps> = ({ Component, pageProps }) => {
       </Head>
       <div id="body" style={styles.layout}>
         <div style={styles.container}>
-          <NavBar setAddModuleModalVisibility={setAddModuleModalVisibility} />
+          <NavBar />
           <Component {...pageProps} />
-          <AddModuleModal
-            isModalVisible={isAddModuleModalVisible}
-            setModalVisibility={setAddModuleModalVisibility}
-          />
         </div>
       </div>
     </>

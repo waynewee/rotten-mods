@@ -2,19 +2,27 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { User } from "../types";
-// import authService from "../services/authentication";
 import authUtils from "../utils/authentication";
 
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
-import { reviewBlue } from "../styles/colors";
+import { reviewBlue, codeBlue } from "../styles/colors";
 import CustomButton from "./Button";
+import AddCourseModal from "./AddCourseModal";
+import AddSchoolModal from "./AddSchoolModal";
+import AddModuleModal from "./AddModuleModal";
+
 import { Button, Menu, Dropdown } from "antd";
 import "../styles/antd.less";
 
 const ProfileButton: React.FC = () => {
   const [loginModalVisible, setLoginModalVisible] = useState(false);
   const [signupModalVisible, setSignupModalVisible] = useState(false);
+  const [addCourseModalVisible, setAddCourseModalVisible] = useState(false);
+  const [addSchoolModalVisible, setAddSchoolModalVisible] = useState(false);
+  const [addModuleModalVisible, setModuleModalVisible] = useState(false);
+
+
   const isLoggedIn: boolean = useSelector((state) => state.auth.isLoggedIn);
   const user: User = useSelector((state) => state.auth.user);
 
@@ -43,7 +51,14 @@ const ProfileButton: React.FC = () => {
     });
   };
 
-  const menu = (
+  const logoutUser = () => {
+    authUtils.logOut();
+    router.push({
+      pathname: "/home",
+    });
+  }
+
+  const userMenu = (
     <Menu>
       <Menu.Item key="1">
         <Button type="text" onClick={navigateToProfilePage}>
@@ -51,20 +66,53 @@ const ProfileButton: React.FC = () => {
         </Button>
       </Menu.Item>
       <Menu.Item key="2">
-        <Button type="text" onClick={authUtils.logOut}>
+        <Button type="text" onClick={logoutUser}>
           Log Out
         </Button>
       </Menu.Item>
     </Menu>
   );
 
+  const addMenu = (
+    <Menu>
+      <Menu.Item key="1">
+      <Button type="text" onClick = {() => {setAddCourseModalVisible(true)}}> 
+            Add Course
+          </Button>
+      </Menu.Item>
+      <Menu.Item key="2">
+      <Button type="text" onClick = {() => {setAddSchoolModalVisible(true)}}> 
+            Add School
+          </Button>
+      </Menu.Item>
+      <Menu.Item key="3">
+      <Button type="text" onClick = {() => {setModuleModalVisible(true)}}> 
+            Add Module
+          </Button>
+      </Menu.Item>
+    </Menu>
+  );
+   
+
   return (
     <>
       {isLoggedIn ? (
         <>
-          <Dropdown overlay={menu} placement="bottomCenter">
-            <Button style={styles.container}>{user.fullName}</Button>
+          <Dropdown overlay={addMenu} placement="bottomCenter">
+            <Button style={styles.addModuleButton}>Add</Button>
           </Dropdown>
+          <Dropdown overlay={userMenu} placement="bottomLeft">
+            <Button style={styles.userButton}>{user.fullName}</Button>
+          </Dropdown>
+          
+
+{/* 
+          <Button onClick = {() => {setAddCourseModalVisible(true)}}> 
+            Add Course
+          </Button>
+          <Button onClick = {() => {setAddSchoolModalVisible(true)}}> 
+            Add School
+          </Button> */}
         </>
       ) : (
         <CustomButton style={styles.loginButton} onClick={toggleLoginModal}>
@@ -78,12 +126,15 @@ const ProfileButton: React.FC = () => {
       {signupModalVisible ? (
         <SignupModal toggles={{ toggleSignupModal, switchModals }} />
       ) : null}
+        <AddCourseModal isModalVisible={addCourseModalVisible} setModalVisibility={setAddCourseModalVisible} />
+        <AddSchoolModal isModalVisible={addSchoolModalVisible} setModalVisibility={setAddSchoolModalVisible} />
+        <AddModuleModal isModalVisible={addModuleModalVisible} setModalVisibility={setModuleModalVisible} />
     </>
   );
 };
 
 const styles = {
-  container: {
+  userButton: {
     display: "flex",
     alignItems: "center",
     margin: "0px 10px",
@@ -104,6 +155,15 @@ const styles = {
     margin: "0px 10px",
     padding: 10,
     backgroundColor: reviewBlue,
+    color: "#fff",
+    borderRadius: 8,
+  },
+  addModuleButton: {
+    display: "flex",
+    alignItems: "center",
+    margin: "0px 10px",
+    padding: 20,
+    backgroundColor: codeBlue,
     color: "#fff",
     borderRadius: 8,
   },

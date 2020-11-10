@@ -102,14 +102,14 @@ async function logIn(values) {
 }
 
 async function logOut() {
-  // const response = await authApi.logOut().catch((error) => {
-  //   throw error;
-  // });
+  const response = await authApi.logOut().catch((error) => {
+    throw error;
+  });
 
     window.localStorage.removeItem("ROTTENMODS_EMAIL");
     window.localStorage.removeItem("ROTTENMODS_PASSWORD");
 
-    message.success("Successfully Logged Out");
+    message.success("Successfully Logged Out!");
 
     store.dispatch({
       type: LOG_USER_OUT,

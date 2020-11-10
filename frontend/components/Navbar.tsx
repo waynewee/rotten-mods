@@ -14,11 +14,7 @@ import Button from "./Button";
 
 const { Search } = Input;
 
-interface NavBarProps {
-  setAddModuleModalVisibility: Dispatch<SetStateAction<boolean>>;
-}
-
-const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
+const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -39,13 +35,6 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
     });
   };
 
-  const toggleAddModModalVisibility = () => {
-    if (!isLoggedIn) {
-      triggerRequireLoginMessage();
-    } else {
-      setAddModuleModalVisibility(true);
-    }
-  };
 
   return (
     <div style={styles.container}>
@@ -72,12 +61,7 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
             <DownOutlined />
           </div>
         </Dropdown>
-        <Button
-          style={styles.addModuleButton}
-          onClick={toggleAddModModalVisibility}
-        >
-          Add Module
-        </Button>
+
         <ProfileButton />
       </div>
     </div>

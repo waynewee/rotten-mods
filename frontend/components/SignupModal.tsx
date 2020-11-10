@@ -101,33 +101,33 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
     setCourseName(event.target.value);
   };
 
-  const addUniversityItem = () => {
-    setSchoolName("");
-    if (
-      newSchoolName.trim() !== "" &&
-      !inputUniversityValues.some((e) => e.schoolName === newSchoolName)
-    ) {
-      console.log("adduniItem");
-      setUniversityInputValues([
-        ...inputUniversityValues,
-        { schoolId: "userCreated", schoolName: newSchoolName },
-      ]);
-    }
-  };
+  // const addUniversityItem = () => {
+  //   setSchoolName("");
+  //   if (
+  //     newSchoolName.trim() !== "" &&
+  //     !inputUniversityValues.some((e) => e.schoolName === newSchoolName)
+  //   ) {
+  //     console.log("adduniItem");
+  //     setUniversityInputValues([
+  //       ...inputUniversityValues,
+  //       { schoolId: "userCreated", schoolName: newSchoolName },
+  //     ]);
+  //   }
+  // };
 
-  const addCourseItem = () => {
-    console.log("adduniItem");
-    setCourseName("");
-    if (
-      newCourseName.trim() !== "" &&
-      !inputCourses.some((e) => e.courseName === newCourseName)
-    ) {
-      setInputCourses([
-        ...inputCourses,
-        { courseId: "userCreated", courseName: newCourseName },
-      ]);
-    }
-  };
+  // const addCourseItem = () => {
+  //   console.log("adduniItem");
+  //   setCourseName("");
+  //   if (
+  //     newCourseName.trim() !== "" &&
+  //     !inputCourses.some((e) => e.courseName === newCourseName)
+  //   ) {
+  //     setInputCourses([
+  //       ...inputCourses,
+  //       { courseId: "userCreated", courseName: newCourseName },
+  //     ]);
+  //   }
+  // };
 
   const validateEmail = (email: string): boolean => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$/;
@@ -135,51 +135,51 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
     return regex.test(email);
   };
 
-  function renderAddition(addition) {
-    if (addition == "university") {
-      return (
-        <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
-          <Input
-            style={{ flex: "auto" }}
-            value={newSchoolName}
-            onChange={onUniversityChange}
-          />
-          <a
-            style={{
-              flex: "none",
-              padding: "8px",
-              display: "block",
-              cursor: "pointer",
-            }}
-            onClick={addUniversityItem}
-          >
-            ADD
-          </a>
-        </div>
-      );
-    } else {
-      return (
-        <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
-          <Input
-            style={{ flex: "auto" }}
-            value={newCourseName}
-            onChange={onCourseChange}
-          />
-          <a
-            style={{
-              flex: "none",
-              padding: "8px",
-              display: "block",
-              cursor: "pointer",
-            }}
-            onClick={addCourseItem}
-          >
-            ADD
-          </a>
-        </div>
-      );
-    }
-  }
+  // function renderAddition(addition) {
+  //   if (addition == "university") {
+  //     return (
+  //       <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
+  //         <Input
+  //           style={{ flex: "auto" }}
+  //           value={newSchoolName}
+  //           onChange={onUniversityChange}
+  //         />
+  //         <a
+  //           style={{
+  //             flex: "none",
+  //             padding: "8px",
+  //             display: "block",
+  //             cursor: "pointer",
+  //           }}
+  //           onClick={addUniversityItem}
+  //         >
+  //           ADD
+  //         </a>
+  //       </div>
+  //     );
+  //   } else {
+  //     return (
+  //       <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
+  //         <Input
+  //           style={{ flex: "auto" }}
+  //           value={newCourseName}
+  //           onChange={onCourseChange}
+  //         />
+  //         <a
+  //           style={{
+  //             flex: "none",
+  //             padding: "8px",
+  //             display: "block",
+  //             cursor: "pointer",
+  //           }}
+  //           onClick={addCourseItem}
+  //         >
+  //           ADD
+  //         </a>
+  //       </div>
+  //     );
+  //   }
+  // }
 
   return (
     <>
@@ -272,8 +272,8 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
               dropdownRender={(menu) => (
                 <>
                   {menu}
-                  <Divider style={{ margin: "4px 0" }} />
-                  {renderAddition("university")}
+                  {/* <Divider style={{ margin: "4px 0" }} />
+                  {renderAddition("university")} */}
                 </>
               )}
             >
@@ -302,8 +302,8 @@ const SignupModal: React.FC<SignupModalProps> = (toggles) => {
               dropdownRender={(menu) => (
                 <>
                   {menu}
-                  <Divider style={{ margin: "4px 0" }} />
-                  {renderAddition("course")}
+                  {/* <Divider style={{ margin: "4px 0" }} />
+                  {renderAddition("course")} */}
                 </>
               )}
             >
