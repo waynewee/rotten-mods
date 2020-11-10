@@ -11,6 +11,7 @@ import { DownOutlined } from "@ant-design/icons";
 import { codeBlue } from "../styles/colors";
 import ProfileButton from "./ProfileButton";
 import Button from "./Button";
+import {fetchSchoolAction} from "../redux/actions/search";
 
 const { Search } = Input;
 
@@ -28,7 +29,7 @@ const Navbar: React.FC = () => {
   );
 
   const submitSearch = (searchTerm) => {
-    dispatch({ type: SEARCH_TERM, payload: searchTerm });
+    dispatch(fetchSchoolAction(searchTerm));
     router.push({
       pathname: "/search",
       query: { s: searchTerm },

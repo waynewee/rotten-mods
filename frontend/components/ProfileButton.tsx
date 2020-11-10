@@ -29,8 +29,10 @@ const ProfileButton: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    isLoggedIn ? setLoginModalVisible(false) : null;
-  });
+    if (isLoggedIn) {
+      setLoginModalVisible(false);
+    }
+  }),[isLoggedIn];
 
   const toggleLoginModal = () => {
     setLoginModalVisible(!loginModalVisible);

@@ -1,3 +1,4 @@
+import { logInAction, logOutAction } from './../redux/actions/auth';
 import axios from "axios";
 import { LOG_USER_IN, LOG_USER_OUT } from "../redux/constants";
 import { User } from "../types";
@@ -94,10 +95,7 @@ async function logIn(values) {
     window.localStorage.setItem("ROTTENMODS_EMAIL", emailaddress);
     window.localStorage.setItem("ROTTENMODS_PASSWORD", password);
 
-    store.dispatch({
-      type: LOG_USER_IN,
-      payload: user,
-    });
+    store.dispatch(logInAction(user));
   }
 }
 
@@ -111,9 +109,7 @@ async function logOut() {
 
     message.success("Successfully Logged Out!");
 
-    store.dispatch({
-      type: LOG_USER_OUT,
-    });
+    store.dispatch(logOutAction());
 
   
 

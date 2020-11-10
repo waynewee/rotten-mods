@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { Module } from "../types";
 import { ADD_MODULE_FOR_COMPARISON } from "../redux/constants";
+import { addModuleAction } from  "../redux/actions/compare";
+
 
 import StarFilledIcon from "../icons/StarFilledIcon";
 import { codeBlue, compareOrange, ratingsYellow, descriptionGreen } from "../styles/colors";
@@ -25,13 +27,9 @@ const HomeModuleListCard: React.FC<HomeModuleListCardProps> = ({ module }) => {
   }
 
   const onCompare = () => {
-    dispatch({
-      type: ADD_MODULE_FOR_COMPARISON,
-      payload: {
-        id: _id,
-        code
-      }
-    })
+    dispatch(
+      addModuleAction(_id, code)
+    )
   }
 
   return (

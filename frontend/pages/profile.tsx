@@ -21,7 +21,7 @@ const Profile: React.FC = () => {
   const user = useSelector((state)=>state.auth.user);
   useEffect(() => {
     fetchRecommendedModules();
-  }, [userId]);
+  });
 
   const fetchRecommendedModules = async () => {
     try {
