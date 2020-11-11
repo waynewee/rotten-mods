@@ -15,7 +15,7 @@ function populateMods(){
           title: mod.ModuleTitle,
           acadYear: "19/20",
           semester: mod.Semesters,
-          description: mod.description,
+          description: mod.Description,
           credit: mod.Credit,
           workload: mod.Workload
         })
