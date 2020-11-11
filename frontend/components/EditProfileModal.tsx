@@ -109,7 +109,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   return (
     <Modal
       visible={true}
-      title={<div style={{ textAlign: "center" }}> SIGNUP </div>}
+      title={<div style={{ textAlign: "center" }}> EDIT PROFILE </div>}
       centered
       onCancel={toggleEditProfileModal}
       footer={null}
