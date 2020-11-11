@@ -23,9 +23,6 @@ const signUp = async (
   name,
   email,
   password,
-  schoolId,
-  courseId,
-  currentYear
 ) => {
   const response = await axios.post(
     userBaseUrl,
@@ -33,9 +30,6 @@ const signUp = async (
       name,
       email,
       password,
-      schoolId,
-      courseId,
-      currentYear,
     },
     {
       withCredentials: true,

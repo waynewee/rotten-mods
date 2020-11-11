@@ -64,9 +64,6 @@ async function signUp(values) {
         fullname,
         emailaddress,
         userpassword,
-        university,
-        course,
-        yearofstudy
       )
       .catch((error) => {
         throw error;
@@ -84,11 +81,15 @@ async function logIn(values) {
   });
   if (data) {
     const { name, currentYear, courseId, _id } = data;
-    const courseData = await courseApi.getCourse(courseId);
+    let courseData = null;
+    if (courseId) {
+      courseData = await courseApi.getCourse(courseId);
+    } 
+    
     const user: User = {
       fullName: name,
-      yearOfStudy: currentYear,
-      studyCourse: courseData.name,
+      yearOfStudy: currentYear ? currentYear : null,
+      studyCourse: courseData ? courseData.name : null,
       _id,
     };
 

@@ -1375,14 +1375,11 @@ const logOut = async () => {
   return response;
 };
 
-const signUp = async (name, email, password, schoolId, courseId, currentYear) => {
+const signUp = async (name, email, password) => {
   const response = await external_axios_default.a.post(userBaseUrl, {
     name,
     email,
-    password,
-    schoolId,
-    courseId,
-    currentYear
+    password
   }, {
     withCredentials: true
   });
@@ -1473,7 +1470,7 @@ async function authentication_signUp(values) {
   // if schoolId is user created, then create a new school in the system
 
   if (course !== "userCreated" && university !== "userCreated") {
-    const data = await auth.signUp(fullname, emailaddress, userpassword, university, course, yearofstudy).catch(error => {
+    const data = await auth.signUp(fullname, emailaddress, userpassword).catch(error => {
       throw error;
     });
 
@@ -1499,11 +1496,16 @@ async function authentication_logIn(values) {
       courseId,
       _id
     } = data;
-    const courseData = await api_course.getCourse(courseId);
+    let courseData = null;
+
+    if (courseId) {
+      courseData = await api_course.getCourse(courseId);
+    }
+
     const user = {
       fullName: name,
-      yearOfStudy: currentYear,
-      studyCourse: courseData.name,
+      yearOfStudy: currentYear ? currentYear : null,
+      studyCourse: courseData ? courseData.name : null,
       _id
     };
     window.localStorage.setItem("ROTTENMODS_EMAIL", emailaddress);
@@ -1788,52 +1790,7 @@ const SignupModal = toggles => {
   const validateEmail = email => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$/;
     return regex.test(email);
-  }; // function renderAddition(addition) {
-  //   if (addition == "university") {
-  //     return (
-  //       <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
-  //         <Input
-  //           style={{ flex: "auto" }}
-  //           value={newSchoolName}
-  //           onChange={onUniversityChange}
-  //         />
-  //         <a
-  //           style={{
-  //             flex: "none",
-  //             padding: "8px",
-  //             display: "block",
-  //             cursor: "pointer",
-  //           }}
-  //           onClick={addUniversityItem}
-  //         >
-  //           ADD
-  //         </a>
-  //       </div>
-  //     );
-  //   } else {
-  //     return (
-  //       <div style={{ display: "flex", flexWrap: "nowrap", padding: 8 }}>
-  //         <Input
-  //           style={{ flex: "auto" }}
-  //           value={newCourseName}
-  //           onChange={onCourseChange}
-  //         />
-  //         <a
-  //           style={{
-  //             flex: "none",
-  //             padding: "8px",
-  //             display: "block",
-  //             cursor: "pointer",
-  //           }}
-  //           onClick={addCourseItem}
-  //         >
-  //           ADD
-  //         </a>
-  //       </div>
-  //     );
-  //   }
-  // }
-
+  };
 
   return SignupModal_jsx(external_react_default.a.Fragment, null, SignupModal_jsx(external_antd_["Modal"], {
     visible: true,
@@ -1886,60 +1843,7 @@ const SignupModal = toggles => {
     prefix: SignupModal_jsx(icons_["LockOutlined"], null),
     type: "password",
     placeholder: "Password"
-  })), SignupModal_jsx(external_antd_["Form"].Item, {
-    style: {
-      marginBottom: 0
-    }
-  }, SignupModal_jsx(external_antd_["Form"].Item, {
-    name: "yearofstudy",
-    rules: [{
-      required: true,
-      message: "Please enter your Year of Study!"
-    }, {
-      validator: (_, value) => {
-        if (value < 1 || value > 8) {
-          return Promise.reject("Your Year of Study should only be between 1 to 8");
-        } else {
-          return Promise.resolve();
-        }
-      }
-    }]
-  }, SignupModal_jsx(external_antd_["Input"], {
-    type: "number",
-    prefix: SignupModal_jsx(icons_["CalendarOutlined"], null),
-    placeholder: "Year Of Study"
-  }))), SignupModal_jsx(external_antd_["Form"].Item, {
-    name: "university",
-    rules: [{
-      required: true,
-      message: "Please enter your University!"
-    }]
-  }, SignupModal_jsx(external_antd_["Select"], {
-    style: {
-      width: "100%"
-    },
-    placeholder: "University",
-    dropdownRender: menu => SignupModal_jsx(external_react_default.a.Fragment, null, menu)
-  }, inputUniversityValues.map(item => SignupModal_jsx(external_antd_["Select"].Option, {
-    key: item.schoolName,
-    value: item.schoolId
-  }, item.schoolName)))), SignupModal_jsx(external_antd_["Form"].Item, {
-    name: "course",
-    rules: [{
-      required: true,
-      message: "Please enter the name of the course you are enrolled in!"
-    }]
-  }, SignupModal_jsx(external_antd_["Select"], {
-    style: {
-      width: "100%"
-    },
-    placeholder: "Course Of Study",
-    value: "Default",
-    dropdownRender: menu => SignupModal_jsx(external_react_default.a.Fragment, null, menu)
-  }, inputCourses.map(item => SignupModal_jsx(external_antd_["Select"].Option, {
-    key: item.courseName,
-    value: item.courseId
-  }, item.courseName)))), SignupModal_jsx(external_antd_["Form"].Item, null, SignupModal_jsx(external_antd_["Button"], {
+  })), SignupModal_jsx(external_antd_["Form"].Item, null, SignupModal_jsx(external_antd_["Button"], {
     type: "primary",
     htmlType: "submit",
     style: SignupModal_styles.loginFormButton

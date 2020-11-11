@@ -10,19 +10,23 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
-  const { fullName, studyCourse, yearOfStudy } = user;
+  // const { fullName, studyCourse, yearOfStudy } = user;
 
   return (
-    fullName.length == 0 
+    user.fullName.length == 0 
       ? <div style={styles.userInfoContainer}> 
           <div style={styles.fullName}> Please Log In First</div>
         </div>
 
       :
          <div style={styles.userInfoContainer}> 
-          <div style={styles.fullName}> {fullName}</div>
-          <div style={styles.study}> Year {yearOfStudy} Student </div>
-          <div style={styles.study}> {studyCourse}</div>
+          <div style={styles.fullName}> {user.fullName}</div>
+          {user.yearOfStudy 
+            ? <div style={styles.study}> Year {user.yearOfStudy} Student </div>
+            : null}
+          {user.studyCourse
+            ? <div style={styles.study}> {user.studyCourse}</div>
+            : null}
         </div>  
   );
 };
