@@ -1130,11 +1130,14 @@ const AddReviewModal = ({
     };
 
     if (reviewByUser) {
-      await review["a" /* default */].updateReviewOfModule(requestBody, reviewByUser._id); // update ratings
+      await review["a" /* default */].updateReviewOfModule(requestBody, reviewByUser._id);
+      updateReviews(); // update ratings
     } else {
-      await review["a" /* default */].addReviewOfModule(requestBody); // add ratings
-      // await reviewApi.addRating(difficulty, "difficulty", userId, modId, "mod", );
-      // await reviewApi.addRating(ratings, "star", userId, modId, "mod", );
+      if (ratingsByUser) {
+        await review["a" /* default */].deleteRating(ratingsByUser._id);
+      }
+
+      await review["a" /* default */].addReviewOfModule(requestBody);
     }
 
     setModalVisibility(false);
@@ -1922,6 +1925,10 @@ const ModuleReviewPage = ({
     0: ratingsByUser,
     1: setRatingsByUser
   } = Object(external_react_["useState"])(null);
+  const {
+    0: currentSort,
+    1: setCurrentSort
+  } = Object(external_react_["useState"])("new");
   const userId = Object(external_react_redux_["useSelector"])(state => {
     var _state$auth$user;
 
@@ -1935,6 +1942,15 @@ const ModuleReviewPage = ({
 
   const updateReviews = async () => {
     const newReviews = await review["a" /* default */].getReviewsOfModule(module._id);
+
+    if (currentSort === "new") {
+      newReviews.sort(compareNewest);
+    } else if (currentSort === "old") {
+      newReviews.sort(compareOldest);
+    } else if (currentSort === "likes") {
+      newReviews.sort(compareLikes);
+    }
+
     setReviewsList(newReviews);
   };
 
@@ -1967,7 +1983,8 @@ const ModuleReviewPage = ({
     return secondReviewLikes - firstReviewLikes;
   };
 
-  const sortReviews = compareFunction => {
+  const sortReviews = (compareFunction, sortType) => {
+    setCurrentSort(sortType);
     const cloneReviews = reviewsList.concat([]);
     cloneReviews.sort(compareFunction);
     setReviewsList(cloneReviews);
@@ -1980,11 +1997,11 @@ const ModuleReviewPage = ({
   };
 
   const menu = module_review_jsx(external_antd_["Menu"], null, module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareNewest)
+    onClick: () => sortReviews(compareNewest, "new")
   }, "Newest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareOldest)
+    onClick: () => sortReviews(compareOldest, "old")
   }, "Oldest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareLikes)
+    onClick: () => sortReviews(compareLikes, "likes")
   }, "Most Likes")));
 
   const renderPage = () => {
@@ -2209,6 +2226,12 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   return response.data;
 };
 
+const deleteRating = async id => {
+  await axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete(`${ratingBaseUrl}/${id}`, {
+    withCredentials: true
+  });
+};
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   getReviewsOfModule,
   getReviewsOfUser,
@@ -2217,7 +2240,8 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   getRatingById,
   getRating,
   updateRating,
-  updateReviewOfModule
+  updateReviewOfModule,
+  deleteRating
 });
 
 /***/ }),
@@ -2951,6 +2975,7 @@ const ReviewCard = ({
 }) => {
   var _reaction$like$count, _reaction$like;
 
+  console.log("review", review);
   const {
     0: isCommentsModalVisible,
     1: setCommentsModalVisibility
@@ -2993,10 +3018,12 @@ const ReviewCard = ({
   const name = user === null || user === void 0 ? void 0 : user.name;
   const like = (_reaction$like$count = reaction === null || reaction === void 0 ? void 0 : (_reaction$like = reaction.like) === null || _reaction$like === void 0 ? void 0 : _reaction$like.count) !== null && _reaction$like$count !== void 0 ? _reaction$like$count : 0;
   Object(external_react_["useEffect"])(() => {
-    Object(helpers["a" /* fetchRatings */])(ratingIds, setStar, setDifficulty);
     fetchComments();
     checkIsLikedByUser();
   }, []);
+  Object(external_react_["useEffect"])(() => {
+    Object(helpers["a" /* fetchRatings */])(ratingIds, setStar, setDifficulty);
+  }, [ratingIds]);
 
   const fetchComments = async () => {
     const fetchedComments = await api_comment.getCommentsOfReview(_id);

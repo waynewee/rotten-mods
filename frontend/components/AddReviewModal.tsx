@@ -91,12 +91,14 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
 
     if (reviewByUser) {
       await reviewApi.updateReviewOfModule(requestBody, reviewByUser._id);
+      updateReviews();
       // update ratings
     } else {
+      if (ratingsByUser) {
+        await reviewApi.deleteRating(ratingsByUser._id);
+      }
+
       await reviewApi.addReviewOfModule(requestBody);
-      // add ratings
-      // await reviewApi.addRating(difficulty, "difficulty", userId, modId, "mod", );
-      // await reviewApi.addRating(ratings, "star", userId, modId, "mod", );
     }
 
     setModalVisibility(false);

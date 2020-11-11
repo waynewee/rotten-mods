@@ -3693,6 +3693,12 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   return response.data;
 };
 
+const deleteRating = async id => {
+  await axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete(`${ratingBaseUrl}/${id}`, {
+    withCredentials: true
+  });
+};
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   getReviewsOfModule,
   getReviewsOfUser,
@@ -3701,7 +3707,8 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   getRatingById,
   getRating,
   updateRating,
-  updateReviewOfModule
+  updateReviewOfModule,
+  deleteRating
 });
 
 /***/ }),
