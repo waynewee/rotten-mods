@@ -11,17 +11,13 @@ import { DownOutlined } from "@ant-design/icons";
 import { codeBlue } from "../styles/colors";
 import ProfileButton from "./ProfileButton";
 import Button from "./Button";
+import {fetchSchoolAction} from "../redux/actions/search";
 
 const { Search } = Input;
 
-interface NavBarProps {
-  setAddModuleModalVisibility: Dispatch<SetStateAction<boolean>>;
-}
-
-const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
+const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const menu = (
     <Menu>
@@ -32,20 +28,13 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
   );
 
   const submitSearch = (searchTerm) => {
-    dispatch({ type: SEARCH_TERM, payload: searchTerm });
+    dispatch(fetchSchoolAction(searchTerm));
     router.push({
       pathname: "/search",
       query: { s: searchTerm },
     });
   };
 
-  const toggleAddModModalVisibility = () => {
-    if (!isLoggedIn) {
-      triggerRequireLoginMessage();
-    } else {
-      setAddModuleModalVisibility(true);
-    }
-  };
 
   return (
     <div style={styles.container}>
@@ -72,12 +61,7 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
             <DownOutlined />
           </div>
         </Dropdown>
-        <Button
-          style={styles.addModuleButton}
-          onClick={toggleAddModModalVisibility}
-        >
-          Add Module
-        </Button>
+
         <ProfileButton />
       </div>
     </div>

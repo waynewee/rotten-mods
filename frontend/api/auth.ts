@@ -15,7 +15,7 @@ const logIn = async (email, password) => {
 };
 
 const logOut = async () => {
-  const response = await axios.get(logoutBaseUrl);
+  const response = await axios.post(logoutBaseUrl);
   return response;
 };
 
@@ -23,9 +23,6 @@ const signUp = async (
   name,
   email,
   password,
-  schoolId,
-  courseId,
-  currentYear
 ) => {
   const response = await axios.post(
     userBaseUrl,
@@ -33,9 +30,6 @@ const signUp = async (
       name,
       email,
       password,
-      schoolId,
-      courseId,
-      currentYear,
     },
     {
       withCredentials: true,
