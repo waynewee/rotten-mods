@@ -47,12 +47,15 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   } = review;
   const name = user?.name;
   const like = reaction?.like?.count ?? 0;
-  
+
   useEffect(() => {
-    fetchRatings(ratingIds, setStar, setDifficulty);
     fetchComments();
     checkIsLikedByUser();
   }, []);
+
+  useEffect(() => {
+    fetchRatings(ratingIds, setStar, setDifficulty);
+  }, [ratingIds]);
 
   const fetchComments = async () => {
     const fetchedComments = await commentApi.getCommentsOfReview(_id);

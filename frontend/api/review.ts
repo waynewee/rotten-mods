@@ -116,6 +116,10 @@ const updateRating = async (
   return response.data;
 };
 
+const deleteRating = async (id: string) => {
+  await axios.delete(`${ratingBaseUrl}/${id}`, { withCredentials: true });
+}
+
 export default {
   getReviewsOfModule,
   getReviewsOfUser,
@@ -125,4 +129,5 @@ export default {
   getRating,
   updateRating,
   updateReviewOfModule,
+  deleteRating
 };

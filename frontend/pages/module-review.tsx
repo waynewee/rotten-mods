@@ -40,6 +40,8 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
     false
   );
   const [ratingsByUser, setRatingsByUser] = useState(null);
+  const [currentSort, setCurrentSort] = useState("new");
+
   const userId = useSelector((state) => state.auth.user?._id);
   const reviewByUser = reviewsList.find((review) => review.userId === userId);
 
@@ -50,6 +52,13 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
 
   const updateReviews = async () => {
     const newReviews = await reviewApi.getReviewsOfModule(module._id);
+    if (currentSort === "new") {
+      newReviews.sort(compareNewest);
+    } else if (currentSort === "old") {
+      newReviews.sort(compareOldest);
+    } else if (currentSort === "likes") {
+      newReviews.sort(compareLikes);
+    }
     setReviewsList(newReviews);
   };
 
@@ -85,7 +94,8 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
     return secondReviewLikes - firstReviewLikes;
   };
 
-  const sortReviews = (compareFunction) => {
+  const sortReviews = (compareFunction, sortType) => {
+    setCurrentSort(sortType);
     const cloneReviews = reviewsList.concat([]);
     cloneReviews.sort(compareFunction);
     setReviewsList(cloneReviews);
@@ -100,13 +110,13 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button onClick={() => sortReviews(compareNewest)}>Newest</Button>
+        <Button onClick={() => sortReviews(compareNewest, "new")}>Newest</Button>
       </Menu.Item>
       <Menu.Item>
-        <Button onClick={() => sortReviews(compareOldest)}>Oldest</Button>
+        <Button onClick={() => sortReviews(compareOldest, "old")}>Oldest</Button>
       </Menu.Item>
       <Menu.Item>
-        <Button onClick={() => sortReviews(compareLikes)}>Most Likes</Button>
+        <Button onClick={() => sortReviews(compareLikes, "likes")}>Most Likes</Button>
       </Menu.Item>
     </Menu>
   );
