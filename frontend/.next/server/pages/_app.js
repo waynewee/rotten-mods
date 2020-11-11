@@ -855,6 +855,44 @@ module.exports = require("next/dist/next-server/lib/router-context.js");
 
 /***/ }),
 
+/***/ "QlD1":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("zr5I");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("rOcY");
+
+
+const baseUrl = `${_config__WEBPACK_IMPORTED_MODULE_1__[/* serverDomain */ "a"]}/api/course`;
+
+const getCourse = async courseId => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}/${courseId}`);
+  return response.data;
+};
+
+const getAllCourses = async () => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}`);
+  return response.data;
+};
+
+const addCourse = async courseName => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(baseUrl, {
+    "name": courseName
+  }, {
+    withCredentials: true
+  });
+  return response.data;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  getCourse,
+  addCourse,
+  getAllCourses
+});
+
+/***/ }),
+
 /***/ "TqRt":
 /***/ (function(module, exports) {
 
@@ -1299,241 +1337,18 @@ var external_react_redux_ = __webpack_require__("h74D");
 // EXTERNAL MODULE: ./redux/store.ts + 6 modules
 var store = __webpack_require__("iEce");
 
-// EXTERNAL MODULE: ./redux/constants.js
-var constants = __webpack_require__("EHoS");
+// EXTERNAL MODULE: ./utils/authentication.ts + 2 modules
+var authentication = __webpack_require__("nX5i");
 
-// CONCATENATED MODULE: ./redux/actions/auth.ts
-
-const logInAction = user => {
-  return {
-    type: constants["h" /* LOG_USER_IN */],
-    payload: user
-  };
-};
-const logOutAction = () => {
-  return {
-    type: constants["i" /* LOG_USER_OUT */]
-  };
-};
-// EXTERNAL MODULE: external "axios"
-var external_axios_ = __webpack_require__("zr5I");
-var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_);
-
-// EXTERNAL MODULE: ./config/index.js
-var config = __webpack_require__("rOcY");
-
-// CONCATENATED MODULE: ./api/auth.ts
-
-
-const loginBaseUrl = `${config["a" /* serverDomain */]}/api/login`;
-const logoutBaseUrl = `${config["a" /* serverDomain */]}/api/logout`;
-const userBaseUrl = `${config["a" /* serverDomain */]}/api/user`;
-
-const logIn = async (email, password) => {
-  const response = await external_axios_default.a.post(loginBaseUrl, {
-    email,
-    password
-  });
-  return response.data;
-};
-
-const logOut = async () => {
-  const response = await external_axios_default.a.post(logoutBaseUrl);
-  return response;
-};
-
-const signUp = async (name, email, password) => {
-  const response = await external_axios_default.a.post(userBaseUrl, {
-    name,
-    email,
-    password
-  }, {
-    withCredentials: true
-  });
-  return response.data;
-};
-
-/* harmony default export */ var auth = ({
-  logIn,
-  signUp,
-  logOut
-});
-// CONCATENATED MODULE: ./api/course.ts
-
-
-const baseUrl = `${config["a" /* serverDomain */]}/api/course`;
-
-const getCourse = async courseId => {
-  const response = await external_axios_default.a.get(`${baseUrl}/${courseId}`);
-  return response.data;
-};
-
-const addCourse = async courseName => {
-  const response = await external_axios_default.a.post(baseUrl, {
-    "name": courseName
-  }, {
-    withCredentials: true
-  });
-  return response.data;
-};
-
-/* harmony default export */ var api_course = ({
-  getCourse,
-  addCourse
-});
-// EXTERNAL MODULE: external "antd"
-var external_antd_ = __webpack_require__("Exp3");
-
-// CONCATENATED MODULE: ./utils/authentication.ts
-
-
-
-
-
-
-async function authentication_signUp(values) {
-  const {
-    fullname,
-    emailaddress,
-    userpassword,
-    university,
-    course,
-    yearofstudy
-  } = values; // let createUserConfig = {
-  //     method: 'post',
-  //     url: 'http://localhost:8080/api/user',
-  //     headers: {
-  //         'Content-Type': 'application/json'
-  //     },
-  //     data: {
-  //         "name": values.fullname,
-  //         "email": values.emailaddress,
-  //         "password": values.userpassword,
-  //         "schoolId": values.university,
-  //         "courseId": values.course,
-  //         "currentYear": values.yearofstudy
-  //     }
-  // };
-  // let createSchoolConfig = {
-  //     method: 'post',
-  //     url: 'http://localhost:8080/api/school',
-  //     headers: {
-  //         'Content-Type': 'application/json'
-  //     },
-  //     data: {
-  //         "name": values.fullname,
-  //     }
-  // };
-  // let createCourseConfig = {
-  //     method: 'post',
-  //     url: 'http://localhost:8080/api/course',
-  //     headers: {
-  //         'Content-Type': 'application/json'
-  //     },
-  //     data: {
-  //         "name": values.fullname,
-  //     }
-  // };
-  // if schoolId is user created, then create a new school in the system
-
-  if (course !== "userCreated" && university !== "userCreated") {
-    const data = await auth.signUp(fullname, emailaddress, userpassword).catch(error => {
-      throw error;
-    });
-
-    if (data) {
-      console.log("sign up success");
-    }
-  }
-}
-
-async function authentication_logIn(values) {
-  const {
-    emailaddress,
-    password
-  } = values;
-  const data = await auth.logIn(emailaddress, password).catch(error => {
-    throw error;
-  });
-
-  if (data) {
-    const {
-      name,
-      currentYear,
-      courseId,
-      _id
-    } = data;
-    let courseData = null;
-
-    if (courseId) {
-      courseData = await api_course.getCourse(courseId);
-    }
-
-    const user = {
-      fullName: name,
-      yearOfStudy: currentYear ? currentYear : null,
-      studyCourse: courseData ? courseData.name : null,
-      _id
-    };
-    window.localStorage.setItem("ROTTENMODS_EMAIL", emailaddress);
-    window.localStorage.setItem("ROTTENMODS_PASSWORD", password);
-    store["a" /* store */].dispatch(logInAction(user));
-  }
-}
-
-async function authentication_logOut() {
-  const response = await auth.logOut().catch(error => {
-    throw error;
-  });
-  window.localStorage.removeItem("ROTTENMODS_EMAIL");
-  window.localStorage.removeItem("ROTTENMODS_PASSWORD");
-  external_antd_["message"].success("Successfully Logged Out!");
-  store["a" /* store */].dispatch(logOutAction());
-}
-
-;
-/* harmony default export */ var authentication = ({
-  signUp: authentication_signUp,
-  logIn: authentication_logIn,
-  logOut: authentication_logOut
-});
 // EXTERNAL MODULE: ./utils/helpers.ts + 1 modules
 var helpers = __webpack_require__("ye7r");
 
-// EXTERNAL MODULE: external "query-string"
-var external_query_string_ = __webpack_require__("Lc87");
-var external_query_string_default = /*#__PURE__*/__webpack_require__.n(external_query_string_);
+// EXTERNAL MODULE: ./api/school.ts
+var api_school = __webpack_require__("sG7I");
 
-// CONCATENATED MODULE: ./api/school.ts
+// EXTERNAL MODULE: ./redux/constants.js
+var constants = __webpack_require__("EHoS");
 
-
-
-const school_baseUrl = `${config["a" /* serverDomain */]}/api/school`;
-
-const searchSchools = async searchTerm => {
-  const query = external_query_string_default.a.stringify({
-    s: searchTerm,
-    page: 1,
-    limit: 100
-  });
-  const response = await external_axios_default.a.get(`${school_baseUrl}/?${query}`);
-  return response.data;
-};
-
-const addSchool = async schoolName => {
-  const response = await external_axios_default.a.post(school_baseUrl, {
-    "name": schoolName
-  }, {
-    withCredentials: true
-  });
-  console.log(response);
-  return response.data;
-};
-
-/* harmony default export */ var api_school = ({
-  searchSchools,
-  addSchool
-});
 // EXTERNAL MODULE: external "next/head"
 var head_ = __webpack_require__("xnum");
 var head_default = /*#__PURE__*/__webpack_require__.n(head_);
@@ -1552,6 +1367,9 @@ var router_ = __webpack_require__("4Q3z");
 // EXTERNAL MODULE: ./styles/antd.less
 var antd = __webpack_require__("Mzm7");
 
+// EXTERNAL MODULE: external "antd"
+var external_antd_ = __webpack_require__("Exp3");
+
 // EXTERNAL MODULE: ./styles/colors.js
 var colors = __webpack_require__("xwfA");
 
@@ -1568,7 +1386,7 @@ var __jsx = external_react_default.a.createElement;
 
 const LoginModal = toggles => {
   const onFormFinish = loginValues => {
-    authentication.logIn(loginValues).then(() => {
+    authentication["a" /* default */].logIn(loginValues).then(() => {
       external_antd_["message"].success("Successfully Logged in!");
     }).catch(() => {
       external_antd_["message"].error("The email address or password provided is invalid!");
@@ -1629,6 +1447,10 @@ const styles = {
   }
 };
 /* harmony default export */ var components_LoginModal = (LoginModal);
+// EXTERNAL MODULE: external "axios"
+var external_axios_ = __webpack_require__("zr5I");
+var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_);
+
 // CONCATENATED MODULE: ./components/SignupModal.tsx
 
 var SignupModal_jsx = external_react_default.a.createElement;
@@ -1712,7 +1534,7 @@ const SignupModal = toggles => {
   };
 
   const onFormFinish = signUpValues => {
-    authentication.signUp(signUpValues).then(function (response) {
+    authentication["a" /* default */].signUp(signUpValues).then(function (response) {
       external_antd_["message"].success("Successfully Signed Up");
       toggles.toggles.switchModals();
     }).catch(error => {
@@ -1833,6 +1655,9 @@ const SignupModal_styles = {
 // EXTERNAL MODULE: ./components/Button.tsx
 var Button = __webpack_require__("xQut");
 
+// EXTERNAL MODULE: ./api/course.ts
+var api_course = __webpack_require__("QlD1");
+
 // EXTERNAL MODULE: ./components/FormModal.tsx
 var FormModal = __webpack_require__("0lvd");
 
@@ -1859,7 +1684,7 @@ const AddCourseModal = ({
   } = Object(external_react_["useState"])("");
 
   const onSubmit = () => {
-    api_course.addCourse(course);
+    api_course["a" /* default */].addCourse(course);
     external_antd_["message"].success(`The course ${course} has been added successfully!`);
   };
 
@@ -1905,7 +1730,7 @@ const AddSchoolModal = ({
   } = Object(external_react_["useState"])("");
 
   const onSubmit = () => {
-    api_school.addSchool(school);
+    api_school["a" /* default */].addSchool(school);
     external_antd_["message"].success(`The school ${school} has been added successfully!`);
   };
 
@@ -2173,7 +1998,7 @@ const ProfileButton = () => {
   };
 
   const logoutUser = () => {
-    authentication.logOut();
+    authentication["a" /* default */].logOut();
     router.push({
       pathname: "/home"
     });
@@ -2432,7 +2257,7 @@ const ReduxApp = ({
     const password = window.localStorage.getItem("ROTTENMODS_PASSWORD");
 
     if (email && password) {
-      authentication.logIn({
+      authentication["a" /* default */].logIn({
         emailaddress: email,
         password
       });
@@ -2444,7 +2269,7 @@ const ReduxApp = ({
 
 
   const fetchAllSchools = async () => {
-    const schools = await api_school.searchSchools("");
+    const schools = await api_school["a" /* default */].searchSchools("");
     dispatch({
       type: constants["f" /* FETCH_SCHOOLS */],
       payload: schools
@@ -3578,7 +3403,10 @@ const initialState = {
     _id: "",
     fullName: "",
     yearOfStudy: 1,
-    studyCourse: ""
+    courseName: "",
+    password: "",
+    email: "",
+    schoolName: ""
   }
 };
 
@@ -4039,6 +3867,208 @@ function makePublicRouterInstance(router) {
 
 /***/ }),
 
+/***/ "nX5i":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./redux/constants.js
+var constants = __webpack_require__("EHoS");
+
+// CONCATENATED MODULE: ./redux/actions/auth.ts
+
+const logInAction = user => {
+  return {
+    type: constants["h" /* LOG_USER_IN */],
+    payload: user
+  };
+};
+const logOutAction = () => {
+  return {
+    type: constants["i" /* LOG_USER_OUT */]
+  };
+};
+// EXTERNAL MODULE: external "axios"
+var external_axios_ = __webpack_require__("zr5I");
+var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_);
+
+// EXTERNAL MODULE: ./config/index.js
+var config = __webpack_require__("rOcY");
+
+// CONCATENATED MODULE: ./api/auth.ts
+
+
+const loginBaseUrl = `${config["a" /* serverDomain */]}/api/login`;
+const logoutBaseUrl = `${config["a" /* serverDomain */]}/api/logout`;
+const userBaseUrl = `${config["a" /* serverDomain */]}/api/user`;
+
+const logIn = async (email, password) => {
+  const response = await external_axios_default.a.post(loginBaseUrl, {
+    email,
+    password
+  });
+  return response.data;
+};
+
+const logOut = async () => {
+  const response = await external_axios_default.a.post(logoutBaseUrl);
+  return response;
+};
+
+const signUp = async (name, email, password) => {
+  const response = await external_axios_default.a.post(userBaseUrl, {
+    name,
+    email,
+    password
+  }, {
+    withCredentials: true
+  });
+  return response.data;
+};
+
+/* harmony default export */ var auth = ({
+  logIn,
+  signUp,
+  logOut
+});
+// EXTERNAL MODULE: ./api/course.ts
+var api_course = __webpack_require__("QlD1");
+
+// EXTERNAL MODULE: ./api/school.ts
+var school = __webpack_require__("sG7I");
+
+// EXTERNAL MODULE: ./redux/store.ts + 6 modules
+var store = __webpack_require__("iEce");
+
+// EXTERNAL MODULE: external "antd"
+var external_antd_ = __webpack_require__("Exp3");
+
+// CONCATENATED MODULE: ./utils/authentication.ts
+
+
+
+
+
+
+
+async function authentication_signUp(values) {
+  const {
+    fullname,
+    emailaddress,
+    userpassword,
+    university,
+    course,
+    yearofstudy
+  } = values; // let createUserConfig = {
+  //     method: 'post',
+  //     url: 'http://localhost:8080/api/user',
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     },
+  //     data: {
+  //         "name": values.fullname,
+  //         "email": values.emailaddress,
+  //         "password": values.userpassword,
+  //         "schoolId": values.university,
+  //         "courseId": values.course,
+  //         "currentYear": values.yearofstudy
+  //     }
+  // };
+  // let createSchoolConfig = {
+  //     method: 'post',
+  //     url: 'http://localhost:8080/api/school',
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     },
+  //     data: {
+  //         "name": values.fullname,
+  //     }
+  // };
+  // let createCourseConfig = {
+  //     method: 'post',
+  //     url: 'http://localhost:8080/api/course',
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     },
+  //     data: {
+  //         "name": values.fullname,
+  //     }
+  // };
+  // if schoolId is user created, then create a new school in the system
+
+  if (course !== "userCreated" && university !== "userCreated") {
+    const data = await auth.signUp(fullname, emailaddress, userpassword).catch(error => {
+      throw error;
+    });
+
+    if (data) {
+      console.log("sign up success");
+    }
+  }
+}
+
+async function authentication_logIn(values) {
+  const {
+    emailaddress,
+    password
+  } = values;
+  const data = await auth.logIn(emailaddress, password).catch(error => {
+    throw error;
+  });
+
+  if (data) {
+    const {
+      name,
+      currentYear,
+      courseId,
+      _id,
+      schoolId
+    } = data;
+    let courseData = null;
+    let schoolData = null;
+
+    if (courseId) {
+      courseData = await api_course["a" /* default */].getCourse(courseId);
+    }
+
+    if (schoolId) {
+      schoolData = await school["a" /* default */].getSchool(schoolId);
+    }
+
+    const user = {
+      fullName: name,
+      email: emailaddress,
+      password: password,
+      yearOfStudy: currentYear ? currentYear : null,
+      courseName: courseData ? courseData.name : null,
+      schoolName: schoolData ? schoolData.name : null,
+      _id
+    };
+    window.localStorage.setItem("ROTTENMODS_EMAIL", emailaddress);
+    window.localStorage.setItem("ROTTENMODS_PASSWORD", password);
+    store["a" /* store */].dispatch(logInAction(user));
+  }
+}
+
+async function authentication_logOut() {
+  const response = await auth.logOut().catch(error => {
+    throw error;
+  });
+  window.localStorage.removeItem("ROTTENMODS_EMAIL");
+  window.localStorage.removeItem("ROTTENMODS_PASSWORD");
+  external_antd_["message"].success("Successfully Logged Out!");
+  store["a" /* store */].dispatch(logOutAction());
+}
+
+;
+/* harmony default export */ var authentication = __webpack_exports__["a"] = ({
+  signUp: authentication_signUp,
+  logIn: authentication_logIn,
+  logOut: authentication_logOut
+});
+
+/***/ }),
+
 /***/ "nZwT":
 /***/ (function(module, exports) {
 
@@ -4063,6 +4093,59 @@ module.exports = require("redux");
 
 axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.withCredentials = true;
 const serverDomain = false ? undefined : ""; // TODO: add deployed server's domain
+
+/***/ }),
+
+/***/ "sG7I":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("zr5I");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("Lc87");
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(query_string__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("rOcY");
+
+
+
+const baseUrl = `${_config__WEBPACK_IMPORTED_MODULE_2__[/* serverDomain */ "a"]}/api/school`;
+
+const searchSchools = async searchTerm => {
+  const query = query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify({
+    s: searchTerm,
+    page: 1,
+    limit: 100
+  });
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}/?${query}`);
+  return response.data;
+};
+
+const getAllSchools = async () => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}`);
+  return response.data;
+};
+
+const getSchool = async schoolId => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}/${schoolId}`);
+  return response.data;
+};
+
+const addSchool = async schoolName => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(baseUrl, {
+    "name": schoolName
+  }, {
+    withCredentials: true
+  });
+  console.log(response);
+  return response.data;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  searchSchools,
+  addSchool,
+  getSchool,
+  getAllSchools
+});
 
 /***/ }),
 

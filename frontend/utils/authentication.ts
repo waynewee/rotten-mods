@@ -4,6 +4,8 @@ import { LOG_USER_IN, LOG_USER_OUT } from "../redux/constants";
 import { User } from "../types";
 import authApi from "../api/auth";
 import courseApi from "../api/course";
+import schoolApi from "../api/school";
+
 import { store } from "../redux/store";
 
 import { message } from "antd";
@@ -80,16 +82,22 @@ async function logIn(values) {
     throw error;
   });
   if (data) {
-    const { name, currentYear, courseId, _id } = data;
+    const { name, currentYear, courseId, _id, schoolId} = data;
     let courseData = null;
+    let schoolData = null;
     if (courseId) {
       courseData = await courseApi.getCourse(courseId);
-    } 
-    
+    }
+    if (schoolId) {
+      schoolData = await schoolApi.getSchool(schoolId);
+    }     
     const user: User = {
       fullName: name,
+      email: emailaddress,
+      password: password,
       yearOfStudy: currentYear ? currentYear : null,
-      studyCourse: courseData ? courseData.name : null,
+      courseName: courseData ? courseData.name : null,
+      schoolName: schoolData ? schoolData.name : null,
       _id,
     };
 

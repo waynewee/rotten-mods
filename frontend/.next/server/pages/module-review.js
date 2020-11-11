@@ -742,7 +742,10 @@ const initialState = {
     _id: "",
     fullName: "",
     yearOfStudy: 1,
-    studyCourse: ""
+    courseName: "",
+    password: "",
+    email: "",
+    schoolName: ""
   }
 };
 
@@ -1862,7 +1865,7 @@ const ModuleInformation_styles = {
   }
 };
 /* harmony default export */ var components_ModuleInformation = (ModuleInformation);
-// EXTERNAL MODULE: ./components/ReviewList.tsx + 9 modules
+// EXTERNAL MODULE: ./components/ReviewList.tsx + 8 modules
 var ReviewList = __webpack_require__("zmtl");
 
 // EXTERNAL MODULE: ./components/SeeMoreButton.tsx
@@ -2223,6 +2226,40 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
 /***/ (function(module, exports) {
 
 module.exports = require("@ant-design/icons");
+
+/***/ }),
+
+/***/ "ph7Q":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("zr5I");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("rOcY");
+
+
+const baseUrl = `${_config__WEBPACK_IMPORTED_MODULE_1__[/* serverDomain */ "a"]}/api/user`;
+
+const getUser = async userId => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}/${userId}`);
+  return response.data;
+};
+
+const updateUser = async (newUserDetails, userId) => {
+  console.log("the user received is");
+  console.log(newUserDetails);
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(`${baseUrl}/${userId}`, newUserDetails, {
+    withCredentials: true
+  });
+  console.log("the update response");
+  console.log(response);
+  return response.data;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  getUser,
+  updateUser
+});
 
 /***/ }),
 
@@ -2711,19 +2748,9 @@ var Button = __webpack_require__("xQut");
 var styles_module = __webpack_require__("w5JA");
 var styles_module_default = /*#__PURE__*/__webpack_require__.n(styles_module);
 
-// CONCATENATED MODULE: ./api/user.ts
+// EXTERNAL MODULE: ./api/user.ts
+var api_user = __webpack_require__("ph7Q");
 
-
-const user_baseUrl = `${config["a" /* serverDomain */]}/api/user`;
-
-const getUser = async userId => {
-  const response = await external_axios_default.a.get(`${user_baseUrl}/${userId}`);
-  return response.data;
-};
-
-/* harmony default export */ var api_user = ({
-  getUser
-});
 // CONCATENATED MODULE: ./components/CommentCard.tsx
 
 var CommentCard_jsx = external_react_default.a.createElement;
@@ -2743,7 +2770,7 @@ const CommentCard = ({
   }, []);
 
   const getUserName = async () => {
-    const user = await api_user.getUser(comment.userId);
+    const user = await api_user["a" /* default */].getUser(comment.userId);
     setName(user.name);
   };
 

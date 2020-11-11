@@ -8,6 +8,11 @@ const getCourse = async (courseId) => {
   return response.data;
 };
 
+const getAllCourses = async () => {
+  const response = await axios.get(`${baseUrl}`);
+  return response.data;
+};
+
 const addCourse = async (courseName) => {
   const response = await axios.post(
     baseUrl, 
@@ -19,4 +24,4 @@ const addCourse = async (courseName) => {
   return response.data;
 };
 
-export default { getCourse, addCourse };
+export default { getCourse, addCourse, getAllCourses };

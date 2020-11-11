@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { User } from "../types";
 import { useSelector } from "react-redux";
 import recommendationApi from "../api/recommendations";
 import {
@@ -62,7 +61,7 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <ProfileCard user={user} />
+      <ProfileCard/>
       <BookmarkedModuleCard />
       <div style={styles.container}>
         <StudyPlanCard />

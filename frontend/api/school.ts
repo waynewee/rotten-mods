@@ -14,6 +14,16 @@ const searchSchools = async (searchTerm: string) => {
   return response.data;
 };
 
+const getAllSchools = async () => {
+  const response = await axios.get(`${baseUrl}`);
+  return response.data;
+};
+
+const getSchool = async (schoolId) => {
+  const response = await axios.get(`${baseUrl}/${schoolId}`);
+  return response.data;
+};
+
 const addSchool = async (schoolName) => {
   const response = await axios.post(
     baseUrl, 
@@ -27,5 +37,5 @@ const addSchool = async (schoolName) => {
 };
 
 export default {
-  searchSchools, addSchool
+  searchSchools, addSchool, getSchool, getAllSchools
 };

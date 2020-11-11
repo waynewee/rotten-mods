@@ -8,6 +8,19 @@ const getUser = async (userId) => {
   return response.data;
 };
 
+const updateUser = async (newUserDetails , userId) => {
+  console.log("the user received is");
+  console.log(newUserDetails);
+  const response = await axios.put(`${baseUrl}/${userId}`, newUserDetails, {
+    withCredentials: true,
+  });
+  console.log("the update response")
+  console.log(response);
+  return response.data
+}
+
+
+
 export default {
-  getUser,
+  getUser, updateUser
 };
