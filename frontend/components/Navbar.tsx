@@ -19,14 +19,6 @@ const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const menu = (
-    <Menu>
-      <Menu.Item>NUS</Menu.Item>
-      <Menu.Item>NTU</Menu.Item>
-      <Menu.Item>SMU</Menu.Item>
-    </Menu>
-  );
-
   const submitSearch = (searchTerm) => {
     dispatch(fetchSchoolAction(searchTerm));
     router.push({
@@ -53,15 +45,6 @@ const Navbar: React.FC = () => {
       </div>
 
       <div style={styles.actionsContainer}>
-        <Dropdown overlay={menu}>
-          <div style={{ marginRight: 20 }}>
-            <a style={{ color: "#595959", marginRight: 6, fontSize: 18 }}>
-              NUS
-            </a>
-            <DownOutlined />
-          </div>
-        </Dropdown>
-
         <ProfileButton />
       </div>
     </div>

@@ -583,7 +583,6 @@ const FormModalItem = ({
 
   const toggleCheckbox = index => event => {
     const newValue = parseInt(event.target.value) === 0 ? 1 : 0;
-    console.log(newValue, index);
     const isChecked = newValue === 1;
 
     if (index === 1) {
@@ -763,8 +762,7 @@ const FormModalItem = ({
     return __jsx("div", null, __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["AutoComplete"], {
       style: styles.input,
       onSelect: addModule,
-      options: searchOptions // onSearch={onSearch}
-      ,
+      options: searchOptions,
       value: searchTerm,
       onChange: onChange
     }), __jsx("div", {
@@ -775,57 +773,26 @@ const FormModalItem = ({
     }, renderTags()));
   };
 
-  const renderInputType = () => {
-    switch (type) {
-      case "input":
-        return renderInput();
-
-      case "textarea":
-        return renderTextArea();
-
-      case "text":
-        return renderText();
-
-      case "rate":
-        return renderRate();
-
-      case "difficulty":
-        return renderDifficulty();
-
-      case "number":
-        return renderNumber();
-
-      case "year":
-        return renderYear();
-
-      case "semester":
-        return renderSemester();
-
-      case "semesters":
-        return renderSemesters();
-
-      case "annualYear":
-        return renderAnnualYear();
-
-      case "university":
-        return renderUniversity();
-
-      case "autocomplete":
-        return renderAutoComplete();
-
-      case "prereq":
-        return renderPrereq();
-
-      default:
-        return renderInput();
-    }
+  const renderInputType = {
+    "input": renderInput,
+    "textarea": renderTextArea,
+    "text": renderText,
+    "rate": renderRate,
+    "difficulty": renderDifficulty,
+    "number": renderNumber,
+    "year": renderYear,
+    "semester": renderSemester,
+    "semesters": renderSemesters,
+    "annualYear": renderAnnualYear,
+    "university": renderUniversity,
+    "autocomplete": renderAutoComplete,
+    "prereq": renderPrereq
   };
-
   return __jsx("div", {
     style: styles.labelContainer
   }, __jsx("label", {
     style: styles.label
-  }, `${label}:`), renderInputType());
+  }, `${label}:`), renderInputType[type]());
 };
 
 const styles = {
@@ -1585,11 +1552,11 @@ var router_ = __webpack_require__("4Q3z");
 // EXTERNAL MODULE: ./styles/antd.less
 var antd = __webpack_require__("Mzm7");
 
-// EXTERNAL MODULE: external "@ant-design/icons"
-var icons_ = __webpack_require__("nZwT");
-
 // EXTERNAL MODULE: ./styles/colors.js
 var colors = __webpack_require__("xwfA");
+
+// EXTERNAL MODULE: external "@ant-design/icons"
+var icons_ = __webpack_require__("nZwT");
 
 // CONCATENATED MODULE: ./components/LoginModal.tsx
 
@@ -2337,7 +2304,6 @@ var Navbar_jsx = external_react_default.a.createElement;
 
 
 
-
 const {
   Search
 } = external_antd_["Input"];
@@ -2345,8 +2311,6 @@ const {
 const Navbar = () => {
   const dispatch = Object(external_react_redux_["useDispatch"])();
   const router = Object(router_["useRouter"])();
-
-  const menu = Navbar_jsx(external_antd_["Menu"], null, Navbar_jsx(external_antd_["Menu"].Item, null, "NUS"), Navbar_jsx(external_antd_["Menu"].Item, null, "NTU"), Navbar_jsx(external_antd_["Menu"].Item, null, "SMU"));
 
   const submitSearch = searchTerm => {
     dispatch(fetchSchoolAction(searchTerm));
@@ -2376,19 +2340,7 @@ const Navbar = () => {
     style: Navbar_styles.searchBar
   })), Navbar_jsx("div", {
     style: Navbar_styles.actionsContainer
-  }, Navbar_jsx(external_antd_["Dropdown"], {
-    overlay: menu
-  }, Navbar_jsx("div", {
-    style: {
-      marginRight: 20
-    }
-  }, Navbar_jsx("a", {
-    style: {
-      color: "#595959",
-      marginRight: 6,
-      fontSize: 18
-    }
-  }, "NUS"), Navbar_jsx(icons_["DownOutlined"], null))), Navbar_jsx(components_ProfileButton, null)));
+  }, Navbar_jsx(components_ProfileButton, null)));
 };
 
 const Navbar_styles = {
@@ -2466,9 +2418,9 @@ const ReduxApp = ({
 
   Object(external_react_["useEffect"])(() => {
     if (userId) {
-      Object(helpers["b" /* updatePersonalBookmarks */])(userId);
-      Object(helpers["c" /* updatePersonalReviews */])(userId);
-      Object(helpers["d" /* updatedPersonalPlannedModules */])(userId);
+      Object(helpers["c" /* updatePersonalBookmarks */])(userId);
+      Object(helpers["d" /* updatePersonalReviews */])(userId);
+      Object(helpers["e" /* updatedPersonalPlannedModules */])(userId);
     }
   }, [userId]);
   /**
@@ -3884,6 +3836,11 @@ const addRating = async (value, type, userId, subId, sub) => {
   return response.status;
 };
 
+const getRatingById = async id => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${ratingBaseUrl}/${id}`);
+  return response.data;
+};
+
 const getRating = async (subscriberType, subscriberId, userId, ratingType) => {
   const query = query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify({
     sub: subscriberType,
@@ -3913,6 +3870,7 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   getReviewsOfUser,
   addReviewOfModule,
   addRating,
+  getRatingById,
   getRating,
   updateRating,
   updateReviewOfModule
@@ -4307,10 +4265,11 @@ const fetchPlannedMods = async userId => {
 "use strict";
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "b", function() { return /* binding */ updatePersonalBookmarks; });
-__webpack_require__.d(__webpack_exports__, "d", function() { return /* binding */ updatedPersonalPlannedModules; });
-__webpack_require__.d(__webpack_exports__, "c", function() { return /* binding */ updatePersonalReviews; });
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ triggerRequireLoginMessage; });
+__webpack_require__.d(__webpack_exports__, "c", function() { return /* binding */ updatePersonalBookmarks; });
+__webpack_require__.d(__webpack_exports__, "e", function() { return /* binding */ updatedPersonalPlannedModules; });
+__webpack_require__.d(__webpack_exports__, "d", function() { return /* binding */ updatePersonalReviews; });
+__webpack_require__.d(__webpack_exports__, "b", function() { return /* binding */ triggerRequireLoginMessage; });
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ fetchRatings; });
 
 // EXTERNAL MODULE: ./api/bookmark.ts
 var bookmark = __webpack_require__("elgY");
@@ -4374,6 +4333,17 @@ const updatePersonalReviews = async userId => {
 };
 const triggerRequireLoginMessage = () => {
   external_antd_["message"].warning("You need to login first!");
+};
+const fetchRatings = (ratingIds, setStar, setDifficulty) => {
+  ratingIds.forEach(async id => {
+    const rating = await review["a" /* default */].getRatingById(id);
+
+    if (rating.type == "star") {
+      setStar(rating.value);
+    } else if (rating.type == "difficulty") {
+      setDifficulty(rating.value);
+    }
+  });
 };
 
 /***/ }),

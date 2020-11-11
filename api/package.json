@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -p .",
     "watch": "npm run build -- -w",
-    "start": "cross-env NODE_ENV=production node ./dist/src/app.js",
+    "start": "cross-env NODE_ENV=development node ./dist/src/app.js",
     "dev":"cross-env NODE_ENV=development nodemon ./dist/src/app.js --delay 1",
     "populate": "node ./modules/populate/index.js"
   },

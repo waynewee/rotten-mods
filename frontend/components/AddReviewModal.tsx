@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ModalState, Review } from "../types";
 import reviewApi from "../api/review";
+import { fetchRatings } from "../utils/helpers";
 
 import FormModal from "./FormModal";
 import FormModalItem from "./FormModalItem";
@@ -27,16 +28,7 @@ const yearMinusOne = currentAYSecondYear - 1;
 
 const initialReviewState = {
   text: "",
-  rating: {
-    difficulty: {
-      count: 1,
-      value: 3.0,
-    },
-    star: {
-      count: 1,
-      value: 3.0,
-    },
-  },
+  ratingIds: [],
   workload: 10,
   semesterTaken: 1,
   acadYearTaken: `${yearMinusOne}/${currentAYSecondYear}`,
@@ -55,15 +47,20 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
   const initialReview = reviewByUser ?? initialReviewState;
 
   const [text, setText] = useState(initialReview.text);
-  const [difficulty, setDifficulty] = useState(
-    initialReview.rating?.difficulty?.value
-  );
-  const [ratings, setRatings] = useState(initialReview.rating?.star?.value);
+  const [difficulty, setDifficulty] = useState(3);
+  const [ratings, setRatings] = useState(3);
   const [semester, setSemester] = useState(initialReview.semesterTaken);
   const [year, setYear] = useState(initialReview.acadYearTaken);
   const [submitText, setSubmitText] = useState("Submit");
   const [submitColor, setSubmitColor] = useState(submitBlue);
   const userId = useSelector((state) => state.auth.user?._id);
+
+  useEffect(() => {
+    const ratingIds = reviewByUser?.ratingIds;
+    if (ratingIds?.length > 0) {
+      fetchRatings(ratingIds, setRatings, setDifficulty);
+    }
+  }, []);
 
   const onSubmit = async () => {
     if (!validateForm()) {
@@ -80,22 +77,26 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
       acadYearTaken: year as string,
       modId,
       userId,
-      rating: {
-        difficulty: {
-          count: 1,
+      ratings: [
+        {
+          type: "difficulty",
           value: difficulty,
         },
-        star: {
-          count: 1,
+        {
+          type: "star",
           value: ratings,
         },
-      },
+      ],
     };
 
     if (reviewByUser) {
       await reviewApi.updateReviewOfModule(requestBody, reviewByUser._id);
+      // update ratings
     } else {
       await reviewApi.addReviewOfModule(requestBody);
+      // add ratings
+      // await reviewApi.addRating(difficulty, "difficulty", userId, modId, "mod", );
+      // await reviewApi.addRating(ratings, "star", userId, modId, "mod", );
     }
 
     setModalVisibility(false);

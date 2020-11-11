@@ -335,7 +335,6 @@ const FormModalItem = ({
 
   const toggleCheckbox = index => event => {
     const newValue = parseInt(event.target.value) === 0 ? 1 : 0;
-    console.log(newValue, index);
     const isChecked = newValue === 1;
 
     if (index === 1) {
@@ -515,8 +514,7 @@ const FormModalItem = ({
     return __jsx("div", null, __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["AutoComplete"], {
       style: styles.input,
       onSelect: addModule,
-      options: searchOptions // onSearch={onSearch}
-      ,
+      options: searchOptions,
       value: searchTerm,
       onChange: onChange
     }), __jsx("div", {
@@ -527,57 +525,26 @@ const FormModalItem = ({
     }, renderTags()));
   };
 
-  const renderInputType = () => {
-    switch (type) {
-      case "input":
-        return renderInput();
-
-      case "textarea":
-        return renderTextArea();
-
-      case "text":
-        return renderText();
-
-      case "rate":
-        return renderRate();
-
-      case "difficulty":
-        return renderDifficulty();
-
-      case "number":
-        return renderNumber();
-
-      case "year":
-        return renderYear();
-
-      case "semester":
-        return renderSemester();
-
-      case "semesters":
-        return renderSemesters();
-
-      case "annualYear":
-        return renderAnnualYear();
-
-      case "university":
-        return renderUniversity();
-
-      case "autocomplete":
-        return renderAutoComplete();
-
-      case "prereq":
-        return renderPrereq();
-
-      default:
-        return renderInput();
-    }
+  const renderInputType = {
+    "input": renderInput,
+    "textarea": renderTextArea,
+    "text": renderText,
+    "rate": renderRate,
+    "difficulty": renderDifficulty,
+    "number": renderNumber,
+    "year": renderYear,
+    "semester": renderSemester,
+    "semesters": renderSemesters,
+    "annualYear": renderAnnualYear,
+    "university": renderUniversity,
+    "autocomplete": renderAutoComplete,
+    "prereq": renderPrereq
   };
-
   return __jsx("div", {
     style: styles.labelContainer
   }, __jsx("label", {
     style: styles.label
-  }, `${label}:`), renderInputType());
+  }, `${label}:`), renderInputType[type]());
 };
 
 const styles = {
@@ -1047,6 +1014,9 @@ const deleteEvent = async (subscriberType, subscriberId, userId, eventType) => {
   getEvent,
   deleteEvent
 });
+// EXTERNAL MODULE: ./utils/helpers.ts + 1 modules
+var helpers = __webpack_require__("ye7r");
+
 // EXTERNAL MODULE: ./components/FormModal.tsx
 var FormModal = __webpack_require__("0lvd");
 
@@ -1065,6 +1035,7 @@ var __jsx = external_react_default.a.createElement;
 
 
 
+
 const today = new Date();
 const currentYear = today.getFullYear();
 const currentMonth = today.getMonth();
@@ -1075,16 +1046,7 @@ const currentAYSecondYear = currentSemester === 1 ? yearShortform + 1 : yearShor
 const yearMinusOne = currentAYSecondYear - 1;
 const initialReviewState = {
   text: "",
-  rating: {
-    difficulty: {
-      count: 1,
-      value: 3.0
-    },
-    star: {
-      count: 1,
-      value: 3.0
-    }
-  },
+  ratingIds: [],
   workload: 10,
   semesterTaken: 1,
   acadYearTaken: `${yearMinusOne}/${currentAYSecondYear}`
@@ -1100,8 +1062,6 @@ const AddReviewModal = ({
   reviewByUser,
   ratingsByUser
 }) => {
-  var _initialReview$rating, _initialReview$rating2, _initialReview$rating3, _initialReview$rating4;
-
   const initialReview = reviewByUser !== null && reviewByUser !== void 0 ? reviewByUser : initialReviewState;
   const {
     0: text,
@@ -1110,11 +1070,11 @@ const AddReviewModal = ({
   const {
     0: difficulty,
     1: setDifficulty
-  } = Object(external_react_["useState"])((_initialReview$rating = initialReview.rating) === null || _initialReview$rating === void 0 ? void 0 : (_initialReview$rating2 = _initialReview$rating.difficulty) === null || _initialReview$rating2 === void 0 ? void 0 : _initialReview$rating2.value);
+  } = Object(external_react_["useState"])(3);
   const {
     0: ratings,
     1: setRatings
-  } = Object(external_react_["useState"])((_initialReview$rating3 = initialReview.rating) === null || _initialReview$rating3 === void 0 ? void 0 : (_initialReview$rating4 = _initialReview$rating3.star) === null || _initialReview$rating4 === void 0 ? void 0 : _initialReview$rating4.value);
+  } = Object(external_react_["useState"])(3);
   const {
     0: semester,
     1: setSemester
@@ -1136,6 +1096,13 @@ const AddReviewModal = ({
 
     return (_state$auth$user = state.auth.user) === null || _state$auth$user === void 0 ? void 0 : _state$auth$user._id;
   });
+  Object(external_react_["useEffect"])(() => {
+    const ratingIds = reviewByUser === null || reviewByUser === void 0 ? void 0 : reviewByUser.ratingIds;
+
+    if ((ratingIds === null || ratingIds === void 0 ? void 0 : ratingIds.length) > 0) {
+      Object(helpers["a" /* fetchRatings */])(ratingIds, setRatings, setDifficulty);
+    }
+  }, []);
 
   const onSubmit = async () => {
     if (!validateForm()) {
@@ -1150,22 +1117,21 @@ const AddReviewModal = ({
       acadYearTaken: year,
       modId,
       userId,
-      rating: {
-        difficulty: {
-          count: 1,
-          value: difficulty
-        },
-        star: {
-          count: 1,
-          value: ratings
-        }
-      }
+      ratings: [{
+        type: "difficulty",
+        value: difficulty
+      }, {
+        type: "star",
+        value: ratings
+      }]
     };
 
     if (reviewByUser) {
-      await review["a" /* default */].updateReviewOfModule(requestBody, reviewByUser._id);
+      await review["a" /* default */].updateReviewOfModule(requestBody, reviewByUser._id); // update ratings
     } else {
-      await review["a" /* default */].addReviewOfModule(requestBody);
+      await review["a" /* default */].addReviewOfModule(requestBody); // add ratings
+      // await reviewApi.addRating(difficulty, "difficulty", userId, modId, "mod", );
+      // await reviewApi.addRating(ratings, "star", userId, modId, "mod", );
     }
 
     setModalVisibility(false);
@@ -1322,9 +1288,6 @@ var bookmark = __webpack_require__("elgY");
 
 // EXTERNAL MODULE: ./api/planned-mod.ts
 var planned_mod = __webpack_require__("yRN5");
-
-// EXTERNAL MODULE: ./utils/helpers.ts + 1 modules
-var helpers = __webpack_require__("ye7r");
 
 // CONCATENATED MODULE: ./components/ModuleSmallDetail.tsx
 
@@ -1580,7 +1543,7 @@ const AddPlannedModModal = ({
       await planned_mod["a" /* default */].addPlannedMod(userId, modId, numberOfSemesters);
     }
 
-    Object(helpers["d" /* updatedPersonalPlannedModules */])(userId);
+    Object(helpers["e" /* updatedPersonalPlannedModules */])(userId);
     setModalVisibility(false);
   };
 
@@ -1637,10 +1600,12 @@ function ModuleInformation_defineProperty(obj, key, value) { if (key in obj) { O
 
 
 
+
 const ModuleInformation = ({
   module,
   setAddReviewModalVisibility,
-  setAddRatingsModalVisibility
+  setAddRatingsModalVisibility,
+  reviewByUser
 }) => {
   var _useSelector$find, _useSelector$find2, _schools$find, _rating$difficulty, _rating$star;
 
@@ -1675,7 +1640,7 @@ const ModuleInformation = ({
 
   const toggleBookmark = async () => {
     if (!isLoggedIn) {
-      Object(helpers["a" /* triggerRequireLoginMessage */])();
+      Object(helpers["b" /* triggerRequireLoginMessage */])();
       return;
     }
 
@@ -1685,12 +1650,12 @@ const ModuleInformation = ({
       await bookmark["a" /* default */].deleteBookmark(bookmarkId);
     }
 
-    Object(helpers["b" /* updatePersonalBookmarks */])(userId);
+    Object(helpers["c" /* updatePersonalBookmarks */])(userId);
   };
 
   const togglePlanner = async () => {
     if (!isLoggedIn) {
-      Object(helpers["a" /* triggerRequireLoginMessage */])();
+      Object(helpers["b" /* triggerRequireLoginMessage */])();
       return;
     }
 
@@ -1698,13 +1663,18 @@ const ModuleInformation = ({
       setAddPlannedModModalVisibility(true);
     } else {
       await planned_mod["a" /* default */].removePlannedMod(plannedModId);
-      Object(helpers["d" /* updatedPersonalPlannedModules */])(userId);
+      Object(helpers["e" /* updatedPersonalPlannedModules */])(userId);
     }
   };
 
   const toggleAddRatingsModal = () => {
     if (!isLoggedIn) {
-      Object(helpers["a" /* triggerRequireLoginMessage */])();
+      Object(helpers["b" /* triggerRequireLoginMessage */])();
+      return;
+    }
+
+    if (reviewByUser) {
+      external_antd_["message"].error("You have posted a Review before. Edit your Review instead!");
       return;
     }
 
@@ -1713,7 +1683,7 @@ const ModuleInformation = ({
 
   const toggleAddReviewModal = () => {
     if (!isLoggedIn) {
-      Object(helpers["a" /* triggerRequireLoginMessage */])();
+      Object(helpers["b" /* triggerRequireLoginMessage */])();
       return;
     }
 
@@ -1954,8 +1924,7 @@ const ModuleReviewPage = ({
 
     return (_state$auth$user = state.auth.user) === null || _state$auth$user === void 0 ? void 0 : _state$auth$user._id;
   });
-  const reviewByUser = reviewsList.find(review => review.userId === userId); // Analytics
-
+  const reviewByUser = reviewsList.find(review => review.userId === userId);
   Object(external_react_["useEffect"])(() => {
     checkIsRatedByUser();
     api_event.addEvent(userId, "mod", module._id, "view");
@@ -2019,7 +1988,8 @@ const ModuleReviewPage = ({
     return module ? module_review_jsx(external_react_default.a.Fragment, null, module_review_jsx(components_ModuleInformation, {
       module: module,
       setAddReviewModalVisibility: setAddReviewModalVisibility,
-      setAddRatingsModalVisibility: setAddRatingsModalVisibility
+      setAddRatingsModalVisibility: setAddRatingsModalVisibility,
+      reviewByUser: reviewByUser
     }), module_review_jsx("div", {
       style: module_review_styles.reviewsHeader
     }, module_review_jsx("span", {
@@ -2207,6 +2177,11 @@ const addRating = async (value, type, userId, subId, sub) => {
   return response.status;
 };
 
+const getRatingById = async id => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${ratingBaseUrl}/${id}`);
+  return response.data;
+};
+
 const getRating = async (subscriberType, subscriberId, userId, ratingType) => {
   const query = query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify({
     sub: subscriberType,
@@ -2236,6 +2211,7 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   getReviewsOfUser,
   addReviewOfModule,
   addRating,
+  getRatingById,
   getRating,
   updateRating,
   updateReviewOfModule
@@ -2471,10 +2447,11 @@ const fetchPlannedMods = async userId => {
 "use strict";
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "b", function() { return /* binding */ updatePersonalBookmarks; });
-__webpack_require__.d(__webpack_exports__, "d", function() { return /* binding */ updatedPersonalPlannedModules; });
-__webpack_require__.d(__webpack_exports__, "c", function() { return /* binding */ updatePersonalReviews; });
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ triggerRequireLoginMessage; });
+__webpack_require__.d(__webpack_exports__, "c", function() { return /* binding */ updatePersonalBookmarks; });
+__webpack_require__.d(__webpack_exports__, "e", function() { return /* binding */ updatedPersonalPlannedModules; });
+__webpack_require__.d(__webpack_exports__, "d", function() { return /* binding */ updatePersonalReviews; });
+__webpack_require__.d(__webpack_exports__, "b", function() { return /* binding */ triggerRequireLoginMessage; });
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ fetchRatings; });
 
 // EXTERNAL MODULE: ./api/bookmark.ts
 var bookmark = __webpack_require__("elgY");
@@ -2538,6 +2515,17 @@ const updatePersonalReviews = async userId => {
 };
 const triggerRequireLoginMessage = () => {
   external_antd_["message"].warning("You need to login first!");
+};
+const fetchRatings = (ratingIds, setStar, setDifficulty) => {
+  ratingIds.forEach(async id => {
+    const rating = await review["a" /* default */].getRatingById(id);
+
+    if (rating.type == "star") {
+      setStar(rating.value);
+    } else if (rating.type == "difficulty") {
+      setDifficulty(rating.value);
+    }
+  });
 };
 
 /***/ }),
@@ -2934,7 +2922,7 @@ const ReviewCard = ({
   updateReviews,
   showActions = true
 }) => {
-  var _reaction$like$count, _reaction$like, _rating$difficulty$va, _rating$star$value;
+  var _reaction$like$count, _reaction$like;
 
   const {
     0: isCommentsModalVisible,
@@ -2952,6 +2940,14 @@ const ReviewCard = ({
     0: userLikeReactionId,
     1: setUserLikeReactionId
   } = Object(external_react_["useState"])("");
+  const {
+    0: difficulty,
+    1: setDifficulty
+  } = Object(external_react_["useState"])(3);
+  const {
+    0: star,
+    1: setStar
+  } = Object(external_react_["useState"])(3);
   const isLoggedIn = Object(external_react_redux_["useSelector"])(state => state.auth.isLoggedIn);
   const userId = Object(external_react_redux_["useSelector"])(state => {
     var _state$auth$user;
@@ -2965,13 +2961,12 @@ const ReviewCard = ({
     semesterTaken,
     reaction,
     _id,
-    rating
+    ratingIds
   } = review;
   const name = user === null || user === void 0 ? void 0 : user.name;
   const like = (_reaction$like$count = reaction === null || reaction === void 0 ? void 0 : (_reaction$like = reaction.like) === null || _reaction$like === void 0 ? void 0 : _reaction$like.count) !== null && _reaction$like$count !== void 0 ? _reaction$like$count : 0;
-  const difficulty = (_rating$difficulty$va = rating === null || rating === void 0 ? void 0 : rating.difficulty.value) !== null && _rating$difficulty$va !== void 0 ? _rating$difficulty$va : 3;
-  const star = (_rating$star$value = rating === null || rating === void 0 ? void 0 : rating.star.value) !== null && _rating$star$value !== void 0 ? _rating$star$value : 3;
   Object(external_react_["useEffect"])(() => {
+    Object(helpers["a" /* fetchRatings */])(ratingIds, setStar, setDifficulty);
     fetchComments();
     checkIsLikedByUser();
   }, []);
@@ -2992,7 +2987,7 @@ const ReviewCard = ({
 
   const onLikeReview = async () => {
     if (!isLoggedIn) {
-      Object(helpers["a" /* triggerRequireLoginMessage */])();
+      Object(helpers["b" /* triggerRequireLoginMessage */])();
       return;
     }
 
@@ -3009,7 +3004,7 @@ const ReviewCard = ({
 
   const toggleCommentModalVisibility = () => {
     if (!isLoggedIn) {
-      Object(helpers["a" /* triggerRequireLoginMessage */])();
+      Object(helpers["b" /* triggerRequireLoginMessage */])();
     } else {
       setAddCommentModalVisibility(true);
     }
@@ -3111,10 +3106,10 @@ const ReviewList = ({
   updateReviews,
   showActions
 }) => {
-  const renderReviews = () => reviews.map((review, index) => {
+  const renderReviews = () => reviews.map(review => {
     return ReviewList_jsx(components_ReviewCard, {
       review: review,
-      key: index,
+      key: review._id,
       updateReviews: updateReviews,
       showActions: showActions
     });

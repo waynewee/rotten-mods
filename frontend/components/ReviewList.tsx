@@ -14,11 +14,11 @@ const ReviewList: React.FC<ReviewListProps> = ({
   showActions,
 }) => {
   const renderReviews = () =>
-    reviews.map((review, index) => {
+    reviews.map((review) => {
       return (
         <ReviewCard
           review={review}
-          key={index}
+          key={review._id}
           updateReviews={updateReviews}
           showActions={showActions}
         />

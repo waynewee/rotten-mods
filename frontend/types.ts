@@ -29,10 +29,11 @@ export interface Review {
   acadYearTaken: number;
   semesterTaken: 1 | 2;
   workload: number;
-  rating: {
-    difficulty: Rating;
-    star: Rating;
-  };
+  // rating: {
+  //   difficulty: Rating;
+  //   star: Rating;
+  // };
+  ratingIds: string[];
   reaction: {
     like: {
       count: number;

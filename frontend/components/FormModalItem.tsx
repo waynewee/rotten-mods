@@ -44,7 +44,9 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
 }) => {
   const [firstIsChecked, setFirstIsChecked] = useState(0);
   const [secondIsChecked, setSecondIsChecked] = useState(0);
-  const [searchOptions, setSearchOptions] = useState<SearchOption[]>(options ?? []);
+  const [searchOptions, setSearchOptions] = useState<SearchOption[]>(
+    options ?? []
+  );
 
   useEffect(() => {
     setSearchOptions(options);
@@ -52,7 +54,6 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
 
   const toggleCheckbox = (index) => (event) => {
     const newValue = parseInt(event.target.value) === 0 ? 1 : 0;
-    console.log(newValue, index);
     const isChecked = newValue === 1;
     if (index === 1) {
       setFirstIsChecked(newValue);
@@ -206,7 +207,9 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
 
   const renderPrereq = () => {
     const removeCode = (removedMod) => {
-      const filteredCodes = (value as SearchOption[]).filter((mod) => mod.id !== removedMod.id);
+      const filteredCodes = (value as SearchOption[]).filter(
+        (mod) => mod.id !== removedMod.id
+      );
       setValue(filteredCodes);
     };
 
@@ -233,7 +236,6 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
           style={styles.input}
           onSelect={addModule}
           options={searchOptions}
-          // onSearch={onSearch}
           value={searchTerm}
           onChange={onChange}
         />
@@ -242,43 +244,26 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
     );
   };
 
-  const renderInputType = () => {
-    switch (type) {
-      case "input":
-        return renderInput();
-      case "textarea":
-        return renderTextArea();
-      case "text":
-        return renderText();
-      case "rate":
-        return renderRate();
-      case "difficulty":
-        return renderDifficulty();
-      case "number":
-        return renderNumber();
-      case "year":
-        return renderYear();
-      case "semester":
-        return renderSemester();
-      case "semesters":
-        return renderSemesters();
-      case "annualYear":
-        return renderAnnualYear();
-      case "university":
-        return renderUniversity();
-      case "autocomplete":
-        return renderAutoComplete();
-      case "prereq":
-        return renderPrereq();
-      default:
-        return renderInput();
-    }
-  };
+  const renderInputType = {
+    "input": renderInput,
+    "textarea": renderTextArea,
+    "text": renderText,
+    "rate": renderRate,
+    "difficulty": renderDifficulty,
+    "number": renderNumber,
+    "year": renderYear,
+    "semester": renderSemester,
+    "semesters": renderSemesters,
+    "annualYear": renderAnnualYear,
+    "university": renderUniversity,
+    "autocomplete": renderAutoComplete,
+    "prereq": renderPrereq,
+  }
 
   return (
     <div style={styles.labelContainer}>
       <label style={styles.label}>{`${label}:`}</label>
-      {renderInputType()}
+      {renderInputType[type]()}
     </div>
   );
 };

@@ -1,19 +1,19 @@
+import { useState, useEffect } from "react";
+import { User } from "../types";
+import { useSelector } from "react-redux";
+import recommendationApi from "../api/recommendations";
+import {
+  updatePersonalBookmarks,
+  updatePersonalReviews,
+  updatedPersonalPlannedModules,
+} from "../utils/helpers";
+
 import SectionTitle from "../components/SectionTitle";
 import ProfileCard from "../components/ProfileCard";
 import BookmarkedModuleCard from "../components/BookmarkedModuleCard";
 import StudyPlanCard from "../components/StudyPlanCard";
-import { User } from "../types";
 import ReviewedModuleCard from "../components/ReviewedModuleCard";
 import SearchModuleList from "../components/SearchModuleList";
-import { Module } from "../types";
-import recommendationApi from "../api/recommendations";
-
-
-import { useEffect, useState } from "react";
-
-
-import { useSelector } from "react-redux";
-
 
 const Profile: React.FC = () => {
   const [recommendedModules, setRecommendedModules] = useState([]);
@@ -21,6 +21,9 @@ const Profile: React.FC = () => {
   const user = useSelector((state)=>state.auth.user);
   useEffect(() => {
     fetchRecommendedModules();
+    updatePersonalBookmarks(userId);
+    updatePersonalReviews(userId);
+    updatedPersonalPlannedModules(userId);
   });
 
   const fetchRecommendedModules = async () => {
@@ -72,7 +75,7 @@ const Profile: React.FC = () => {
 
 const styles = {
   container: {
-    display: "flex"
-  }
-}
+    display: "flex",
+  },
+};
 export default Profile;

@@ -777,7 +777,8 @@ const Search = ({
   const {
     0: numberOfResults,
     1: setNumberOfResults
-  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(10);
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(11); // the presence of that 11th result is an indicator that there are more than 10 results
+
   const searchTerm = Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["useSelector"])(state => state.search.searchTerm);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
     setNumberOfResults(10);
@@ -788,7 +789,6 @@ const Search = ({
 
   const fetchMoreSearchResults = async () => {
     const results = await _api_module__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].searchModule(searchTerm, numberOfResults + 10);
-    console.log("Results:", results);
     setSearchResults(results);
     setNumberOfResults(numberOfResults + 10);
   };
@@ -796,8 +796,8 @@ const Search = ({
   return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(_components_SectionTitle__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], {
     title: `Search results for "${searchTerm}"`
   }), __jsx(_components_SearchModuleList__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], {
-    modules: searchResults
-  }), __jsx(_components_SeeMoreButton__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], {
+    modules: searchResults.slice(0, numberOfResults - 1)
+  }), searchResults.length == numberOfResults && __jsx(_components_SeeMoreButton__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], {
     fetchMoreData: fetchMoreSearchResults,
     style: {
       backgroundColor: _styles_colors__WEBPACK_IMPORTED_MODULE_7__[/* descriptionGreen */ "e"]

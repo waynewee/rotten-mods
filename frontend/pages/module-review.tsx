@@ -43,7 +43,6 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   const userId = useSelector((state) => state.auth.user?._id);
   const reviewByUser = reviewsList.find((review) => review.userId === userId);
 
-  // Analytics
   useEffect(() => {
     checkIsRatedByUser();
     eventApi.addEvent(userId, "mod", module._id, "view");
@@ -119,6 +118,7 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
           module={module}
           setAddReviewModalVisibility={setAddReviewModalVisibility}
           setAddRatingsModalVisibility={setAddRatingsModalVisibility}
+          reviewByUser={reviewByUser}
         />
         <div style={styles.reviewsHeader}>
           <span style={styles.reviewsHeaderTitle}>Reviews</span>
