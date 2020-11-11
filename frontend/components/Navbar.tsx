@@ -23,14 +23,6 @@ const Navbar: React.FC<NavBarProps> = ({ setAddModuleModalVisibility }) => {
   const router = useRouter();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const menu = (
-    <Menu>
-      <Menu.Item>NUS</Menu.Item>
-      <Menu.Item>NTU</Menu.Item>
-      <Menu.Item>SMU</Menu.Item>
-    </Menu>
-  );
-
   const submitSearch = (searchTerm) => {
     dispatch({ type: SEARCH_TERM, payload: searchTerm });
     router.push({
