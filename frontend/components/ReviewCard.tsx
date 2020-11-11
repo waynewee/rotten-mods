@@ -24,6 +24,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   updateReviews,
   showActions = true,
 }) => {
+  console.log("review", review);
   const [isCommentsModalVisible, setCommentsModalVisibility] = useState(false);
   const [isAddCommentModalVisible, setAddCommentModalVisibility] = useState(
     false
