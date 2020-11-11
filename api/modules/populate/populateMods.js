@@ -11,13 +11,13 @@ function populateMods(){
       nusModsData.map( (mod) => {
     
         const newMod = new Mod({
-          code: mod.ModuleCode,
-          title: mod.ModuleTitle,
+          code: mod.moduleCode,
+          title: mod.title,
           acadYear: "19/20",
-          semester: mod.Semesters,
+          semester: mod.semesterData? mod.semesterData.map( s => s.semester ) : [],
           description: mod.description,
-          credit: mod.Credit,
-          workload: mod.Workload
+          credit: mod.moduleCredit,
+          workload: mod.workload && Array.isArray(mod.workload) ? mod.workload.reduce((acc, curr) =>  acc + curr , 0): undefined
         })
     
         return newMod.save();

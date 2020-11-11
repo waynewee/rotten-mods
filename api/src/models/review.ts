@@ -10,6 +10,7 @@ const ReviewSchema = new mongoose.Schema({
   acadYearTaken: { type: String },
   semesterTaken: { type: Number},
   event: EventObjSchema,
+  reaction: ReactionObjSchema,
   ratingIds: [String]
 },{
   usePushEach: true,
