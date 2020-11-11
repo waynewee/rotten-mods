@@ -1,4 +1,5 @@
 import { useDispatch } from "react-redux";
+import { deleteModuleAction } from "../redux/actions/compare";
 import { DELETE_MODULE_FOR_COMPARISON } from "../redux/constants";
 
 import { codeBlue, crossRed } from "../styles/colors";
@@ -12,10 +13,7 @@ const ModuleCompareCode: React.FC<ModuleCompareCodeProps> = ({ code, order }) =>
   const dispatch = useDispatch();
 
   const onDelete = () => {
-    dispatch({
-      type: DELETE_MODULE_FOR_COMPARISON,
-      payload: order
-    })
+    dispatch(deleteModuleAction(order));
   }
 
   const renderModuleCode = () => (
