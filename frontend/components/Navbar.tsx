@@ -18,7 +18,6 @@ const { Search } = Input;
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const menu = (
     <Menu>

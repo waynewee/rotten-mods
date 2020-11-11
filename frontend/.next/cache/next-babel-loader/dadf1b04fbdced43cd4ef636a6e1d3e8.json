@@ -1,0 +1,1 @@
+{"ast":null,"code":"import axios from \"axios\";\naxios.defaults.withCredentials = true;\nexport const serverDomain = false ? \"http://localhost:8080\" : \"\"; // TODO: add deployed server's domain","map":null,"metadata":{},"sourceType":"module"}
