@@ -33,11 +33,25 @@ const Home: NextPage = ({}) => {
       }
     };
 
-    const mostRatedModules = await recommendationApi.getMostRatedModules();
-    concatBackup(mostRatedModules.mods, setPopularModules);
-    const mostViewedModules = await recommendationApi.getMostViewedModules();
-    concatBackup(mostViewedModules.mods, setTrendingModules);
 
+    recommendationApi.getMostRatedModules()
+      .then((response) => {
+        concatBackup(response.mods, setPopularModules);
+      })
+      .catch((error)=> {
+        // no modules
+        concatBackup([], setPopularModules);
+      })
+    recommendationApi.getMostViewedModules()
+      .then((response) => {
+        concatBackup(response.mods, setTrendingModules);
+      })
+      .catch((error)=> {
+        // no modules
+        concatBackup([], setTrendingModules);
+      })
+
+    
     try {
       if (userId) {
         const recommendedModules = await recommendationApi.getRecommendedModules(

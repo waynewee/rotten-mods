@@ -13,15 +13,24 @@ const AddSchoolModal: React.FC<ModalState> = ({
 }) => {
   const [school, setSchool] = useState("");
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!validateForm()) {
       message.error("The field cannot be empty!");
       return;
     }
-
-    await schoolApi.addSchool(school);
-    setModalVisibility(false);
-    message.success(`The school ${school} has been added successfully!`);
+    schoolApi.addSchool(school)
+    .then((response) => {
+      setSchool("");
+      setModalVisibility(false);
+      message.success(`The school ${school} has been added successfully!`);
+    })
+    .catch((error) => {
+      console.log("the error is");
+      console.log(error.response);
+      if (error.response.status == "409") {
+        message.error(`The school ${school} is already in the database!`);
+      }
+    })
   };
 
   const validateForm = () => {

@@ -1683,15 +1683,24 @@ const AddCourseModal = ({
     1: setCourse
   } = Object(external_react_["useState"])("");
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!validateForm()) {
       external_antd_["message"].error("The field cannot be empty!");
       return;
     }
 
-    await api_course["a" /* default */].addCourse(course);
-    setModalVisibility(false);
-    external_antd_["message"].success(`The course ${course} has been added successfully!`);
+    api_course["a" /* default */].addCourse(course).then(response => {
+      setCourse("");
+      setModalVisibility(false);
+      external_antd_["message"].success(`The course ${course} has been added successfully!`);
+    }).catch(error => {
+      console.log("the error is");
+      console.log(error.response);
+
+      if (error.response.status == "409") {
+        external_antd_["message"].error(`The course ${course} is already in the database!`);
+      }
+    });
   };
 
   const validateForm = () => {
@@ -1739,15 +1748,24 @@ const AddSchoolModal = ({
     1: setSchool
   } = Object(external_react_["useState"])("");
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!validateForm()) {
       external_antd_["message"].error("The field cannot be empty!");
       return;
     }
 
-    await api_school["a" /* default */].addSchool(school);
-    setModalVisibility(false);
-    external_antd_["message"].success(`The school ${school} has been added successfully!`);
+    api_school["a" /* default */].addSchool(school).then(response => {
+      setSchool("");
+      setModalVisibility(false);
+      external_antd_["message"].success(`The school ${school} has been added successfully!`);
+    }).catch(error => {
+      console.log("the error is");
+      console.log(error.response);
+
+      if (error.response.status == "409") {
+        external_antd_["message"].error(`The school ${school} is already in the database!`);
+      }
+    });
   };
 
   const validateForm = () => {
