@@ -113,7 +113,7 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
     <Menu>
       <Menu.Item>
         <Button onClick={() => sortReviews(compareNewest, "Latest")}>
-          Newest
+          Latest
         </Button>
       </Menu.Item>
       <Menu.Item>
