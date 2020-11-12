@@ -33,13 +33,13 @@ const ModuleMetaComparison: React.FC<ModuleMetaComparisonProps> = ({
   const firstUniversity = schools.find(
     (school) => school._id === firstSchoolId
   )?.name;
-  const firstDifficulty = firstRatings?.difficulty?.value || 3;
-  const firstStar = firstRatings?.star?.value || 3;
+  const firstDifficulty = firstRatings?.difficulty?.value || 0;
+  const firstStar = firstRatings?.star?.value || 0;
   const secondUniversity = schools.find(
     (school) => school._id === secondSchoolId
   )?.name;
-  const secondDifficulty = secondRatings?.difficulty?.value || 3;
-  const secondStar = secondRatings?.star?.value || 3;
+  const secondDifficulty = secondRatings?.difficulty?.value || 0;
+  const secondStar = secondRatings?.star?.value || 0;
 
   return (
     <>
