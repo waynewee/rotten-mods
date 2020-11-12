@@ -3,6 +3,7 @@ const { mongoUri } = require('../../dist/config')
 const recommendByLikes = require('../recommend/recommend-by-likes')
 const User = require('../../dist/src/models/user').default
 const Recommendation = require('../../dist/src/models/recommendation').default
+const Mod = require('../../dist/src/models/mod').default
 mongoose.connect(mongoUri)
 
 
@@ -19,8 +20,17 @@ async function computeRecsByLikes(){
   for( let i = 0; i < users.length; i++ ){
 
     const userId = users[i]._id.toString()
-    const modIds = await recommendByLikes(userId)
+    let modIds = await recommendByLikes(userId)
     const type = "similarity"
+
+    if( modIds.length == 0 ){
+      const mods = await Mod.aggregate([
+        { $match: {}},
+        { $sample: { size: 6 }}
+      ])
+  
+      modIds = mods.map( mod => mod._id.toString() )
+    }
 
     const recommendation = new Recommendation({
       userId,

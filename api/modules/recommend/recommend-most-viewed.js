@@ -22,7 +22,6 @@ function recommend() {
       { $match: {_id : {"$in": res}}},
     ]).then(res2 => {
       res2 = res2.map(r => r._id)
-      console.log(res2)
       return res2
     })
   })

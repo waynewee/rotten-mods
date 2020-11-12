@@ -22,6 +22,8 @@ const AddModuleModal: React.FC<ModalState> = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const schoolName = useSelector((state) => state.auth.user.schoolName);
+  console.log("prinitng sch name");
+  console.log(schoolName);
   const [university, setUniversity] = useState(schoolName);
   const [credit, setCredit] = useState(4);
   const [semesters, setSemesters] = useState<

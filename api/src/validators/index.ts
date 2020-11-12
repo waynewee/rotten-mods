@@ -6,6 +6,16 @@ import Course from '../models/course'
 import Reply from '../models/reply'
 import Review from '../models/review'
 
+export function validateSemesters(semesters: Array<number>){
+  if( !semesters || semesters.length == 0 ){
+    return
+  }
+
+  for(let i = 0; i < semesters.length; i++ ){
+    validateSemester(semesters[i])
+  }
+}
+
 export function validateSemester(semester: number){
 
   if( !semester ){ return }

@@ -6,9 +6,6 @@ import personalModulesReducer from "./personalModulesReducer";
 import schoolsReducer from "./schoolsReducer";
 
 const reducer = (state, action) =>{
-  if (action.type === 'LOG_USER_OUT') {
-    state = undefined;
-  }
 
   return appReducer(state, action);
 }

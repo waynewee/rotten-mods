@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { LOG_USER_IN, LOG_USER_OUT } from \"../constants\";\nexport const logInAction = user => {\n  return {\n    type: LOG_USER_IN,\n    payload: user\n  };\n};\nexport const logOutAction = () => {\n  return {\n    type: LOG_USER_OUT\n  };\n};","map":null,"metadata":{},"sourceType":"module"}

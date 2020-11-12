@@ -35,8 +35,20 @@ const getMostViewedModules = async () => {
   return response.data;
 };
 
+const getTopRatedModules = async () => {
+  const type = "top-rated";
+  const queryRecomendationType = queryString.stringify({ type });
+  const response = await axios.get(`${baseUrl}/?${queryRecomendationType}`, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+
+
 export default {
   getRecommendedModules,
   getMostRatedModules,
   getMostViewedModules,
+  getTopRatedModules
 };
