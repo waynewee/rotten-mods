@@ -3,6 +3,7 @@ import { requireParam } from "../helpers/require-param"
 import { capitalize, upperCase } from "../helpers/string-methods"
 import {
   validateAcadYear,
+  validateDuplicateMod,
   validateSchoolId, 
   validateSemester
 } from '../validators'
@@ -12,6 +13,8 @@ export default async function makeMod(modInfo: any){
   const validated = await validate(modInfo)
   const transformed = await transform(validated)
   const normalized = normalize(transformed)
+
+  await validateDuplicateMod(normalized.title, normalized.code)
 
   return normalized
 

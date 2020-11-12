@@ -1,11 +1,15 @@
 import { requireParam } from "../helpers/require-param"
 import { capitalize, lowerCase, upperCase } from "../helpers/string-methods"
+import { validateDuplicateSchool } from "../validators"
 
 export default async function makeSchool(schoolInfo: any){
  
   const validated = await validate(schoolInfo)
   const transformed = await transform(validated)
   const normalized = normalize(transformed)
+
+  await validateDuplicateSchool(normalized.name)
+
 
   return normalized
 
@@ -35,7 +39,6 @@ async function validate(schoolInfo: any){
   } = schoolInfo
 
   requireParam(name, 'name')
-
   return schoolInfo 
 
 }

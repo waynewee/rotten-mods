@@ -9,7 +9,9 @@ import * as config from '../config'
 import router from './routers'
 import swaggerDocument from '../docs/swagger.json'
 
-mongoose.connect(config.mongoUri)
+mongoose.connect(config.mongoUri, {
+  autoIndex: true
+})
 .then(() => console.log("Connected"))
 .catch(err => console.log(err.message))
 

@@ -1,11 +1,14 @@
 import { requireParam } from "../helpers/require-param"
 import { capitalize, lowerCase, upperCase } from "../helpers/string-methods"
+import { validateDuplicateCourse } from "../validators"
 
 export default async function makeCourse(courseInfo: any){
  
   const validated = await validate(courseInfo)
   const transformed = await transform(validated)
   const normalized = normalize(transformed)
+
+  await validateDuplicateCourse(normalized.name)
 
   return normalized
 

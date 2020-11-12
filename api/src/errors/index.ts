@@ -32,3 +32,9 @@ export class AuthenticationError extends RottenModsError {
     super(`${objectName} not authorised`, 403)
   }
 }
+
+export class DuplicateObjectError extends RottenModsError {
+  constructor(objectName: string){
+    super(`${objectName} duplicate found!`, 409)
+  }
+}

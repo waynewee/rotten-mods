@@ -1,4 +1,4 @@
-import { InvalidParameterError, ObjectNotFoundError } from "../errors"
+import { DuplicateObjectError, InvalidParameterError, ObjectNotFoundError } from "../errors"
 import School from '../models/school'
 import User from '../models/user'
 import Mod from '../models/mod'
@@ -107,7 +107,6 @@ export async function validateUserId(userId: string){
   }
 
 }
-
 
 export async function validateSchoolId(schoolId: string){
 
@@ -223,4 +222,49 @@ export function validateRatingValue(value: number){
   if( value < 1 || value > 5 ){
     throw new InvalidParameterError("Invalid rating", "Rating must be between 1 and 5")
   }
+}
+
+export async function validateDuplicateCourse(name: string ){
+
+  const duplicate = await Course.findOne({name})
+
+  if( duplicate ){
+    throw new DuplicateObjectError("Course")
+  }
+
+}
+
+export async function validateDuplicateSchool(name: string ){
+
+  const duplicate = await School.findOne({name})
+
+  if( duplicate ){
+    throw new DuplicateObjectError("School")
+  }
+
+}
+
+export async function validateDuplicateMod(title: string, code: string ){
+
+  const duplicate = await Mod.findOne({
+    $and: [
+      { title },
+      { code }
+    ]
+  })
+
+  if( duplicate ){
+    throw new DuplicateObjectError("Mod")
+  }
+
+}
+
+export async function validateDuplicateUser(email: string){
+
+  const duplicate = await School.findOne({ email })
+
+  if( duplicate ){
+    throw new DuplicateObjectError("User")
+  }
+
 }

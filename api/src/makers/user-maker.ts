@@ -6,7 +6,8 @@ import {
   validateSchoolId, 
   validateDate, 
   validateSchoolYear,
-  validateCourseId
+  validateCourseId,
+  validateDuplicateUser
 } from '../validators'
 
 export default async function makeUser(userInfo: any){
@@ -14,6 +15,8 @@ export default async function makeUser(userInfo: any){
   const validated = await validate(userInfo)
   const transformed = await transform(validated)
   const normalized = normalize(transformed)
+
+  await validateDuplicateUser(normalized.email)
 
   return normalized
 
