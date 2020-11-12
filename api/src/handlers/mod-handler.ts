@@ -58,6 +58,10 @@ export async function search(searchInfo: any){
   //filters
   const { schoolId, semester, credit } = searchQuery
 
+  const semesterArray = semester && semester.split("_")
+
+  console.log(semesterArray)
+
   const query: any = {
     $and: [
       {
@@ -73,8 +77,10 @@ export async function search(searchInfo: any){
     query.$and.push({ schoolId })
   }
 
-  if( semester ){
-    query.$and.push({ semester: { $elemMatch: { $eq: semester } } })
+  if( semesterArray ){
+    semesterArray.map( (s: number) => {
+      query.$and.push({ semester: { $elemMatch: { $eq: s } } })
+    })
   }
 
   if( credit ){

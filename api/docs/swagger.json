@@ -474,7 +474,8 @@
           "name": "semester",
           "description":"Semester Number",
           "schema": {
-            "type": "Integer"
+            "type": "Array",
+            "example": [1, 2]
           }
         },{
           "in": "query",
