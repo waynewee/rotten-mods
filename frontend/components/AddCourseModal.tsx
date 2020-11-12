@@ -1,34 +1,31 @@
-import { Modal, Button, Form, Input, Divider } from "antd";
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
-
-import authService from "../utils/authentication";
-
-import { message } from "antd";
 import courseApi from "../api/course";
 import { useState, useEffect } from "react";
-
 
 import FormModal from "./FormModal";
 import FormModalItem from "./FormModalItem";
 import { codeBlue } from "../styles/colors";
 import { ModalState } from "../types";
-
-
-
-
+import { message } from "antd";
 
 const AddCourseModal: React.FC<ModalState> = ({
   isModalVisible,
   setModalVisibility,
 }) => {
-  
-  
   const [course, setCourse] = useState("");
 
-  const onSubmit = () => {
-    courseApi.addCourse(course);
-    message.success(`The course ${course} has been added successfully!`);
+  const onSubmit = async () => {
+    if (!validateForm()) {
+      message.error("The field cannot be empty!");
+      return;
+    }
 
+    await courseApi.addCourse(course);
+    setModalVisibility(false);
+    message.success(`The course ${course} has been added successfully!`);
+  };
+
+  const validateForm = () => {
+    return course !== "";
   };
 
   return (

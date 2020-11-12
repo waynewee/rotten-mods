@@ -4,11 +4,11 @@ import plannedModApi from "../api/planned-mod";
 import reviewApi from "../api/review";
 import { store } from "../redux/store";
 import { message } from "antd";
-import { 
+import {
   fetchBookmarksAction,
-  fetchPlannedModsAction, 
-  fetchPersonalReviewsAction 
-} from  "../redux/actions/personal-modules"
+  fetchPlannedModsAction,
+  fetchPersonalReviewsAction,
+} from "../redux/actions/personal-modules";
 
 export const updatePersonalBookmarks = async (userId) => {
   if (!userId) return;
@@ -21,13 +21,19 @@ export const updatedPersonalPlannedModules = async (userId) => {
   if (!userId) return;
 
   const data = await plannedModApi.fetchPlannedMods(userId);
-  store.dispatch(fetchPlannedModsAction(data));
+  const mappedModCode = data.map((mod) => {
+    mod.code = mod.mod.code;
+    return mod;
+  });
+
+  store.dispatch(fetchPlannedModsAction(mappedModCode));
 };
 
 export const updatePersonalReviews = async (userId) => {
   if (!userId) return;
 
   const data = await reviewApi.getReviewsOfUser(userId);
+
   store.dispatch(fetchPersonalReviewsAction(data));
 };
 

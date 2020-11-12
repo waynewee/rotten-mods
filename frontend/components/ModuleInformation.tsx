@@ -38,7 +38,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
   module,
   setAddReviewModalVisibility,
   setAddRatingsModalVisibility,
-  reviewByUser
+  reviewByUser,
 }) => {
   const [
     isAddPlannedModModalVisible,
@@ -107,7 +107,9 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
     }
 
     if (reviewByUser) {
-      message.error("You have posted a Review before. Edit your Review instead!");
+      message.error(
+        "You have posted a Review before. Edit your Review instead!"
+      );
       return;
     }
 
@@ -130,7 +132,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
           <div style={styles.moduleSmallDetailsColumn}>
             <ModuleSmallDetail
               Icon={UniversityIcon}
-              text={`University: ${university}`}
+              text={`University: ${university ?? "Not Found"}`}
               iconStyle={styles.iconStyle}
             />
             <ModuleSmallDetail

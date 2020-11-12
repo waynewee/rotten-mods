@@ -10,14 +10,21 @@ import { codeBlue, crossRed } from "../styles/colors";
 interface ModulePillProps {
   modId: string;
   missingPrereqs?: Module[];
+  moduleCode?: string;
 }
 
-const ModulePill: React.FC<ModulePillProps> = ({ modId, missingPrereqs }) => {
+const ModulePill: React.FC<ModulePillProps> = ({
+  modId,
+  missingPrereqs,
+  moduleCode = "",
+}) => {
   const router = useRouter();
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(moduleCode);
 
   useEffect(() => {
-    getModuleCode();
+    if (!moduleCode) {
+      getModuleCode();
+    }
   }, []);
 
   const getModuleCode = async () => {
@@ -36,22 +43,23 @@ const ModulePill: React.FC<ModulePillProps> = ({ modId, missingPrereqs }) => {
     });
   };
 
-  return (
-    <Button style={styles.container} onClick={navigateToModuleReview}>
-      {code}
-      {missingPrereqs && missingPrereqs.length !== 0 && (
-        <Tooltip
-          title={`Missing prereqs: ${missingPrereqs
-            .map((mod) => mod.code)
-            .join(", ")}`}
-        >
-          <div style={styles.warningButton} onClick={() => {}}>
-            i
-          </div>
-        </Tooltip>
-      )}
-    </Button>
-  );
+  return code !== "" && (
+      <Button style={styles.container} onClick={navigateToModuleReview}>
+        {code}
+        {missingPrereqs && missingPrereqs.length !== 0 && (
+          <Tooltip
+            title={`Missing prereqs: ${missingPrereqs
+              .map((mod) => mod.code)
+              .join(", ")}`}
+          >
+            <div style={styles.warningButton} onClick={() => {}}>
+              i
+            </div>
+          </Tooltip>
+        )}
+      </Button>
+    );
+  
 };
 
 const styles = {

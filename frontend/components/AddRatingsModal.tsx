@@ -5,7 +5,8 @@ import reviewApi from "../api/review";
 
 import FormModal from "./FormModal";
 import FormModalItem from "./FormModalItem";
-import { reviewBlue, submitBlue, crossRed } from "../styles/colors";
+import { reviewBlue, submitBlue } from "../styles/colors";
+import { message } from "antd";
 
 interface AddRatingsModalProps extends ModalState {
   code: string;
@@ -35,10 +36,7 @@ const AddRatingsModal: React.FC<AddRatingsModalProps> = ({
 
   const onSubmit = async () => {
     if (!validateForm()) {
-      setSubmitText(
-        "You did not rate the module. Once done click this button!"
-      );
-      setSubmitColor(crossRed);
+      message.error("You need to rate the module first!");
       return;
     }
 

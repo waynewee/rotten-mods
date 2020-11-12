@@ -21,7 +21,9 @@ const AddModuleModal: React.FC<ModalState> = ({
   const [code, setCode] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [university, setUniversity] = useState("");
+  const schoolName = useSelector((state) => state.auth.user.schoolName);
+  const [university, setUniversity] = useState(schoolName);
+  console.log(university);
   const [credit, setCredit] = useState(4);
   const [semesters, setSemesters] = useState<[boolean, boolean]>([
     false,
@@ -38,6 +40,10 @@ const AddModuleModal: React.FC<ModalState> = ({
   }));
 
   useEffect(() => {
+    setUniversity(schoolName);
+  }, [schoolName]);
+
+  useEffect(() => {
     getAllModules();
   }, [prereqSearchTerm]);
 
@@ -52,11 +58,13 @@ const AddModuleModal: React.FC<ModalState> = ({
 
   const onSubmit = () => {
     if (!validateForm()) {
+      message.error(
+        "You need to complete all fields other than Pre-requisites!"
+      );
       return;
     }
 
     const schoolId = schools.find((school) => school.name === university)?._id;
-    console.log(allModules);
     const prereqs = modulePrereqs.map((mod) => mod.id);
     const semester = semesters.reduce((acc, sem, index) => {
       if (sem) acc.push(index + 1);

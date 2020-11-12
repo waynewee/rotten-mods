@@ -197,6 +197,7 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
       style={styles.input}
       options={searchOptions}
       onSelect={setValue}
+      defaultValue={value as string}
       onSearch={(searchText) =>
         setSearchOptions(
           options.filter((item) => item.value.includes(searchText))
@@ -214,7 +215,6 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
     };
 
     const renderTags = () => {
-      console.log(value);
       return (value as SearchOption[]).map((mod) => (
         <Tag closable onClose={() => removeCode(mod)} key={mod.id}>
           {mod.value}

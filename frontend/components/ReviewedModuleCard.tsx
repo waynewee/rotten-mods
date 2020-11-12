@@ -6,7 +6,9 @@ import ModulePill from "./ModulePill";
 import { reviewBlue } from "../styles/colors";
 
 const ReviewedModuleCard: React.FC = () => {
-  const personalReviews: Review[] = useSelector((state) => state.personalModules.reviews);
+  const personalReviews: Review[] = useSelector(
+    (state) => state.personalModules.reviews
+  );
 
   const renderModuleCodes = () =>
     personalReviews.map((review) => {
@@ -30,6 +32,7 @@ const styles = {
     flexDirection: "row" as "row",
     justifyContent: "flex-start",
     flexWrap: "wrap" as "wrap",
+    gap: 10,
   },
   container: {
     flex: 1,
@@ -41,7 +44,7 @@ const styles = {
     marginBottom: 15,
     display: "flex",
     flexDirection: "column" as "column",
-    minHeight: 150
+    minHeight: 150,
   },
   header: {
     display: "flex",
