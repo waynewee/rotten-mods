@@ -461,6 +461,28 @@
           "schema": {
             "type": "Integer"
           }
+        },{
+          "in": "query",
+          "name": "schoolId",
+          "description":"OID of the school filter",
+          "schema": {
+            "type": "string",
+            "example": "512345678910111211314151"
+          }
+        },{
+          "in": "query",
+          "name": "semester",
+          "description":"Semester Number",
+          "schema": {
+            "type": "Integer"
+          }
+        },{
+          "in": "query",
+          "name": "credit",
+          "description":"Module credits",
+          "schema": {
+            "type": "Integer"
+          }
         }],
         "responses": {
           "200": {

@@ -39,7 +39,7 @@ function normalize(searchInfo: any){
 
   return {
     page: page? parseInt(page): 1,
-    limit: page? parseInt(limit): 0,
+    limit: limit? parseInt(limit): 0,
     searchTerm: searchTerm? searchTerm: "",
     ...otherInfo
   }
