@@ -1148,7 +1148,7 @@ const AddReviewModal = ({
     updateModule();
   };
 
-  const validateForm = () => ratings !== 0 && difficulty !== 0 && text !== "";
+  const validateForm = () => ratings !== 0 && difficulty !== 0 && text.trim() !== "";
 
   const closeModal = isToClose => {
     setModalVisibility(isToClose);
