@@ -38,7 +38,7 @@ const AddCommentModal: React.FC<AddCommentModalProps> = ({
     fetchComments();
   };
 
-  const validateForm = () => comment !== "";
+  const validateForm = () => comment.trim() !== "";
 
   const closeModal = (isToClose) => {
     setModalVisibility(isToClose);

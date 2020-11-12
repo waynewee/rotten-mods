@@ -93,6 +93,54 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
+/***/ "+J/R":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("zr5I");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("Lc87");
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(query_string__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("rOcY");
+
+
+
+const baseUrl = `${_config__WEBPACK_IMPORTED_MODULE_2__[/* serverDomain */ "a"]}/api/reaction`;
+
+const addReaction = async (sub, subId, userId, type) => {
+  await axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(baseUrl, {
+    sub,
+    subId,
+    userId,
+    type
+  }, {
+    withCredentials: true
+  });
+};
+
+const getReaction = async (sub, subId, userId, type) => {
+  const query = query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify({
+    sub,
+    subId,
+    userId,
+    type
+  });
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}/?${query}`);
+  return response.data;
+};
+
+const deleteReaction = async reactionId => {
+  await axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete(`${baseUrl}/${reactionId}`);
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  addReaction,
+  getReaction,
+  deleteReaction
+});
+
+/***/ }),
+
 /***/ "0lvd":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -253,6 +301,34 @@ module.exports = require("react-modal");
 
 /***/ }),
 
+/***/ "DwSS":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function LikeOutlinedIcon(props) {
+  return __jsx("svg", _extends({
+    "aria-hidden": "true",
+    "data-prefix": "far",
+    "data-icon": "thumbs-up",
+    className: "thumbs-up-regular_svg__svg-inline--fa thumbs-up-regular_svg__fa-thumbs-up thumbs-up-regular_svg__fa-w-16",
+    viewBox: "0 0 512 512"
+  }, props), __jsx("path", {
+    fill: "currentColor",
+    d: "M466.27 286.69C475.04 271.84 480 256 480 236.85c0-44.015-37.218-85.58-85.82-85.58H357.7c4.92-12.81 8.85-28.13 8.85-46.54C366.55 31.936 328.86 0 271.28 0c-61.607 0-58.093 94.933-71.76 108.6-22.747 22.747-49.615 66.447-68.76 83.4H32c-17.673 0-32 14.327-32 32v240c0 17.673 14.327 32 32 32h64c14.893 0 27.408-10.174 30.978-23.95 44.509 1.001 75.06 39.94 177.802 39.94 7.22 0 15.22.01 22.22.01 77.117 0 111.986-39.423 112.94-95.33 13.319-18.425 20.299-43.122 17.34-66.99 9.854-18.452 13.664-40.343 8.99-62.99zm-61.75 53.83c12.56 21.13 1.26 49.41-13.94 57.57 7.7 48.78-17.608 65.9-53.12 65.9h-37.82c-71.639 0-118.029-37.82-171.64-37.82V240h10.92c28.36 0 67.98-70.89 94.54-97.46 28.36-28.36 18.91-75.63 37.82-94.54 47.27 0 47.27 32.98 47.27 56.73 0 39.17-28.36 56.72-28.36 94.54h103.99c21.11 0 37.73 18.91 37.82 37.82.09 18.9-12.82 37.81-22.27 37.81 13.489 14.555 16.371 45.236-5.21 65.62zM88 432c0 13.255-10.745 24-24 24s-24-10.745-24-24 10.745-24 24-24 24 10.745 24 24z"
+  }));
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (LikeOutlinedIcon);
+
+/***/ }),
+
 /***/ "EHoS":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -315,7 +391,8 @@ const FormModalItem = ({
   setValue,
   options,
   searchTerm,
-  setSearchTerm
+  setSearchTerm,
+  minNum
 }) => {
   const {
     0: firstIsChecked,
@@ -390,7 +467,8 @@ const FormModalItem = ({
   const renderNumber = () => __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["InputNumber"], {
     style: styles.inputNumber,
     value: value,
-    onChange: e => setValue(e)
+    onChange: e => setValue(e),
+    min: minNum
   });
 
   const renderYear = () => __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Select"], {
@@ -411,13 +489,17 @@ const FormModalItem = ({
     style: styles.inputNumber,
     onChange: setValue,
     defaultValue: value
-  }, __jsx(Option, {
+  }, options ? options.map(option => __jsx(Option, {
+    value: option
+  }, option)) : __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(Option, {
     value: 1
   }, "1"), __jsx(Option, {
     value: 2
   }, "2"), __jsx(Option, {
     value: 3
-  }, "3"));
+  }, "3"), __jsx(Option, {
+    value: 4
+  }, "4")));
 
   const renderSemesters = () => __jsx("div", {
     style: {
@@ -425,31 +507,27 @@ const FormModalItem = ({
       alignItems: "center",
       height: 34
     }
-  }, __jsx("div", null, __jsx("input", {
-    id: "1",
-    type: "checkbox",
-    value: firstIsChecked,
-    onChange: toggleCheckbox(1)
-  }), __jsx("label", {
-    style: styles.inputCheckboxLabel,
-    htmlFor: "1"
-  }, "1")), __jsx("div", null, __jsx("input", {
-    id: "2",
-    type: "checkbox",
-    value: secondIsChecked,
-    onChange: toggleCheckbox(2)
-  }), __jsx("label", {
-    style: styles.inputCheckboxLabel,
-    htmlFor: "2"
-  }, "2")), __jsx("div", null, __jsx("input", {
-    id: "3",
-    type: "checkbox",
-    value: secondIsChecked,
-    onChange: toggleCheckbox(3)
-  }), __jsx("label", {
-    style: styles.inputCheckboxLabel,
-    htmlFor: "3"
-  }, "3")));
+  }, __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    style: {
+      color: "white"
+    },
+    onChange: () => setValue(1)
+  }, "1"), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    style: {
+      color: "white"
+    },
+    onChange: () => setValue(2)
+  }, "2"), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    style: {
+      color: "white"
+    },
+    onChange: () => setValue(3)
+  }, "3"), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    style: {
+      color: "white"
+    },
+    onChange: () => setValue(4)
+  }, "4"));
 
   const renderAnnualYear = () => {
     const today = new Date();
@@ -536,19 +614,19 @@ const FormModalItem = ({
   };
 
   const renderInputType = {
-    "input": renderInput,
-    "textarea": renderTextArea,
-    "text": renderText,
-    "rate": renderRate,
-    "difficulty": renderDifficulty,
-    "number": renderNumber,
-    "year": renderYear,
-    "semester": renderSemester,
-    "semesters": renderSemesters,
-    "annualYear": renderAnnualYear,
-    "university": renderUniversity,
-    "autocomplete": renderAutoComplete,
-    "prereq": renderPrereq
+    input: renderInput,
+    textarea: renderTextArea,
+    text: renderText,
+    rate: renderRate,
+    difficulty: renderDifficulty,
+    number: renderNumber,
+    year: renderYear,
+    semester: renderSemester,
+    semesters: renderSemesters,
+    annualYear: renderAnnualYear,
+    university: renderUniversity,
+    autocomplete: renderAutoComplete,
+    prereq: renderPrereq
   };
   return __jsx("div", {
     style: styles.labelContainer
@@ -586,6 +664,52 @@ const styles = {
   }
 };
 /* harmony default export */ __webpack_exports__["a"] = (FormModalItem);
+{
+  /* <div>
+        <input
+          id="1"
+          type="checkbox"
+          value={firstIsChecked}
+          onChange={toggleCheckbox(1)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="1">
+          1
+        </label>
+      </div>
+      <div>
+        <input
+          id="2"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(2)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="2">
+          2
+        </label>
+      </div>
+      <div>
+        <input
+          id="3"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(3)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="3">
+          3
+        </label>
+      </div>
+      <div>
+        <input
+          id="4"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(4)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="4">
+          4
+        </label>
+      </div> */
+}
 
 /***/ }),
 
@@ -628,34 +752,6 @@ function BookmarkIcon(props) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (BookmarkIcon);
-
-/***/ }),
-
-/***/ "Vfi8":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function PenIcon(props) {
-  return __jsx("svg", _extends({
-    "aria-hidden": "true",
-    "data-prefix": "fas",
-    "data-icon": "pen-alt",
-    className: "pen-alt-solid_svg__svg-inline--fa pen-alt-solid_svg__fa-pen-alt pen-alt-solid_svg__fa-w-16",
-    viewBox: "0 0 512 512"
-  }, props), __jsx("path", {
-    fill: "currentColor",
-    d: "M497.94 74.17l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.75 18.75-49.15 0-67.91zm-246.8-20.53c-15.62-15.62-40.94-15.62-56.56 0L75.8 172.43c-6.25 6.25-6.25 16.38 0 22.62l22.63 22.63c6.25 6.25 16.38 6.25 22.63 0l101.82-101.82 22.63 22.62L93.95 290.03A327.038 327.038 0 00.17 485.11l-.03.23c-1.7 15.28 11.21 28.2 26.49 26.51a327.02 327.02 0 00195.34-93.8l196.79-196.79-82.77-82.77-84.85-84.85z"
-  }));
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (PenIcon);
 
 /***/ }),
 
@@ -768,9 +864,7 @@ const authReducer = (state = initialState, action) => {
       });
 
     case constants["i" /* LOG_USER_OUT */]:
-      return {
-        initialState
-      };
+      return initialState;
 
     default:
       return state;
@@ -924,10 +1018,6 @@ const schoolsReducer = (state = schoolsReducer_initialState, action) => {
 
 
 const reducer = (state, action) => {
-  if (action.type === 'LOG_USER_OUT') {
-    state = undefined;
-  }
-
   return appReducer(state, action);
 };
 
@@ -1065,13 +1155,13 @@ const initialReviewState = {
   text: "",
   ratingIds: [],
   workload: 10,
-  semesterTaken: 1,
+  semesterTaken: "",
   acadYearTaken: `${yearMinusOne}/${currentAYSecondYear}`
 };
 
 const AddReviewModal = ({
   code,
-  modId,
+  module,
   updateReviews,
   updateModule,
   isModalVisible,
@@ -1105,6 +1195,7 @@ const AddReviewModal = ({
 
     return (_state$auth$user = state.auth.user) === null || _state$auth$user === void 0 ? void 0 : _state$auth$user._id;
   });
+  console.log(module);
   Object(external_react_["useEffect"])(() => {
     const ratingIds = reviewByUser === null || reviewByUser === void 0 ? void 0 : reviewByUser.ratingIds;
 
@@ -1132,7 +1223,7 @@ const AddReviewModal = ({
       text,
       semesterTaken: semester,
       acadYearTaken: year,
-      modId,
+      modId: module._id,
       userId,
       ratings: [{
         type: "difficulty",
@@ -1190,6 +1281,7 @@ const AddReviewModal = ({
     label: "Semester Taken",
     type: "semester",
     value: semester,
+    options: module.semester,
     setValue: setSemester
   }), __jsx(FormModalItem["a" /* default */], {
     label: "Difficulty",
@@ -1304,6 +1396,9 @@ var bookmark = __webpack_require__("elgY");
 
 // EXTERNAL MODULE: ./api/planned-mod.ts
 var planned_mod = __webpack_require__("yRN5");
+
+// EXTERNAL MODULE: ./api/reaction.ts
+var api_reaction = __webpack_require__("+J/R");
 
 // CONCATENATED MODULE: ./components/ModuleSmallDetail.tsx
 
@@ -1434,6 +1529,26 @@ function LayerGroupIcon(props) {
 // EXTERNAL MODULE: ./icons/StarFilledIcon.tsx
 var StarFilledIcon = __webpack_require__("j1SK");
 
+// CONCATENATED MODULE: ./icons/LikeFilledIcon.tsx
+
+var LikeFilledIcon_jsx = external_react_default.a.createElement;
+
+function LikeFilledIcon_extends() { LikeFilledIcon_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return LikeFilledIcon_extends.apply(this, arguments); }
+
+function LikeFilledIcon(props) {
+  return LikeFilledIcon_jsx("svg", LikeFilledIcon_extends({
+    "aria-hidden": "true",
+    "data-prefix": "fas",
+    "data-icon": "thumbs-up",
+    className: "thumbs-up-solid_svg__svg-inline--fa thumbs-up-solid_svg__fa-thumbs-up thumbs-up-solid_svg__fa-w-16",
+    viewBox: "0 0 512 512"
+  }, props), LikeFilledIcon_jsx("path", {
+    fill: "currentColor",
+    d: "M104 224H24c-13.255 0-24 10.745-24 24v240c0 13.255 10.745 24 24 24h80c13.255 0 24-10.745 24-24V248c0-13.255-10.745-24-24-24zM64 472c-13.255 0-24-10.745-24-24s10.745-24 24-24 24 10.745 24 24-10.745 24-24 24zM384 81.452c0 42.416-25.97 66.208-33.277 94.548h101.723c33.397 0 59.397 27.746 59.553 58.098.084 17.938-7.546 37.249-19.439 49.197l-.11.11c9.836 23.337 8.237 56.037-9.308 79.469 8.681 25.895-.069 57.704-16.382 74.757 4.298 17.598 2.244 32.575-6.148 44.632C440.202 511.587 389.616 512 346.839 512l-2.845-.001c-48.287-.017-87.806-17.598-119.56-31.725-15.957-7.099-36.821-15.887-52.651-16.178-6.54-.12-11.783-5.457-11.783-11.998v-213.77c0-3.2 1.282-6.271 3.558-8.521 39.614-39.144 56.648-80.587 89.117-113.111 14.804-14.832 20.188-37.236 25.393-58.902C282.515 39.293 291.817 0 312 0c24 0 72 8 72 81.452z"
+  }));
+}
+
+/* harmony default export */ var icons_LikeFilledIcon = (LikeFilledIcon);
 // CONCATENATED MODULE: ./icons/StarOutlinedIcon.tsx
 
 var StarOutlinedIcon_jsx = external_react_default.a.createElement;
@@ -1454,6 +1569,9 @@ const HollowStarIcon = props => {
 };
 
 /* harmony default export */ var StarOutlinedIcon = (HollowStarIcon);
+// EXTERNAL MODULE: ./icons/LikeOutlinedIcon.tsx
+var LikeOutlinedIcon = __webpack_require__("DwSS");
+
 // CONCATENATED MODULE: ./icons/UniversityIcon.tsx
 
 var UniversityIcon_jsx = external_react_default.a.createElement;
@@ -1517,9 +1635,42 @@ function CheckboxOutlinedIcon(props) {
 }
 
 /* harmony default export */ var icons_CheckboxOutlinedIcon = (CheckboxOutlinedIcon);
-// EXTERNAL MODULE: ./icons/PenFilledIcon.tsx
-var PenFilledIcon = __webpack_require__("Vfi8");
+// CONCATENATED MODULE: ./icons/PencilOutlinedIcon.tsx
+var PencilOutlinedIcon_jsx = external_react_["createElement"];
 
+function PencilOutlinedIcon_extends() { PencilOutlinedIcon_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return PencilOutlinedIcon_extends.apply(this, arguments); }
+
+
+
+function PencilOutlinedIcon(props) {
+  return PencilOutlinedIcon_jsx("svg", PencilOutlinedIcon_extends({
+    height: "484pt",
+    viewBox: "-15 -15 484 484",
+    width: "484pt"
+  }, props), PencilOutlinedIcon_jsx("path", {
+    d: "M401.648 18.234c-24.394-24.351-63.898-24.351-88.293 0l-22.101 22.223-235.27 235.145-.5.503c-.12.122-.12.25-.25.25-.25.375-.625.747-.87 1.122 0 .125-.13.125-.13.25-.25.375-.37.625-.625 1-.12.125-.12.246-.246.375-.125.375-.25.625-.379 1 0 .12-.12.12-.12.25L.663 437.32a12.288 12.288 0 002.996 12.735 12.564 12.564 0 008.867 3.625c1.356-.024 2.7-.235 3.996-.625l156.848-52.325c.121 0 .121 0 .25-.12a4.523 4.523 0 001.121-.505.443.443 0 00.254-.12c.371-.25.871-.505 1.246-.755.371-.246.75-.62 1.125-.87.125-.13.246-.13.246-.25.13-.126.38-.247.504-.5l257.371-257.372c24.352-24.394 24.352-63.898 0-88.289zM169.375 371.383l-86.914-86.91L299.996 66.938l86.914 86.91zm-99.156-63.809l75.93 75.926-114.016 37.96zm347.664-184.82l-13.238 13.363L317.727 49.2l13.367-13.36c14.62-14.609 38.32-14.609 52.945 0l33.965 33.966c14.512 14.687 14.457 38.332-.121 52.949zm0 0"
+  }));
+}
+
+/* harmony default export */ var icons_PencilOutlinedIcon = (PencilOutlinedIcon);
+// CONCATENATED MODULE: ./icons/PencilFilledIcon.tsx
+var PencilFilledIcon_jsx = external_react_["createElement"];
+
+function PencilFilledIcon_extends() { PencilFilledIcon_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return PencilFilledIcon_extends.apply(this, arguments); }
+
+
+
+function PencilFilledIcon(props) {
+  return PencilFilledIcon_jsx("svg", PencilFilledIcon_extends({
+    height: "325pt",
+    viewBox: "0 0 325 325.375",
+    width: "325pt"
+  }, props), PencilFilledIcon_jsx("path", {
+    d: "M114.688 284.676l-73.801-73.801 178.5-178.5 73.8 73.8zm-80.7-60.801l67.7 67.7-101.5 33.8zm281.899-140.3l-12.801 12.8-73.899-73.898 12.801-12.801c12.895-12.903 33.805-12.903 46.7 0l27.199 27.199c12.8 12.937 12.8 33.766 0 46.7zm0 0"
+  }));
+}
+
+/* harmony default export */ var icons_PencilFilledIcon = (PencilFilledIcon);
 // EXTERNAL MODULE: ./components/Button.tsx
 var Button = __webpack_require__("xQut");
 
@@ -1617,18 +1768,28 @@ function ModuleInformation_defineProperty(obj, key, value) { if (key in obj) { O
 
 
 
+
+
+
+
 const ModuleInformation = ({
   module,
   setAddReviewModalVisibility,
   setAddRatingsModalVisibility,
-  reviewByUser
+  reviewByUser,
+  updateModule
 }) => {
-  var _useSelector$find, _useSelector$find2, _schools$find, _rating$difficulty, _rating$star;
+  var _useSelector$find, _useSelector$find2, _schools$find, _rating$difficulty, _rating$star, _module$reaction$like, _module$reaction, _module$reaction$like2;
 
   const {
     0: isAddPlannedModModalVisible,
     1: setAddPlannedModModalVisibility
   } = Object(external_react_["useState"])(false);
+  const {
+    0: likeReactionId,
+    1: setLikeReactionId
+  } = Object(external_react_["useState"])(""); // is true if it is reaction's id
+
   const userId = Object(external_react_redux_["useSelector"])(state => {
     var _state$auth$user;
 
@@ -1653,6 +1814,18 @@ const ModuleInformation = ({
   const university = (_schools$find = schools.find(school => school._id === schoolId)) === null || _schools$find === void 0 ? void 0 : _schools$find.name;
   const difficulty = (rating === null || rating === void 0 ? void 0 : (_rating$difficulty = rating.difficulty) === null || _rating$difficulty === void 0 ? void 0 : _rating$difficulty.value) || 0;
   const star = (rating === null || rating === void 0 ? void 0 : (_rating$star = rating.star) === null || _rating$star === void 0 ? void 0 : _rating$star.value) || 0;
+  Object(external_react_["useEffect"])(() => {
+    fetchIsLikedByUser();
+  }, [userId]);
+
+  const fetchIsLikedByUser = async () => {
+    try {
+      const reaction = await api_reaction["a" /* default */].getReaction("mod", module._id, userId, "like");
+      setLikeReactionId(reaction._id);
+    } catch (err) {
+      setLikeReactionId("");
+    }
+  };
 
   const toggleBookmark = async () => {
     if (!isLoggedIn) {
@@ -1706,6 +1879,22 @@ const ModuleInformation = ({
     setAddReviewModalVisibility(true);
   };
 
+  const toggleLike = async () => {
+    if (!isLoggedIn) {
+      Object(helpers["b" /* triggerRequireLoginMessage */])();
+      return;
+    }
+
+    if (likeReactionId) {
+      await api_reaction["a" /* default */].deleteReaction(likeReactionId);
+    } else {
+      await api_reaction["a" /* default */].addReaction("mod", module._id, userId, "like");
+    }
+
+    fetchIsLikedByUser();
+    updateModule();
+  };
+
   return ModuleInformation_jsx("div", {
     style: ModuleInformation_styles.container
   }, ModuleInformation_jsx("div", {
@@ -1718,11 +1907,11 @@ const ModuleInformation = ({
     style: ModuleInformation_styles.moduleSmallDetailsColumn
   }, ModuleInformation_jsx(components_ModuleSmallDetail, {
     Icon: icons_UniversityIcon,
-    text: `University: ${university !== null && university !== void 0 ? university : "Not Found"}`,
+    text: `University: ${university !== null && university !== void 0 ? university : "-"}`,
     iconStyle: ModuleInformation_styles.iconStyle
   }), ModuleInformation_jsx(components_ModuleSmallDetail, {
     Icon: icons_HourGlassHalfFilledIcon,
-    text: `Semester(s) offered: ${semester.sort().join(", ")}`,
+    text: `Semester(s) offered: ${semester.sort().join(", ") || "-"}`,
     iconStyle: ModuleInformation_styles.iconStyle
   })), ModuleInformation_jsx("div", {
     style: ModuleInformation_styles.moduleSmallDetailsColumn
@@ -1742,7 +1931,7 @@ const ModuleInformation = ({
     iconStyle: ModuleInformation_styles.iconStyle
   }), ModuleInformation_jsx(components_ModuleSmallDetail, {
     Icon: icons_LayerGroupIcon,
-    text: `Difficulty: ${difficulty.toFixed(1)}/5`,
+    text: `Difficulty: ${difficulty.toFixed(1) == "0.0" ? "-" : difficulty.toFixed(1)}/5`,
     iconStyle: ModuleInformation_styles.iconStyle
   }))), ModuleInformation_jsx("div", {
     style: {
@@ -1761,15 +1950,41 @@ const ModuleInformation = ({
       width: "100%",
       color: "#838383"
     }
-  }, ModuleInformation_jsx("div", null, ModuleInformation_jsx(StarFilledIcon["a" /* default */], {
+  }, ModuleInformation_jsx("div", {
+    style: {
+      marginRight: 10
+    }
+  }, ModuleInformation_jsx(icons_LikeFilledIcon, {
+    style: {
+      height: 20,
+      color: colors["a" /* codeBlue */],
+      margin: "0px 10px",
+      position: "relative",
+      bottom: -2
+    }
+  }), `${(_module$reaction$like = (_module$reaction = module.reaction) === null || _module$reaction === void 0 ? void 0 : (_module$reaction$like2 = _module$reaction.like) === null || _module$reaction$like2 === void 0 ? void 0 : _module$reaction$like2.count) !== null && _module$reaction$like !== void 0 ? _module$reaction$like : 0}`), ModuleInformation_jsx("div", null, ModuleInformation_jsx(StarFilledIcon["a" /* default */], {
     style: {
       height: 20,
       color: colors["g" /* ratingsYellow */],
-      margin: "0px 10px"
+      margin: "0px 10px",
+      position: "relative",
+      bottom: -2
     }
-  })), `${star.toFixed(1)}`), ModuleInformation_jsx("div", {
+  }), `${star.toFixed(1)}`)), ModuleInformation_jsx("div", {
     style: ModuleInformation_styles.actionsBar
   }, ModuleInformation_jsx(Button["a" /* default */], {
+    onClick: toggleLike
+  }, likeReactionId ? ModuleInformation_jsx(icons_LikeFilledIcon, {
+    style: ModuleInformation_objectSpread(ModuleInformation_objectSpread({}, ModuleInformation_styles.actionIcon), {}, {
+      color: colors["a" /* codeBlue */],
+      fontSize: 25
+    })
+  }) : ModuleInformation_jsx(LikeOutlinedIcon["a" /* default */], {
+    style: ModuleInformation_objectSpread(ModuleInformation_objectSpread({}, ModuleInformation_styles.actionIcon), {}, {
+      color: colors["a" /* codeBlue */],
+      fontSize: 25
+    })
+  })), ModuleInformation_jsx(Button["a" /* default */], {
     onClick: togglePlanner
   }, plannedModId ? ModuleInformation_jsx(icons_["BookFilled"], {
     style: ModuleInformation_objectSpread(ModuleInformation_objectSpread({}, ModuleInformation_styles.actionIcon), {}, {
@@ -1799,9 +2014,15 @@ const ModuleInformation = ({
     })
   })), ModuleInformation_jsx(Button["a" /* default */], {
     onClick: toggleAddReviewModal
-  }, ModuleInformation_jsx(PenFilledIcon["a" /* default */], {
+  }, reviewByUser ? ModuleInformation_jsx(icons_PencilFilledIcon, {
     style: ModuleInformation_objectSpread(ModuleInformation_objectSpread({}, ModuleInformation_styles.actionIcon), {}, {
-      color: "#7497CC"
+      width: 25,
+      fill: colors["h" /* reviewBlue */]
+    })
+  }) : ModuleInformation_jsx(icons_PencilOutlinedIcon, {
+    style: ModuleInformation_objectSpread(ModuleInformation_objectSpread({}, ModuleInformation_styles.actionIcon), {}, {
+      width: 25,
+      fill: colors["h" /* reviewBlue */]
     })
   }))))), ModuleInformation_jsx("div", {
     style: ModuleInformation_styles.infoContainer
@@ -1878,7 +2099,7 @@ const ModuleInformation_styles = {
   }
 };
 /* harmony default export */ var components_ModuleInformation = (ModuleInformation);
-// EXTERNAL MODULE: ./components/ReviewList.tsx + 8 modules
+// EXTERNAL MODULE: ./components/ReviewList.tsx + 6 modules
 var ReviewList = __webpack_require__("zmtl");
 
 // EXTERNAL MODULE: ./components/SeeMoreButton.tsx
@@ -1906,8 +2127,6 @@ const compareNewest = (firstReview, secondReview) => {
   const secondReviewCreatedAtDate = new Date(secondReview.createdAt);
   return firstReviewCreatedAtDate < secondReviewCreatedAtDate ? 1 : -1;
 };
-
-const REVIEW_LIST_INTERVAL = 10;
 
 const ModuleReviewPage = ({
   initialModule,
@@ -2010,7 +2229,7 @@ const ModuleReviewPage = ({
 
   const menu = module_review_jsx(external_antd_["Menu"], null, module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
     onClick: () => sortReviews(compareNewest, "Latest")
-  }, "Newest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
+  }, "Latest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
     onClick: () => sortReviews(compareOldest, "Oldest")
   }, "Oldest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
     onClick: () => sortReviews(compareLikes, "Most Likes")
@@ -2021,7 +2240,8 @@ const ModuleReviewPage = ({
       module: module,
       setAddReviewModalVisibility: setAddReviewModalVisibility,
       setAddRatingsModalVisibility: setAddRatingsModalVisibility,
-      reviewByUser: reviewByUser
+      reviewByUser: reviewByUser,
+      updateModule: updateModule
     }), module_review_jsx("div", {
       style: module_review_styles.reviewsHeader
     }, module_review_jsx("span", {
@@ -2045,7 +2265,7 @@ const ModuleReviewPage = ({
       fetchMoreData: fetchMoreReviews
     }), module_review_jsx(components_AddReviewModal, {
       code: module.code,
-      modId: module._id,
+      module: module,
       updateReviews: updateReviews,
       isModalVisible: isAddReviewModalVisible,
       setModalVisibility: setAddReviewModalVisibility,
@@ -2383,10 +2603,7 @@ const searchModule = async (searchTerm, limit = 10, page = 1, schoolId = "", sem
     schoolId,
     semester,
     credit
-  }; // if (schoolId) {
-  //   query.schoolId = schoolId;
-  // }
-
+  };
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}?${query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(query)}`);
   return response.data;
 };
@@ -2665,43 +2882,9 @@ const getCommentsOfReview = async reviewId => {
   addComment,
   getCommentsOfReview
 });
-// CONCATENATED MODULE: ./api/reaction.ts
+// EXTERNAL MODULE: ./api/reaction.ts
+var api_reaction = __webpack_require__("+J/R");
 
-
-
-const reaction_baseUrl = `${config["a" /* serverDomain */]}/api/reaction`;
-
-const addReaction = async (sub, subId, userId, type) => {
-  await external_axios_default.a.post(reaction_baseUrl, {
-    sub,
-    subId,
-    userId,
-    type
-  }, {
-    withCredentials: true
-  });
-};
-
-const getReaction = async (sub, subId, userId, type) => {
-  const query = external_query_string_default.a.stringify({
-    sub,
-    subId,
-    userId,
-    type
-  });
-  const response = await external_axios_default.a.get(`${reaction_baseUrl}/?${query}`);
-  return response.data;
-};
-
-const deleteReaction = async reactionId => {
-  await external_axios_default.a.delete(`${reaction_baseUrl}/${reactionId}`);
-};
-
-/* harmony default export */ var api_reaction = ({
-  addReaction,
-  getReaction,
-  deleteReaction
-});
 // EXTERNAL MODULE: ./utils/helpers.ts + 1 modules
 var helpers = __webpack_require__("ye7r");
 
@@ -2766,7 +2949,7 @@ const AddCommentModal = ({
     fetchComments();
   };
 
-  const validateForm = () => comment !== "";
+  const validateForm = () => comment.trim() !== "";
 
   const closeModal = isToClose => {
     setModalVisibility(isToClose);
@@ -2952,26 +3135,9 @@ function CommentOutlinedIcon(props) {
 }
 
 /* harmony default export */ var icons_CommentOutlinedIcon = (CommentOutlinedIcon);
-// CONCATENATED MODULE: ./icons/LikeOutlinedIcon.tsx
+// EXTERNAL MODULE: ./icons/LikeOutlinedIcon.tsx
+var LikeOutlinedIcon = __webpack_require__("DwSS");
 
-var LikeOutlinedIcon_jsx = external_react_default.a.createElement;
-
-function LikeOutlinedIcon_extends() { LikeOutlinedIcon_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return LikeOutlinedIcon_extends.apply(this, arguments); }
-
-function LikeOutlinedIcon(props) {
-  return LikeOutlinedIcon_jsx("svg", LikeOutlinedIcon_extends({
-    "aria-hidden": "true",
-    "data-prefix": "far",
-    "data-icon": "thumbs-up",
-    className: "thumbs-up-regular_svg__svg-inline--fa thumbs-up-regular_svg__fa-thumbs-up thumbs-up-regular_svg__fa-w-16",
-    viewBox: "0 0 512 512"
-  }, props), LikeOutlinedIcon_jsx("path", {
-    fill: "currentColor",
-    d: "M466.27 286.69C475.04 271.84 480 256 480 236.85c0-44.015-37.218-85.58-85.82-85.58H357.7c4.92-12.81 8.85-28.13 8.85-46.54C366.55 31.936 328.86 0 271.28 0c-61.607 0-58.093 94.933-71.76 108.6-22.747 22.747-49.615 66.447-68.76 83.4H32c-17.673 0-32 14.327-32 32v240c0 17.673 14.327 32 32 32h64c14.893 0 27.408-10.174 30.978-23.95 44.509 1.001 75.06 39.94 177.802 39.94 7.22 0 15.22.01 22.22.01 77.117 0 111.986-39.423 112.94-95.33 13.319-18.425 20.299-43.122 17.34-66.99 9.854-18.452 13.664-40.343 8.99-62.99zm-61.75 53.83c12.56 21.13 1.26 49.41-13.94 57.57 7.7 48.78-17.608 65.9-53.12 65.9h-37.82c-71.639 0-118.029-37.82-171.64-37.82V240h10.92c28.36 0 67.98-70.89 94.54-97.46 28.36-28.36 18.91-75.63 37.82-94.54 47.27 0 47.27 32.98 47.27 56.73 0 39.17-28.36 56.72-28.36 94.54h103.99c21.11 0 37.73 18.91 37.82 37.82.09 18.9-12.82 37.81-22.27 37.81 13.489 14.555 16.371 45.236-5.21 65.62zM88 432c0 13.255-10.745 24-24 24s-24-10.745-24-24 10.745-24 24-24 24 10.745 24 24z"
-  }));
-}
-
-/* harmony default export */ var icons_LikeOutlinedIcon = (LikeOutlinedIcon);
 // CONCATENATED MODULE: ./components/ReviewCard.tsx
 
 var ReviewCard_jsx = external_react_default.a.createElement;
@@ -3059,7 +3225,7 @@ const ReviewCard = ({
 
   const checkIsLikedByUser = async () => {
     try {
-      const likeReaction = await api_reaction.getReaction("review", _id, userId, "like");
+      const likeReaction = await api_reaction["a" /* default */].getReaction("review", _id, userId, "like");
       setUserLikeReactionId(likeReaction._id);
     } catch (err) {
       setUserLikeReactionId("");
@@ -3073,14 +3239,13 @@ const ReviewCard = ({
     }
 
     if (!userLikeReactionId) {
-      await api_reaction.addReaction("review", _id, userId, "like");
-      updateReviews();
-      checkIsLikedByUser();
+      await api_reaction["a" /* default */].addReaction("review", _id, userId, "like");
     } else {
-      await api_reaction.deleteReaction(userLikeReactionId);
-      updateReviews();
-      checkIsLikedByUser();
+      await api_reaction["a" /* default */].deleteReaction(userLikeReactionId);
     }
+
+    updateReviews();
+    checkIsLikedByUser();
   };
 
   const toggleCommentModalVisibility = () => {
@@ -3109,7 +3274,7 @@ const ReviewCard = ({
     style: ReviewCard_styles.action
   }, ReviewCard_jsx(Button["a" /* default */], {
     onClick: onLikeReview
-  }, ReviewCard_jsx(icons_LikeOutlinedIcon, {
+  }, ReviewCard_jsx(LikeOutlinedIcon["a" /* default */], {
     style: _objectSpread(_objectSpread({}, ReviewCard_styles.icon), {}, {
       color: userLikeReactionId ? colors["g" /* ratingsYellow */] : "#fff"
     })

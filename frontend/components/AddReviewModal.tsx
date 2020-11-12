@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { ModalState, Review } from "../types";
+import { ModalState, Review, Module } from "../types";
 import reviewApi from "../api/review";
 import { fetchRatings } from "../utils/helpers";
 
@@ -11,7 +11,7 @@ import { message } from "antd";
 
 interface AddReviewModalProps extends ModalState {
   code: string;
-  modId: string;
+  module: Module;
   updateReviews: () => void;
   updateModule: () => void;
   reviewByUser: Review;
@@ -31,13 +31,13 @@ const initialReviewState = {
   text: "",
   ratingIds: [],
   workload: 10,
-  semesterTaken: 1,
+  semesterTaken: "",
   acadYearTaken: `${yearMinusOne}/${currentAYSecondYear}`,
 };
 
 const AddReviewModal: React.FC<AddReviewModalProps> = ({
   code,
-  modId,
+  module,
   updateReviews,
   updateModule,
   isModalVisible,
@@ -53,7 +53,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
   const [semester, setSemester] = useState(initialReview.semesterTaken);
   const [year, setYear] = useState(initialReview.acadYearTaken);
   const userId = useSelector((state) => state.auth.user?._id);
-
+  console.log(module);
   useEffect(() => {
     const ratingIds = reviewByUser?.ratingIds;
     if (ratingIds?.length > 0) {
@@ -79,9 +79,9 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
 
     const requestBody = {
       text,
-      semesterTaken: semester,
+      semesterTaken: semester as string,
       acadYearTaken: year as string,
-      modId,
+      modId: module._id,
       userId,
       ratings: [
         {
@@ -112,7 +112,8 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
     updateModule();
   };
 
-  const validateForm = () => ratings !== 0 && difficulty !== 0 && text.trim() !== "";
+  const validateForm = () =>
+    ratings !== 0 && difficulty !== 0 && text.trim() !== "";
 
   const closeModal = (isToClose) => {
     setModalVisibility(isToClose);
@@ -144,6 +145,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
         label="Semester Taken"
         type="semester"
         value={semester}
+        options={module.semester}
         setValue={setSemester}
       />
       <FormModalItem

@@ -13,7 +13,7 @@ interface RatingInReview {
 
 interface ReviewToSubmit {
   text: string;
-  semesterTaken: number;
+  semesterTaken: string;
   acadYearTaken: string;
   modId: string;
   userId: string;

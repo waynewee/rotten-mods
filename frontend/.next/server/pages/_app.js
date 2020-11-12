@@ -563,7 +563,8 @@ const FormModalItem = ({
   setValue,
   options,
   searchTerm,
-  setSearchTerm
+  setSearchTerm,
+  minNum
 }) => {
   const {
     0: firstIsChecked,
@@ -638,7 +639,8 @@ const FormModalItem = ({
   const renderNumber = () => __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["InputNumber"], {
     style: styles.inputNumber,
     value: value,
-    onChange: e => setValue(e)
+    onChange: e => setValue(e),
+    min: minNum
   });
 
   const renderYear = () => __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Select"], {
@@ -659,13 +661,17 @@ const FormModalItem = ({
     style: styles.inputNumber,
     onChange: setValue,
     defaultValue: value
-  }, __jsx(Option, {
+  }, options ? options.map(option => __jsx(Option, {
+    value: option
+  }, option)) : __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(Option, {
     value: 1
   }, "1"), __jsx(Option, {
     value: 2
   }, "2"), __jsx(Option, {
     value: 3
-  }, "3"));
+  }, "3"), __jsx(Option, {
+    value: 4
+  }, "4")));
 
   const renderSemesters = () => __jsx("div", {
     style: {
@@ -673,31 +679,27 @@ const FormModalItem = ({
       alignItems: "center",
       height: 34
     }
-  }, __jsx("div", null, __jsx("input", {
-    id: "1",
-    type: "checkbox",
-    value: firstIsChecked,
-    onChange: toggleCheckbox(1)
-  }), __jsx("label", {
-    style: styles.inputCheckboxLabel,
-    htmlFor: "1"
-  }, "1")), __jsx("div", null, __jsx("input", {
-    id: "2",
-    type: "checkbox",
-    value: secondIsChecked,
-    onChange: toggleCheckbox(2)
-  }), __jsx("label", {
-    style: styles.inputCheckboxLabel,
-    htmlFor: "2"
-  }, "2")), __jsx("div", null, __jsx("input", {
-    id: "3",
-    type: "checkbox",
-    value: secondIsChecked,
-    onChange: toggleCheckbox(3)
-  }), __jsx("label", {
-    style: styles.inputCheckboxLabel,
-    htmlFor: "3"
-  }, "3")));
+  }, __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    style: {
+      color: "white"
+    },
+    onChange: () => setValue(1)
+  }, "1"), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    style: {
+      color: "white"
+    },
+    onChange: () => setValue(2)
+  }, "2"), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    style: {
+      color: "white"
+    },
+    onChange: () => setValue(3)
+  }, "3"), __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    style: {
+      color: "white"
+    },
+    onChange: () => setValue(4)
+  }, "4"));
 
   const renderAnnualYear = () => {
     const today = new Date();
@@ -784,19 +786,19 @@ const FormModalItem = ({
   };
 
   const renderInputType = {
-    "input": renderInput,
-    "textarea": renderTextArea,
-    "text": renderText,
-    "rate": renderRate,
-    "difficulty": renderDifficulty,
-    "number": renderNumber,
-    "year": renderYear,
-    "semester": renderSemester,
-    "semesters": renderSemesters,
-    "annualYear": renderAnnualYear,
-    "university": renderUniversity,
-    "autocomplete": renderAutoComplete,
-    "prereq": renderPrereq
+    input: renderInput,
+    textarea: renderTextArea,
+    text: renderText,
+    rate: renderRate,
+    difficulty: renderDifficulty,
+    number: renderNumber,
+    year: renderYear,
+    semester: renderSemester,
+    semesters: renderSemesters,
+    annualYear: renderAnnualYear,
+    university: renderUniversity,
+    autocomplete: renderAutoComplete,
+    prereq: renderPrereq
   };
   return __jsx("div", {
     style: styles.labelContainer
@@ -834,6 +836,52 @@ const styles = {
   }
 };
 /* harmony default export */ __webpack_exports__["a"] = (FormModalItem);
+{
+  /* <div>
+        <input
+          id="1"
+          type="checkbox"
+          value={firstIsChecked}
+          onChange={toggleCheckbox(1)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="1">
+          1
+        </label>
+      </div>
+      <div>
+        <input
+          id="2"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(2)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="2">
+          2
+        </label>
+      </div>
+      <div>
+        <input
+          id="3"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(3)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="3">
+          3
+        </label>
+      </div>
+      <div>
+        <input
+          id="4"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(4)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="4">
+          4
+        </label>
+      </div> */
+}
 
 /***/ }),
 
@@ -1779,7 +1827,7 @@ const AddSchoolModal = ({
   };
 
   const validateForm = () => {
-    return school !== "";
+    return school.trim() !== "";
   };
 
   return AddSchoolModal_jsx(FormModal["a" /* default */], {
@@ -1835,6 +1883,8 @@ const AddModuleModal = ({
     1: setDescription
   } = Object(external_react_["useState"])("");
   const schoolName = Object(external_react_redux_["useSelector"])(state => state.auth.user.schoolName);
+  console.log("prinitng sch name");
+  console.log(schoolName);
   const {
     0: university,
     1: setUniversity
@@ -1846,7 +1896,7 @@ const AddModuleModal = ({
   const {
     0: semesters,
     1: setSemesters
-  } = Object(external_react_["useState"])([false, false]);
+  } = Object(external_react_["useState"])([false, false, false, false]);
   const {
     0: workload,
     1: setWorkload
@@ -1907,14 +1957,20 @@ const AddModuleModal = ({
       workload,
       prereqs
     };
+
+    if (semester.length === 0) {
+      delete newModule.semester;
+    }
+
     api_module["a" /* default */].addModule(newModule);
+    console.log(newModule);
     setModalVisibility(false);
     resetState();
     external_antd_["message"].success(`Successfully added module ${code}`);
   };
 
   const validateForm = () => {
-    return code && title && university && description && credit && workload;
+    return code.trim() && title.trim() && university.trim() && description.trim() && credit && workload;
   };
 
   const resetState = () => {
@@ -1923,9 +1979,17 @@ const AddModuleModal = ({
     setDescription("");
     setUniversity("");
     setCredit(4);
-    setSemesters([false, false]);
+    setSemesters([false, false, false, false]);
     setWorkload(10);
     setModulePrereqs([]);
+  };
+
+  const toggleSemester = sem => {
+    const currentBool = semesters[sem - 1];
+    const newToggledSemesters = semesters.map(x => x);
+    newToggledSemesters[sem - 1] = !currentBool;
+    console.log("sems:", newToggledSemesters);
+    setSemesters(newToggledSemesters);
   };
 
   return AddModuleModal_jsx(FormModal["a" /* default */], {
@@ -1960,17 +2024,19 @@ const AddModuleModal = ({
     label: "Workload/Week",
     type: "number",
     value: workload,
-    setValue: setWorkload
+    setValue: setWorkload,
+    minNum: 0
   }), AddModuleModal_jsx(FormModalItem["a" /* default */], {
     label: "Credit",
     type: "number",
     value: credit,
-    setValue: setCredit
+    setValue: setCredit,
+    minNum: 0
   }), AddModuleModal_jsx(FormModalItem["a" /* default */], {
     label: "Semester",
     type: "semesters",
     value: semesters,
-    setValue: setSemesters
+    setValue: toggleSemester
   }), AddModuleModal_jsx(FormModalItem["a" /* default */], {
     label: "Pre-requisites",
     type: "prereq",
@@ -3471,9 +3537,7 @@ const authReducer = (state = initialState, action) => {
       });
 
     case constants["i" /* LOG_USER_OUT */]:
-      return {
-        initialState
-      };
+      return initialState;
 
     default:
       return state;
@@ -3627,10 +3691,6 @@ const schoolsReducer = (state = schoolsReducer_initialState, action) => {
 
 
 const reducer = (state, action) => {
-  if (action.type === 'LOG_USER_OUT') {
-    state = undefined;
-  }
-
   return appReducer(state, action);
 };
 
@@ -4262,10 +4322,7 @@ const searchModule = async (searchTerm, limit = 10, page = 1, schoolId = "", sem
     schoolId,
     semester,
     credit
-  }; // if (schoolId) {
-  //   query.schoolId = schoolId;
-  // }
-
+  };
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}?${query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(query)}`);
   return response.data;
 };

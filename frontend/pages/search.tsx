@@ -88,6 +88,10 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
       label: 3,
       value: 3,
     },
+    {
+      label: 4,
+      value: 4,
+    },
   ];
 
   return (
@@ -123,6 +127,7 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
               <Checkbox.Group
                 options={semesterOptions}
                 onChange={setSemestersFilter}
+                style={{ color: "red" }}
               />
             </div>
           </div>
@@ -130,6 +135,7 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
             <span>Credits:</span>
             <InputNumber
               max={12}
+              min={0}
               onChange={(value) => setCreditsFilter(value as string)}
               style={styles.creditsInput}
             />

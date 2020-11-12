@@ -33,13 +33,13 @@ const ModuleMetaComparison: React.FC<ModuleMetaComparisonProps> = ({
   const firstUniversity = schools.find(
     (school) => school._id === firstSchoolId
   )?.name;
-  const firstDifficulty = firstRatings?.difficulty?.value || 3;
-  const firstStar = firstRatings?.star?.value || 3;
+  const firstDifficulty = firstRatings?.difficulty?.value || 0;
+  const firstStar = firstRatings?.star?.value || 0;
   const secondUniversity = schools.find(
     (school) => school._id === secondSchoolId
   )?.name;
-  const secondDifficulty = secondRatings?.difficulty?.value || 3;
-  const secondStar = secondRatings?.star?.value || 3;
+  const secondDifficulty = secondRatings?.difficulty?.value || 0;
+  const secondStar = secondRatings?.star?.value || 0;
 
   return (
     <>
@@ -50,8 +50,8 @@ const ModuleMetaComparison: React.FC<ModuleMetaComparisonProps> = ({
       />
       <MetaCompareRow
         title="Difficulty"
-        firstMeta={`${firstDifficulty.toFixed(1)}/5`}
-        secondMeta={`${secondDifficulty.toFixed(1)}/5`}
+        firstMeta={`${firstDifficulty.toFixed(1) == "0.0" ? "-" : firstDifficulty.toFixed(1)}/5`}
+        secondMeta={`${secondDifficulty.toFixed(1) == "0.0" ? "-" : secondDifficulty.toFixed(1)}/5`}
       />
       <MetaCompareRow
         title="Ratings"
@@ -60,8 +60,8 @@ const ModuleMetaComparison: React.FC<ModuleMetaComparisonProps> = ({
       />
       <MetaCompareRow
         title="Semester(s) offered"
-        firstMeta={`${firstSemester.sort().join(", ")}`}
-        secondMeta={`${secondSemester.sort().join(", ")}`}
+        firstMeta={`${firstSemester.sort().join(", ")  || "-"}`}
+        secondMeta={`${secondSemester.sort().join(", ")  || "-"}`}
       />
       <MetaCompareRow
         title="Credits"
@@ -70,8 +70,8 @@ const ModuleMetaComparison: React.FC<ModuleMetaComparisonProps> = ({
       />
       <MetaCompareRow
         title="University"
-        firstMeta={firstUniversity}
-        secondMeta={secondUniversity}
+        firstMeta={firstUniversity ?? "-"}
+        secondMeta={secondUniversity ?? "-"}
       />
       <MetaCompareRow title="Reviews" firstMeta={""} secondMeta={""} />
     </>

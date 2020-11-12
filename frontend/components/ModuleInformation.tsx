@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Module, Review } from "../types";
 import bookmarkApi from "../api/bookmark";
 import plannedModApi from "../api/planned-mod";
+import reactionApi from "../api/reaction";
 import {
   updatedPersonalPlannedModules,
   updatePersonalBookmarks,
@@ -15,15 +16,23 @@ import CoinsFilledIcon from "../icons/CoinsFilledIcon";
 import HourGlassHalfFilledIcon from "../icons/HourGlassHalfFilledIcon";
 import LayerGroupIcon from "../icons/LayerGroupIcon";
 import StarFilledIcon from "../icons/StarFilledIcon";
+import LikeFilledIcon from "../icons/LikeFilledIcon";
 import StarOutlinedIcon from "../icons/StarOutlinedIcon";
+import LikeOutlinedIcon from "../icons/LikeOutlinedIcon";
 import UniversityIcon from "../icons/UniversityIcon";
 import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
 import BookmarkOutlinedIcon from "../icons/BookmarkOutlinedIcon";
 import CheckboxOutlinedIcon from "../icons/CheckboxOutlinedIcon";
 import { BookFilled, BookOutlined } from "@ant-design/icons";
-import PenFilledIcon from "../icons/PenFilledIcon";
+import PencilOutlinedIcon from "../icons/PencilOutlinedIcon";
+import PencilFilledIcon from "../icons/PencilFilledIcon";
 import Button from "./Button";
-import { codeBlue, descriptionGreen, ratingsYellow } from "../styles/colors";
+import {
+  codeBlue,
+  reviewBlue,
+  descriptionGreen,
+  ratingsYellow,
+} from "../styles/colors";
 import AddPlannedModModal from "./AddPlannedModModal";
 import { message } from "antd";
 
@@ -32,6 +41,7 @@ interface ModuleInformationProps {
   setAddReviewModalVisibility: Dispatch<SetStateAction<boolean>>;
   setAddRatingsModalVisibility: Dispatch<SetStateAction<boolean>>;
   reviewByUser?: Review;
+  updateModule: () => void;
 }
 
 const ModuleInformation: React.FC<ModuleInformationProps> = ({
@@ -39,11 +49,13 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
   setAddReviewModalVisibility,
   setAddRatingsModalVisibility,
   reviewByUser,
+  updateModule,
 }) => {
   const [
     isAddPlannedModModalVisible,
     setAddPlannedModModalVisibility,
   ] = useState(false);
+  const [likeReactionId, setLikeReactionId] = useState(""); // is true if it is reaction's id
 
   const userId = useSelector((state) => state.auth.user?._id);
   const bookmarkId = useSelector(
@@ -70,6 +82,24 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
   const university = schools.find((school) => school._id === schoolId)?.name;
   const difficulty = rating?.difficulty?.value || 0;
   const star = rating?.star?.value || 0;
+
+  useEffect(() => {
+    fetchIsLikedByUser();
+  }, [userId]);
+
+  const fetchIsLikedByUser = async () => {
+    try {
+      const reaction = await reactionApi.getReaction(
+        "mod",
+        module._id,
+        userId,
+        "like"
+      );
+      setLikeReactionId(reaction._id);
+    } catch (err) {
+      setLikeReactionId("");
+    }
+  };
 
   const toggleBookmark = async () => {
     if (!isLoggedIn) {
@@ -124,6 +154,21 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
     setAddReviewModalVisibility(true);
   };
 
+  const toggleLike = async () => {
+    if (!isLoggedIn) {
+      triggerRequireLoginMessage();
+      return;
+    }
+
+    if (likeReactionId) {
+      await reactionApi.deleteReaction(likeReactionId);
+    } else {
+      await reactionApi.addReaction("mod", module._id, userId, "like");
+    }
+    fetchIsLikedByUser();
+    updateModule();
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.moduleMeta}>
@@ -132,12 +177,12 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
           <div style={styles.moduleSmallDetailsColumn}>
             <ModuleSmallDetail
               Icon={UniversityIcon}
-              text={`University: ${university ?? "Not Found"}`}
+              text={`University: ${university ?? "-"}`}
               iconStyle={styles.iconStyle}
             />
             <ModuleSmallDetail
               Icon={HourGlassHalfFilledIcon}
-              text={`Semester(s) offered: ${semester.sort().join(", ")}`}
+              text={`Semester(s) offered: ${semester.sort().join(", ") || "-"}`}
               iconStyle={styles.iconStyle}
             />
           </div>
@@ -161,7 +206,9 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
             />
             <ModuleSmallDetail
               Icon={LayerGroupIcon}
-              text={`Difficulty: ${difficulty.toFixed(1)}/5`}
+              text={`Difficulty: ${
+                difficulty.toFixed(1) == "0.0" ? "-" : difficulty.toFixed(1)
+              }/5`}
               iconStyle={styles.iconStyle}
             />
           </div>
@@ -185,15 +232,52 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
               color: "#838383",
             }}
           >
+            <div style={{ marginRight: 10 }}>
+              <LikeFilledIcon
+                style={{
+                  height: 20,
+                  color: codeBlue,
+                  margin: "0px 10px",
+                  position: "relative",
+                  bottom: -2,
+                }}
+              />
+              {`${module.reaction?.like?.count ?? 0}`}
+            </div>
             <div>
               <StarFilledIcon
-                style={{ height: 20, color: ratingsYellow, margin: "0px 10px" }}
+                style={{
+                  height: 20,
+                  color: ratingsYellow,
+                  margin: "0px 10px",
+                  position: "relative",
+                  bottom: -2,
+                }}
               />
+              {`${star.toFixed(1)}`}
             </div>
-            {`${star.toFixed(1)}`}
           </div>
 
           <div style={styles.actionsBar}>
+            <Button onClick={toggleLike}>
+              {likeReactionId ? (
+                <LikeFilledIcon
+                  style={{
+                    ...styles.actionIcon,
+                    color: codeBlue,
+                    fontSize: 25,
+                  }}
+                />
+              ) : (
+                <LikeOutlinedIcon
+                  style={{
+                    ...styles.actionIcon,
+                    color: codeBlue,
+                    fontSize: 25,
+                  }}
+                />
+              )}
+            </Button>
             <Button onClick={togglePlanner}>
               {plannedModId ? (
                 <BookFilled
@@ -230,9 +314,15 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
               />
             </Button>
             <Button onClick={toggleAddReviewModal}>
-              <PenFilledIcon
-                style={{ ...styles.actionIcon, color: "#7497CC" }}
-              />
+              {reviewByUser ? (
+                <PencilFilledIcon
+                  style={{ ...styles.actionIcon, width: 25, fill: reviewBlue }}
+                />
+              ) : (
+                <PencilOutlinedIcon
+                  style={{ ...styles.actionIcon, width: 25, fill: reviewBlue }}
+                />
+              )}
             </Button>
           </div>
         </div>

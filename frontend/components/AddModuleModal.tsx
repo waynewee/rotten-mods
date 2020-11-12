@@ -22,12 +22,13 @@ const AddModuleModal: React.FC<ModalState> = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const schoolName = useSelector((state) => state.auth.user.schoolName);
+  console.log("prinitng sch name");
+  console.log(schoolName);
   const [university, setUniversity] = useState(schoolName);
   const [credit, setCredit] = useState(4);
-  const [semesters, setSemesters] = useState<[boolean, boolean]>([
-    false,
-    false,
-  ]);
+  const [semesters, setSemesters] = useState<
+    [boolean, boolean, boolean, boolean]
+  >([false, false, false, false]);
   const [workload, setWorkload] = useState(10);
   const [modulePrereqs, setModulePrereqs] = useState<SearchOptions[]>([]);
   const [allModules, setAllModules] = useState<SearchOptions[]>([]);
@@ -81,14 +82,19 @@ const AddModuleModal: React.FC<ModalState> = ({
       prereqs,
     };
 
+    if (semester.length === 0) {
+      delete newModule.semester;
+    }
+
     moduleApi.addModule(newModule);
+    console.log(newModule);
     setModalVisibility(false);
     resetState();
     message.success(`Successfully added module ${code}`);
   };
 
   const validateForm = () => {
-    return code && title && university && description && credit && workload;
+    return code.trim() && title.trim() && university.trim() && description.trim() && credit && workload;
   };
 
   const resetState = () => {
@@ -97,9 +103,22 @@ const AddModuleModal: React.FC<ModalState> = ({
     setDescription("");
     setUniversity("");
     setCredit(4);
-    setSemesters([false, false]);
+    setSemesters([false, false, false, false]);
     setWorkload(10);
     setModulePrereqs([]);
+  };
+
+  const toggleSemester = (sem) => {
+    const currentBool = semesters[sem - 1];
+    const newToggledSemesters: [
+      boolean,
+      boolean,
+      boolean,
+      boolean
+    ] = semesters.map((x) => x) as [boolean, boolean, boolean, boolean];
+    newToggledSemesters[sem - 1] = !currentBool;
+    console.log("sems:", newToggledSemesters);
+    setSemesters(newToggledSemesters);
   };
 
   return (
@@ -141,18 +160,20 @@ const AddModuleModal: React.FC<ModalState> = ({
         type="number"
         value={workload}
         setValue={setWorkload}
+        minNum={0}
       />
       <FormModalItem
         label="Credit"
         type="number"
         value={credit}
         setValue={setCredit}
+        minNum={0}
       />
       <FormModalItem
         label="Semester"
         type="semesters"
         value={semesters}
-        setValue={setSemesters}
+        setValue={toggleSemester}
       />
       <FormModalItem
         label="Pre-requisites"

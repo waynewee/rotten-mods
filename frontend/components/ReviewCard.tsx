@@ -87,13 +87,12 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
     if (!userLikeReactionId) {
       await reactionApi.addReaction("review", _id, userId, "like");
-      updateReviews();
-      checkIsLikedByUser();
     } else {
       await reactionApi.deleteReaction(userLikeReactionId);
-      updateReviews();
-      checkIsLikedByUser();
     }
+
+    updateReviews();
+    checkIsLikedByUser();
   };
 
   const toggleCommentModalVisibility = () => {

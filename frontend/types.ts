@@ -14,6 +14,11 @@ export interface Module {
   credit: number;
   semester: number[];
   prereqs: string[];
+  reaction?: {
+    like?: {
+      count: number;
+    }
+  }
 }
 
 export interface Rating {

@@ -849,6 +849,9 @@ const Search = ({
   }, {
     label: 3,
     value: 3
+  }, {
+    label: 4,
+    value: 4
   }];
   return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("div", {
     style: styles.header
@@ -870,9 +873,13 @@ const Search = ({
     style: styles.checkboxes
   }, __jsx(antd__WEBPACK_IMPORTED_MODULE_8__["Checkbox"].Group, {
     options: semesterOptions,
-    onChange: setSemestersFilter
+    onChange: setSemestersFilter,
+    style: {
+      color: "red"
+    }
   }))), __jsx("div", null, __jsx("span", null, "Credits:"), __jsx(antd__WEBPACK_IMPORTED_MODULE_8__["InputNumber"], {
     max: 12,
+    min: 0,
     onChange: value => setCreditsFilter(value),
     style: styles.creditsInput
   })))), __jsx(_components_SearchModuleList__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], {
@@ -1022,10 +1029,7 @@ const searchModule = async (searchTerm, limit = 10, page = 1, schoolId = "", sem
     schoolId,
     semester,
     credit
-  }; // if (schoolId) {
-  //   query.schoolId = schoolId;
-  // }
-
+  };
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}?${query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(query)}`);
   return response.data;
 };
