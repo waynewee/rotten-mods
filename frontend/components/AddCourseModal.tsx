@@ -13,15 +13,25 @@ const AddCourseModal: React.FC<ModalState> = ({
 }) => {
   const [course, setCourse] = useState("");
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!validateForm()) {
       message.error("The field cannot be empty!");
       return;
     }
+    courseApi.addCourse(course)
+      .then((response) => {
+        setCourse("");
+        setModalVisibility(false);
+        message.success(`The course ${course} has been added successfully!`);
+      })
+      .catch((error) => {
+        console.log("the error is");
+        console.log(error.response);
+        if (error.response.status == "409") {
+          message.error(`The course ${course} is already in the database!`);
+        }
+      })
 
-    await courseApi.addCourse(course);
-    setModalVisibility(false);
-    message.success(`The course ${course} has been added successfully!`);
   };
 
   const validateForm = () => {
