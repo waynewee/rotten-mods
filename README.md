@@ -4,6 +4,8 @@ This is a step-by-step guide for setting up a development environment on your lo
 
 To get started, you should have installed the latest version Visual Studio Code (VS Code) on your local machine. Then please follow the steps.
 
+The production site is located [here](http://ec2-52-77-214-145.ap-southeast-1.compute.amazonaws.com/)
+
 ## Get a Copy
 
 Clone the repo into your local machine.
