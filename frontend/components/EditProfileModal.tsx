@@ -129,6 +129,19 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
           initialValue={user.fullName}
           rules={[
             { required: true, message: "Please enter your full name!" },
+            {
+              validator: (_, value) => {
+                console.log("the value is");
+                console.log(value);
+                if (value.length > 50) {
+                  return Promise.reject(
+                    "Your name has to be less than 50 characters. Time for a name change?"
+                  );
+                } else {
+                  return Promise.resolve();
+                }
+              },
+            },
           ]}
         >
           <Input />

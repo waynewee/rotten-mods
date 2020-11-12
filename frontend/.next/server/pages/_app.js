@@ -1835,6 +1835,8 @@ const AddModuleModal = ({
     1: setDescription
   } = Object(external_react_["useState"])("");
   const schoolName = Object(external_react_redux_["useSelector"])(state => state.auth.user.schoolName);
+  console.log("prinitng sch name");
+  console.log(schoolName);
   const {
     0: university,
     1: setUniversity
@@ -3471,9 +3473,7 @@ const authReducer = (state = initialState, action) => {
       });
 
     case constants["i" /* LOG_USER_OUT */]:
-      return {
-        initialState
-      };
+      return initialState;
 
     default:
       return state;
@@ -3627,10 +3627,6 @@ const schoolsReducer = (state = schoolsReducer_initialState, action) => {
 
 
 const reducer = (state, action) => {
-  if (action.type === 'LOG_USER_OUT') {
-    state = undefined;
-  }
-
   return appReducer(state, action);
 };
 

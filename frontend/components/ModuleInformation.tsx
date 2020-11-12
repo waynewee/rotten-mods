@@ -132,12 +132,12 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
           <div style={styles.moduleSmallDetailsColumn}>
             <ModuleSmallDetail
               Icon={UniversityIcon}
-              text={`University: ${university ?? "Not Found"}`}
+              text={`University: ${university ?? "-"}`}
               iconStyle={styles.iconStyle}
             />
             <ModuleSmallDetail
               Icon={HourGlassHalfFilledIcon}
-              text={`Semester(s) offered: ${semester.sort().join(", ")}`}
+              text={`Semester(s) offered: ${semester.sort().join(", ") || "-"}`}
               iconStyle={styles.iconStyle}
             />
           </div>
@@ -161,7 +161,7 @@ const ModuleInformation: React.FC<ModuleInformationProps> = ({
             />
             <ModuleSmallDetail
               Icon={LayerGroupIcon}
-              text={`Difficulty: ${difficulty.toFixed(1)}/5`}
+              text={`Difficulty: ${difficulty.toFixed(1) == "0.0" ? "-" : difficulty.toFixed(1)}/5`}
               iconStyle={styles.iconStyle}
             />
           </div>

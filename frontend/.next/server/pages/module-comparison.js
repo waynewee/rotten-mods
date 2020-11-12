@@ -805,24 +805,24 @@ const ModuleMetaComparison = ({
     secondMeta: `${secondModuleHours}`
   }), ModuleMetaComparison_jsx(components_MetaCompareRow, {
     title: "Difficulty",
-    firstMeta: `${firstDifficulty.toFixed(1)}/5`,
-    secondMeta: `${secondDifficulty.toFixed(1)}/5`
+    firstMeta: `${firstDifficulty.toFixed(1) == "0.0" ? "-" : firstDifficulty.toFixed(1)}/5`,
+    secondMeta: `${secondDifficulty.toFixed(1) == "0.0" ? "-" : secondDifficulty.toFixed(1)}/5`
   }), ModuleMetaComparison_jsx(components_MetaCompareRow, {
     title: "Ratings",
     firstMeta: `${firstStar.toFixed(1)}`,
     secondMeta: `${secondStar.toFixed(1)}`
   }), ModuleMetaComparison_jsx(components_MetaCompareRow, {
     title: "Semester(s) offered",
-    firstMeta: `${firstSemester.sort().join(", ")}`,
-    secondMeta: `${secondSemester.sort().join(", ")}`
+    firstMeta: `${firstSemester.sort().join(", ") || "-"}`,
+    secondMeta: `${secondSemester.sort().join(", ") || "-"}`
   }), ModuleMetaComparison_jsx(components_MetaCompareRow, {
     title: "Credits",
     firstMeta: `${firstCredit}`,
     secondMeta: `${secondCredit}`
   }), ModuleMetaComparison_jsx(components_MetaCompareRow, {
     title: "University",
-    firstMeta: firstUniversity,
-    secondMeta: secondUniversity
+    firstMeta: firstUniversity !== null && firstUniversity !== void 0 ? firstUniversity : "-",
+    secondMeta: secondUniversity !== null && secondUniversity !== void 0 ? secondUniversity : "-"
   }), ModuleMetaComparison_jsx(components_MetaCompareRow, {
     title: "Reviews",
     firstMeta: "",
@@ -1042,9 +1042,7 @@ const authReducer = (state = initialState, action) => {
       });
 
     case constants["i" /* LOG_USER_OUT */]:
-      return {
-        initialState
-      };
+      return initialState;
 
     default:
       return state;
@@ -1198,10 +1196,6 @@ const schoolsReducer = (state = schoolsReducer_initialState, action) => {
 
 
 const reducer = (state, action) => {
-  if (action.type === 'LOG_USER_OUT') {
-    state = undefined;
-  }
-
   return appReducer(state, action);
 };
 

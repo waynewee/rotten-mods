@@ -9,13 +9,14 @@ import moduleApi from "../api/module";
 
 import { useEffect, useState } from "react";
 
-const Home: NextPage = ({}) => {
+const Home: NextPage = ({ }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.user?._id);
 
   const [trendingModules, setTrendingModules] = useState([]);
   const [popularModules, setPopularModules] = useState([]);
   const [recommendedModules, setRecommendedModules] = useState([]);
+  const [topModules, setTopModules] = useState([]);
 
   useEffect(() => {
     fetchAllRecommendations();
@@ -38,7 +39,7 @@ const Home: NextPage = ({}) => {
       .then((response) => {
         concatBackup(response.mods, setPopularModules);
       })
-      .catch((error)=> {
+      .catch((error) => {
         // no modules
         concatBackup([], setPopularModules);
       })
@@ -46,12 +47,21 @@ const Home: NextPage = ({}) => {
       .then((response) => {
         concatBackup(response.mods, setTrendingModules);
       })
-      .catch((error)=> {
+      .catch((error) => {
         // no modules
         concatBackup([], setTrendingModules);
       })
 
-    
+    recommendationApi.getTopRatedModules()
+      .then((response) => {
+        concatBackup(response.mods, setTopModules);
+      })
+      .catch((error) => {
+        // no modules
+        concatBackup([], setTopModules);
+      })
+
+
     try {
       if (userId) {
         const recommendedModules = await recommendationApi.getRecommendedModules(
@@ -95,6 +105,8 @@ const Home: NextPage = ({}) => {
       <HomeModuleList modules={trendingModules} />
       <SectionTitle title="Popular Modules" />
       <HomeModuleList modules={popularModules} />
+      <SectionTitle title="Top Modules" />
+      <HomeModuleList modules={topModules} />
       {isLoggedIn && renderRecommendedModules()}
     </>
   );

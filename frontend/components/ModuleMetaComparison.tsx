@@ -50,8 +50,8 @@ const ModuleMetaComparison: React.FC<ModuleMetaComparisonProps> = ({
       />
       <MetaCompareRow
         title="Difficulty"
-        firstMeta={`${firstDifficulty.toFixed(1)}/5`}
-        secondMeta={`${secondDifficulty.toFixed(1)}/5`}
+        firstMeta={`${firstDifficulty.toFixed(1) == "0.0" ? "-" : firstDifficulty.toFixed(1)}/5`}
+        secondMeta={`${secondDifficulty.toFixed(1) == "0.0" ? "-" : secondDifficulty.toFixed(1)}/5`}
       />
       <MetaCompareRow
         title="Ratings"
@@ -60,8 +60,8 @@ const ModuleMetaComparison: React.FC<ModuleMetaComparisonProps> = ({
       />
       <MetaCompareRow
         title="Semester(s) offered"
-        firstMeta={`${firstSemester.sort().join(", ")}`}
-        secondMeta={`${secondSemester.sort().join(", ")}`}
+        firstMeta={`${firstSemester.sort().join(", ")  || "-"}`}
+        secondMeta={`${secondSemester.sort().join(", ")  || "-"}`}
       />
       <MetaCompareRow
         title="Credits"
@@ -70,8 +70,8 @@ const ModuleMetaComparison: React.FC<ModuleMetaComparisonProps> = ({
       />
       <MetaCompareRow
         title="University"
-        firstMeta={firstUniversity}
-        secondMeta={secondUniversity}
+        firstMeta={firstUniversity ?? "-"}
+        secondMeta={secondUniversity ?? "-"}
       />
       <MetaCompareRow title="Reviews" firstMeta={""} secondMeta={""} />
     </>

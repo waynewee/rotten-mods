@@ -768,9 +768,7 @@ const authReducer = (state = initialState, action) => {
       });
 
     case constants["i" /* LOG_USER_OUT */]:
-      return {
-        initialState
-      };
+      return initialState;
 
     default:
       return state;
@@ -924,10 +922,6 @@ const schoolsReducer = (state = schoolsReducer_initialState, action) => {
 
 
 const reducer = (state, action) => {
-  if (action.type === 'LOG_USER_OUT') {
-    state = undefined;
-  }
-
   return appReducer(state, action);
 };
 
@@ -1718,11 +1712,11 @@ const ModuleInformation = ({
     style: ModuleInformation_styles.moduleSmallDetailsColumn
   }, ModuleInformation_jsx(components_ModuleSmallDetail, {
     Icon: icons_UniversityIcon,
-    text: `University: ${university !== null && university !== void 0 ? university : "Not Found"}`,
+    text: `University: ${university !== null && university !== void 0 ? university : "-"}`,
     iconStyle: ModuleInformation_styles.iconStyle
   }), ModuleInformation_jsx(components_ModuleSmallDetail, {
     Icon: icons_HourGlassHalfFilledIcon,
-    text: `Semester(s) offered: ${semester.sort().join(", ")}`,
+    text: `Semester(s) offered: ${semester.sort().join(", ") || "-"}`,
     iconStyle: ModuleInformation_styles.iconStyle
   })), ModuleInformation_jsx("div", {
     style: ModuleInformation_styles.moduleSmallDetailsColumn
@@ -1742,7 +1736,7 @@ const ModuleInformation = ({
     iconStyle: ModuleInformation_styles.iconStyle
   }), ModuleInformation_jsx(components_ModuleSmallDetail, {
     Icon: icons_LayerGroupIcon,
-    text: `Difficulty: ${difficulty.toFixed(1)}/5`,
+    text: `Difficulty: ${difficulty.toFixed(1) == "0.0" ? "-" : difficulty.toFixed(1)}/5`,
     iconStyle: ModuleInformation_styles.iconStyle
   }))), ModuleInformation_jsx("div", {
     style: {
