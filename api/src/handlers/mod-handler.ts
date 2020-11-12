@@ -55,14 +55,36 @@ export async function search(searchInfo: any){
 
   const { limit, page, searchTerm } = searchQuery
 
-  const results = await Mod.find({
-    $or: [
-      { title: { $regex: searchTerm, $options: 'i' } },
-      { code: { $regex: searchTerm, $options: 'i' } }
+  //filters
+  const { schoolId, semester, credit } = searchQuery
+
+  const query: any = {
+    $and: [
+      {
+        $or: [
+          { title: { $regex: searchTerm, $options: 'i' } },
+          { code: { $regex: searchTerm, $options: 'i' } }
+        ]
+      }
     ]
-  })
+  }
+
+  if( schoolId ){
+    query.$and.push({ schoolId })
+  }
+
+  if( semester ){
+    query.$and.push({ semester: { $elemMatch: { $eq: semester } } })
+  }
+
+  if( credit ){
+    query.$and.push({ credit })
+  }
+
+  const results = await Mod.find(query)
   .limit(limit) 
   .skip((page - 1) * limit)
+  .sort({ "rating.star.value": -1 })
 
   return results
 }
