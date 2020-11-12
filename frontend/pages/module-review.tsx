@@ -135,6 +135,7 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
           setAddReviewModalVisibility={setAddReviewModalVisibility}
           setAddRatingsModalVisibility={setAddRatingsModalVisibility}
           reviewByUser={reviewByUser}
+          updateModule={updateModule}
         />
         <div style={styles.reviewsHeader}>
           <span style={styles.reviewsHeaderTitle}>Reviews</span>
