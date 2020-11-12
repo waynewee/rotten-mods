@@ -65,7 +65,7 @@ const Home: NextPage = ({}) => {
           <>
             <SectionTitle title="Recommended For You" />
             <p style={{ textAlign: "center", paddingTop: "20px" }}>
-              Sorry we do not have enough information about you to recommend
+              Sorry we do not have enough information about you yet to recommend
               modules for you!
             </p>
           </>

@@ -7,6 +7,7 @@ import { fetchRatings } from "../utils/helpers";
 import FormModal from "./FormModal";
 import FormModalItem from "./FormModalItem";
 import { reviewBlue, submitBlue, crossRed } from "../styles/colors";
+import { message } from "antd";
 
 interface AddReviewModalProps extends ModalState {
   code: string;
@@ -64,10 +65,7 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
 
   const onSubmit = async () => {
     if (!validateForm()) {
-      setSubmitText(
-        "You have forgotten to fill in at least one of the fields. Once done click this button!"
-      );
-      setSubmitColor(crossRed);
+      message.error("You need to fill in all fields!");
       return;
     }
 
@@ -91,12 +89,14 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
 
     if (reviewByUser) {
       await reviewApi.updateReviewOfModule(requestBody, reviewByUser._id);
+      updateReviews();
       // update ratings
     } else {
+      if (ratingsByUser) {
+        await reviewApi.deleteRating(ratingsByUser._id);
+      }
+
       await reviewApi.addReviewOfModule(requestBody);
-      // add ratings
-      // await reviewApi.addRating(difficulty, "difficulty", userId, modId, "mod", );
-      // await reviewApi.addRating(ratings, "star", userId, modId, "mod", );
     }
 
     setModalVisibility(false);

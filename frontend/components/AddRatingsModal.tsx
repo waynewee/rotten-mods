@@ -5,13 +5,15 @@ import reviewApi from "../api/review";
 
 import FormModal from "./FormModal";
 import FormModalItem from "./FormModalItem";
-import { reviewBlue, submitBlue, crossRed } from "../styles/colors";
+import { reviewBlue, submitBlue } from "../styles/colors";
+import { message } from "antd";
 
 interface AddRatingsModalProps extends ModalState {
   code: string;
   modId: string;
   ratingsByUser?: { value: number; _id: string };
   updateModule: () => void;
+  checkIsRatedByUser: () => void;
 }
 
 const AddRatingsModal: React.FC<AddRatingsModalProps> = ({
@@ -21,6 +23,7 @@ const AddRatingsModal: React.FC<AddRatingsModalProps> = ({
   isModalVisible,
   setModalVisibility,
   updateModule,
+  checkIsRatedByUser,
 }) => {
   const userId = useSelector((state) => state.auth.user?._id);
   const [ratings, setRatings] = useState(ratingsByUser?.value ?? 3);
@@ -33,10 +36,7 @@ const AddRatingsModal: React.FC<AddRatingsModalProps> = ({
 
   const onSubmit = async () => {
     if (!validateForm()) {
-      setSubmitText(
-        "You did not rate the module. Once done click this button!"
-      );
-      setSubmitColor(crossRed);
+      message.error("You need to rate the module first!");
       return;
     }
 
@@ -53,6 +53,7 @@ const AddRatingsModal: React.FC<AddRatingsModalProps> = ({
       await reviewApi.addRating(ratings, "star", userId, modId, "mod");
     }
 
+    checkIsRatedByUser();
     updateModule();
     setModalVisibility(false);
   };

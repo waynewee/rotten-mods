@@ -485,6 +485,7 @@ const FormModalItem = ({
     style: styles.input,
     options: searchOptions,
     onSelect: setValue,
+    defaultValue: value,
     onSearch: searchText => setSearchOptions(options.filter(item => item.value.includes(searchText)))
   });
 
@@ -495,7 +496,6 @@ const FormModalItem = ({
     };
 
     const renderTags = () => {
-      console.log(value);
       return value.map(mod => __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Tag"], {
         closable: true,
         onClose: () => removeCode(mod),
@@ -742,7 +742,10 @@ const initialState = {
     _id: "",
     fullName: "",
     yearOfStudy: 1,
-    studyCourse: ""
+    courseName: "",
+    password: "",
+    email: "",
+    schoolName: ""
   }
 };
 
@@ -1026,9 +1029,13 @@ var FormModalItem = __webpack_require__("HNwB");
 // EXTERNAL MODULE: ./styles/colors.js
 var colors = __webpack_require__("xwfA");
 
+// EXTERNAL MODULE: external "antd"
+var external_antd_ = __webpack_require__("Exp3");
+
 // CONCATENATED MODULE: ./components/AddReviewModal.tsx
 
 var __jsx = external_react_default.a.createElement;
+
 
 
 
@@ -1106,8 +1113,7 @@ const AddReviewModal = ({
 
   const onSubmit = async () => {
     if (!validateForm()) {
-      setSubmitText("You have forgotten to fill in at least one of the fields. Once done click this button!");
-      setSubmitColor(colors["d" /* crossRed */]);
+      external_antd_["message"].error("You need to fill in all fields!");
       return;
     }
 
@@ -1127,11 +1133,14 @@ const AddReviewModal = ({
     };
 
     if (reviewByUser) {
-      await review["a" /* default */].updateReviewOfModule(requestBody, reviewByUser._id); // update ratings
+      await review["a" /* default */].updateReviewOfModule(requestBody, reviewByUser._id);
+      updateReviews(); // update ratings
     } else {
-      await review["a" /* default */].addReviewOfModule(requestBody); // add ratings
-      // await reviewApi.addRating(difficulty, "difficulty", userId, modId, "mod", );
-      // await reviewApi.addRating(ratings, "star", userId, modId, "mod", );
+      if (ratingsByUser) {
+        await review["a" /* default */].deleteRating(ratingsByUser._id);
+      }
+
+      await review["a" /* default */].addReviewOfModule(requestBody);
     }
 
     setModalVisibility(false);
@@ -1198,13 +1207,15 @@ var AddRatingsModal_jsx = external_react_default.a.createElement;
 
 
 
+
 const AddRatingsModal = ({
   code,
   modId,
   ratingsByUser,
   isModalVisible,
   setModalVisibility,
-  updateModule
+  updateModule,
+  checkIsRatedByUser
 }) => {
   var _ratingsByUser$value;
 
@@ -1233,8 +1244,7 @@ const AddRatingsModal = ({
 
   const onSubmit = async () => {
     if (!validateForm()) {
-      setSubmitText("You did not rate the module. Once done click this button!");
-      setSubmitColor(colors["d" /* crossRed */]);
+      external_antd_["message"].error("You need to rate the module first!");
       return;
     }
 
@@ -1244,6 +1254,7 @@ const AddRatingsModal = ({
       await review["a" /* default */].addRating(ratings, "star", userId, modId, "mod");
     }
 
+    checkIsRatedByUser();
     updateModule();
     setModalVisibility(false);
   };
@@ -1277,9 +1288,6 @@ const AddRatingsModal = ({
 };
 
 /* harmony default export */ var components_AddRatingsModal = (AddRatingsModal);
-// EXTERNAL MODULE: external "antd"
-var external_antd_ = __webpack_require__("Exp3");
-
 // EXTERNAL MODULE: external "@ant-design/icons"
 var icons_ = __webpack_require__("nZwT");
 
@@ -1702,7 +1710,7 @@ const ModuleInformation = ({
     style: ModuleInformation_styles.moduleSmallDetailsColumn
   }, ModuleInformation_jsx(components_ModuleSmallDetail, {
     Icon: icons_UniversityIcon,
-    text: `University: ${university}`,
+    text: `University: ${university !== null && university !== void 0 ? university : "Not Found"}`,
     iconStyle: ModuleInformation_styles.iconStyle
   }), ModuleInformation_jsx(components_ModuleSmallDetail, {
     Icon: icons_HourGlassHalfFilledIcon,
@@ -1862,7 +1870,7 @@ const ModuleInformation_styles = {
   }
 };
 /* harmony default export */ var components_ModuleInformation = (ModuleInformation);
-// EXTERNAL MODULE: ./components/ReviewList.tsx + 9 modules
+// EXTERNAL MODULE: ./components/ReviewList.tsx + 8 modules
 var ReviewList = __webpack_require__("zmtl");
 
 // EXTERNAL MODULE: ./components/SeeMoreButton.tsx
@@ -1919,6 +1927,10 @@ const ModuleReviewPage = ({
     0: ratingsByUser,
     1: setRatingsByUser
   } = Object(external_react_["useState"])(null);
+  const {
+    0: currentSort,
+    1: setCurrentSort
+  } = Object(external_react_["useState"])("new");
   const userId = Object(external_react_redux_["useSelector"])(state => {
     var _state$auth$user;
 
@@ -1932,6 +1944,15 @@ const ModuleReviewPage = ({
 
   const updateReviews = async () => {
     const newReviews = await review["a" /* default */].getReviewsOfModule(module._id);
+
+    if (currentSort === "new") {
+      newReviews.sort(compareNewest);
+    } else if (currentSort === "old") {
+      newReviews.sort(compareOldest);
+    } else if (currentSort === "likes") {
+      newReviews.sort(compareLikes);
+    }
+
     setReviewsList(newReviews);
   };
 
@@ -1964,7 +1985,8 @@ const ModuleReviewPage = ({
     return secondReviewLikes - firstReviewLikes;
   };
 
-  const sortReviews = compareFunction => {
+  const sortReviews = (compareFunction, sortType) => {
+    setCurrentSort(sortType);
     const cloneReviews = reviewsList.concat([]);
     cloneReviews.sort(compareFunction);
     setReviewsList(cloneReviews);
@@ -1977,11 +1999,11 @@ const ModuleReviewPage = ({
   };
 
   const menu = module_review_jsx(external_antd_["Menu"], null, module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareNewest)
+    onClick: () => sortReviews(compareNewest, "new")
   }, "Newest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareOldest)
+    onClick: () => sortReviews(compareOldest, "old")
   }, "Oldest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareLikes)
+    onClick: () => sortReviews(compareLikes, "likes")
   }, "Most Likes")));
 
   const renderPage = () => {
@@ -2026,7 +2048,8 @@ const ModuleReviewPage = ({
       isModalVisible: isAddRatingsModalVisible,
       setModalVisibility: setAddRatingsModalVisibility,
       ratingsByUser: ratingsByUser,
-      updateModule: updateModule
+      updateModule: updateModule,
+      checkIsRatedByUser: checkIsRatedByUser
     })) : module_review_jsx("div", {
       style: module_review_styles.moduleNotFoundPage
     }, module_review_jsx("span", {
@@ -2206,6 +2229,12 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   return response.data;
 };
 
+const deleteRating = async id => {
+  await axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete(`${ratingBaseUrl}/${id}`, {
+    withCredentials: true
+  });
+};
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   getReviewsOfModule,
   getReviewsOfUser,
@@ -2214,7 +2243,8 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   getRatingById,
   getRating,
   updateRating,
-  updateReviewOfModule
+  updateReviewOfModule,
+  deleteRating
 });
 
 /***/ }),
@@ -2223,6 +2253,40 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
 /***/ (function(module, exports) {
 
 module.exports = require("@ant-design/icons");
+
+/***/ }),
+
+/***/ "ph7Q":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("zr5I");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("rOcY");
+
+
+const baseUrl = `${_config__WEBPACK_IMPORTED_MODULE_1__[/* serverDomain */ "a"]}/api/user`;
+
+const getUser = async userId => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}/${userId}`);
+  return response.data;
+};
+
+const updateUser = async (newUserDetails, userId) => {
+  console.log("the user received is");
+  console.log(newUserDetails);
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(`${baseUrl}/${userId}`, newUserDetails, {
+    withCredentials: true
+  });
+  console.log("the update response");
+  console.log(response);
+  return response.data;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  getUser,
+  updateUser
+});
 
 /***/ }),
 
@@ -2506,7 +2570,11 @@ const updatePersonalBookmarks = async userId => {
 const updatedPersonalPlannedModules = async userId => {
   if (!userId) return;
   const data = await planned_mod["a" /* default */].fetchPlannedMods(userId);
-  store["a" /* store */].dispatch(fetchPlannedModsAction(data));
+  const mappedModCode = data.map(mod => {
+    mod.code = mod.mod.code;
+    return mod;
+  });
+  store["a" /* store */].dispatch(fetchPlannedModsAction(mappedModCode));
 };
 const updatePersonalReviews = async userId => {
   if (!userId) return;
@@ -2630,9 +2698,13 @@ var FormModalItem = __webpack_require__("HNwB");
 // EXTERNAL MODULE: ./styles/colors.js
 var colors = __webpack_require__("xwfA");
 
+// EXTERNAL MODULE: external "antd"
+var external_antd_ = __webpack_require__("Exp3");
+
 // CONCATENATED MODULE: ./components/AddCommentModal.tsx
 
 var __jsx = external_react_default.a.createElement;
+
 
 
 
@@ -2666,8 +2738,7 @@ const AddCommentModal = ({
 
   const onSubmit = async () => {
     if (!validateForm()) {
-      setSubmitText("You did not comment anything. Once done click this button!");
-      setSubmitColor(colors["d" /* crossRed */]);
+      external_antd_["message"].error("The comment field cannot be empty!");
       return;
     }
 
@@ -2711,19 +2782,9 @@ var Button = __webpack_require__("xQut");
 var styles_module = __webpack_require__("w5JA");
 var styles_module_default = /*#__PURE__*/__webpack_require__.n(styles_module);
 
-// CONCATENATED MODULE: ./api/user.ts
+// EXTERNAL MODULE: ./api/user.ts
+var api_user = __webpack_require__("ph7Q");
 
-
-const user_baseUrl = `${config["a" /* serverDomain */]}/api/user`;
-
-const getUser = async userId => {
-  const response = await external_axios_default.a.get(`${user_baseUrl}/${userId}`);
-  return response.data;
-};
-
-/* harmony default export */ var api_user = ({
-  getUser
-});
 // CONCATENATED MODULE: ./components/CommentCard.tsx
 
 var CommentCard_jsx = external_react_default.a.createElement;
@@ -2743,7 +2804,7 @@ const CommentCard = ({
   }, []);
 
   const getUserName = async () => {
-    const user = await api_user.getUser(comment.userId);
+    const user = await api_user["a" /* default */].getUser(comment.userId);
     setName(user.name);
   };
 
@@ -2924,6 +2985,7 @@ const ReviewCard = ({
 }) => {
   var _reaction$like$count, _reaction$like;
 
+  console.log("review", review);
   const {
     0: isCommentsModalVisible,
     1: setCommentsModalVisibility
@@ -2966,10 +3028,12 @@ const ReviewCard = ({
   const name = user === null || user === void 0 ? void 0 : user.name;
   const like = (_reaction$like$count = reaction === null || reaction === void 0 ? void 0 : (_reaction$like = reaction.like) === null || _reaction$like === void 0 ? void 0 : _reaction$like.count) !== null && _reaction$like$count !== void 0 ? _reaction$like$count : 0;
   Object(external_react_["useEffect"])(() => {
-    Object(helpers["a" /* fetchRatings */])(ratingIds, setStar, setDifficulty);
     fetchComments();
     checkIsLikedByUser();
   }, []);
+  Object(external_react_["useEffect"])(() => {
+    Object(helpers["a" /* fetchRatings */])(ratingIds, setStar, setDifficulty);
+  }, [ratingIds]);
 
   const fetchComments = async () => {
     const fetchedComments = await api_comment.getCommentsOfReview(_id);

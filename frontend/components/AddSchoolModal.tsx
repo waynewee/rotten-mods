@@ -1,32 +1,31 @@
-import { Modal, Button, Form, Input, Divider } from "antd";
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
-
-import authService from "../utils/authentication";
-
-import { message } from "antd";
 import schoolApi from "../api/school";
-import { useState, useEffect } from "react";
-
+import { useState } from "react";
 
 import FormModal from "./FormModal";
 import FormModalItem from "./FormModalItem";
 import { codeBlue } from "../styles/colors";
 import { ModalState } from "../types";
-
+import { message } from "antd";
 
 const AddSchoolModal: React.FC<ModalState> = ({
   isModalVisible,
   setModalVisibility,
 }) => {
-  
-  
   const [school, setSchool] = useState("");
 
-  
+  const onSubmit = async () => {
+    if (!validateForm()) {
+      message.error("The field cannot be empty!");
+      return;
+    }
 
-  const onSubmit = () => {
-    schoolApi.addSchool(school);
+    await schoolApi.addSchool(school);
+    setModalVisibility(false);
     message.success(`The school ${school} has been added successfully!`);
+  };
+
+  const validateForm = () => {
+    return school !== "";
   };
 
   return (

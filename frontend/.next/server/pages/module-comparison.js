@@ -443,6 +443,7 @@ const FormModalItem = ({
     style: styles.input,
     options: searchOptions,
     onSelect: setValue,
+    defaultValue: value,
     onSearch: searchText => setSearchOptions(options.filter(item => item.value.includes(searchText)))
   });
 
@@ -453,7 +454,6 @@ const FormModalItem = ({
     };
 
     const renderTags = () => {
-      console.log(value);
       return value.map(mod => __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Tag"], {
         closable: true,
         onClose: () => removeCode(mod),
@@ -821,7 +821,7 @@ const ModuleMetaComparison = ({
 };
 
 /* harmony default export */ var components_ModuleMetaComparison = (ModuleMetaComparison);
-// EXTERNAL MODULE: ./components/ReviewList.tsx + 9 modules
+// EXTERNAL MODULE: ./components/ReviewList.tsx + 8 modules
 var ReviewList = __webpack_require__("zmtl");
 
 // CONCATENATED MODULE: ./components/ModuleReviewsComparison.tsx
@@ -1016,7 +1016,10 @@ const initialState = {
     _id: "",
     fullName: "",
     yearOfStudy: 1,
-    studyCourse: ""
+    courseName: "",
+    password: "",
+    email: "",
+    schoolName: ""
   }
 };
 
@@ -1303,6 +1306,12 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   return response.data;
 };
 
+const deleteRating = async id => {
+  await axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete(`${ratingBaseUrl}/${id}`, {
+    withCredentials: true
+  });
+};
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   getReviewsOfModule,
   getReviewsOfUser,
@@ -1311,7 +1320,42 @@ const updateRating = async (value, type, userId, subId, sub, ratingId) => {
   getRatingById,
   getRating,
   updateRating,
-  updateReviewOfModule
+  updateReviewOfModule,
+  deleteRating
+});
+
+/***/ }),
+
+/***/ "ph7Q":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("zr5I");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("rOcY");
+
+
+const baseUrl = `${_config__WEBPACK_IMPORTED_MODULE_1__[/* serverDomain */ "a"]}/api/user`;
+
+const getUser = async userId => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}/${userId}`);
+  return response.data;
+};
+
+const updateUser = async (newUserDetails, userId) => {
+  console.log("the user received is");
+  console.log(newUserDetails);
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(`${baseUrl}/${userId}`, newUserDetails, {
+    withCredentials: true
+  });
+  console.log("the update response");
+  console.log(response);
+  return response.data;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  getUser,
+  updateUser
 });
 
 /***/ }),
@@ -1596,7 +1640,11 @@ const updatePersonalBookmarks = async userId => {
 const updatedPersonalPlannedModules = async userId => {
   if (!userId) return;
   const data = await planned_mod["a" /* default */].fetchPlannedMods(userId);
-  store["a" /* store */].dispatch(fetchPlannedModsAction(data));
+  const mappedModCode = data.map(mod => {
+    mod.code = mod.mod.code;
+    return mod;
+  });
+  store["a" /* store */].dispatch(fetchPlannedModsAction(mappedModCode));
 };
 const updatePersonalReviews = async userId => {
   if (!userId) return;
@@ -1720,9 +1768,13 @@ var FormModalItem = __webpack_require__("HNwB");
 // EXTERNAL MODULE: ./styles/colors.js
 var colors = __webpack_require__("xwfA");
 
+// EXTERNAL MODULE: external "antd"
+var external_antd_ = __webpack_require__("Exp3");
+
 // CONCATENATED MODULE: ./components/AddCommentModal.tsx
 
 var __jsx = external_react_default.a.createElement;
+
 
 
 
@@ -1756,8 +1808,7 @@ const AddCommentModal = ({
 
   const onSubmit = async () => {
     if (!validateForm()) {
-      setSubmitText("You did not comment anything. Once done click this button!");
-      setSubmitColor(colors["d" /* crossRed */]);
+      external_antd_["message"].error("The comment field cannot be empty!");
       return;
     }
 
@@ -1801,19 +1852,9 @@ var Button = __webpack_require__("xQut");
 var styles_module = __webpack_require__("w5JA");
 var styles_module_default = /*#__PURE__*/__webpack_require__.n(styles_module);
 
-// CONCATENATED MODULE: ./api/user.ts
+// EXTERNAL MODULE: ./api/user.ts
+var api_user = __webpack_require__("ph7Q");
 
-
-const user_baseUrl = `${config["a" /* serverDomain */]}/api/user`;
-
-const getUser = async userId => {
-  const response = await external_axios_default.a.get(`${user_baseUrl}/${userId}`);
-  return response.data;
-};
-
-/* harmony default export */ var api_user = ({
-  getUser
-});
 // CONCATENATED MODULE: ./components/CommentCard.tsx
 
 var CommentCard_jsx = external_react_default.a.createElement;
@@ -1833,7 +1874,7 @@ const CommentCard = ({
   }, []);
 
   const getUserName = async () => {
-    const user = await api_user.getUser(comment.userId);
+    const user = await api_user["a" /* default */].getUser(comment.userId);
     setName(user.name);
   };
 
@@ -2014,6 +2055,7 @@ const ReviewCard = ({
 }) => {
   var _reaction$like$count, _reaction$like;
 
+  console.log("review", review);
   const {
     0: isCommentsModalVisible,
     1: setCommentsModalVisibility
@@ -2056,10 +2098,12 @@ const ReviewCard = ({
   const name = user === null || user === void 0 ? void 0 : user.name;
   const like = (_reaction$like$count = reaction === null || reaction === void 0 ? void 0 : (_reaction$like = reaction.like) === null || _reaction$like === void 0 ? void 0 : _reaction$like.count) !== null && _reaction$like$count !== void 0 ? _reaction$like$count : 0;
   Object(external_react_["useEffect"])(() => {
-    Object(helpers["a" /* fetchRatings */])(ratingIds, setStar, setDifficulty);
     fetchComments();
     checkIsLikedByUser();
   }, []);
+  Object(external_react_["useEffect"])(() => {
+    Object(helpers["a" /* fetchRatings */])(ratingIds, setStar, setDifficulty);
+  }, [ratingIds]);
 
   const fetchComments = async () => {
     const fetchedComments = await api_comment.getCommentsOfReview(_id);

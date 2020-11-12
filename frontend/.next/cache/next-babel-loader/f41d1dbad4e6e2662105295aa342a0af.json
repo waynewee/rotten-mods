@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { createStore } from \"redux\";\nimport { createWrapper } from \"next-redux-wrapper\";\nimport reducer from \"./reducers\";\nexport var store = createStore(reducer);\n\nvar makeStore = function makeStore(context) {\n  return store;\n};\n\nexport var wrapper = createWrapper(makeStore, {\n  debug: true\n});","map":null,"metadata":{},"sourceType":"module"}

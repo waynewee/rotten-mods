@@ -8,7 +8,10 @@ const initialState: AuthState = {
     _id: "",
     fullName: "",
     yearOfStudy: 1,
-    studyCourse: ""
+    courseName: "",
+    password: "",
+    email: "",
+    schoolName: ""
   },
 };
 

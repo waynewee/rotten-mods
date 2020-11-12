@@ -56,8 +56,11 @@ export interface Comment {
 
 export interface User {
   fullName: string;
+  password: string;
+  email: string;
   yearOfStudy: number;
-  studyCourse: string;
+  courseName: string;
+  schoolName: string
   _id: string;
 }
 
