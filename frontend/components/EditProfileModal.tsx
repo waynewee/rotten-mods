@@ -74,22 +74,25 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const onFormFinish = (profileValues) => {
     console.log("profile valus are");
     console.log(profileValues);
-    const newSchoolId = inputSchoolValues.find(element => element.schoolName == profileValues.newSchoolName).schoolId;
-    const newCourseId = inputCourseValues.find(element => element.courseName == profileValues.newCourseName).courseId;
     const newUserDetails = {
       "name" : profileValues.fullname,
       "email": user.email,
       "password": user.password,
-      "schoolId": newSchoolId,
-      "courseId": newCourseId,
       "currentYear": profileValues.newYearOfStudy,
     }
-    // if (originalSchoolName == user.schoolName) {
-    //   delete newUserDetails["schoolId"];
-    // } 
-    // if (originalCourseName == user.schoolName) {
-    //   delete newUserDetails["courseId"];
-    // }
+
+    if (profileValues.newSchoolName) {
+      const newSchoolId = inputSchoolValues.find(element => element.schoolName == profileValues.newSchoolName).schoolId;
+      newUserDetails["schoolId"] = newSchoolId
+    }
+    if (profileValues.newCourseName) {
+      const newCourseId = inputCourseValues.find(element => element.courseName == profileValues.newCourseName).courseId;
+      newUserDetails["courseId"] = newCourseId;
+    }
+
+  
+  
+
 
     userApi.updateUser(newUserDetails, user._id)
       .then((response) => {
@@ -138,7 +141,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
           rules={[
             {
               validator: (_, value) => {
-                if (value < 1 || value > 8) {
+                console.log("the value is");
+                console.log(value);
+                if ((value < 1 || value > 8) && (value)) {
                   return Promise.reject(
                     "Your Year of Study should only be between 1 to 8"
                   );
@@ -149,7 +154,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             },
           ]}
         >
-          <Input />
+          <Input type="number"/>
         </Form.Item>
         <Form.Item
           name="newCourseName"
