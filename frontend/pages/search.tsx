@@ -59,7 +59,7 @@ const Search: NextPage<SearchProps> = ({ initialSearchResults = [] }) => {
       numberOfResults,
       1,
       schoolNameFilter,
-      semestersFilter[0],
+      semestersFilter.join("_"),
       creditsFilter
     );
     setSearchResults(results);
