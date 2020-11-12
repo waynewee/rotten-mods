@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { FETCH_SCHOOLS } from \"../constants\";\nconst initialState = [];\n\nconst schoolsReducer = (state = initialState, action) => {\n  switch (action.type) {\n    case FETCH_SCHOOLS:\n      return action.payload;\n\n    default:\n      return state;\n  }\n};\n\nexport default schoolsReducer;","map":null,"metadata":{},"sourceType":"module"}

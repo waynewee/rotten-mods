@@ -52,8 +52,6 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
   const [ratings, setRatings] = useState(3);
   const [semester, setSemester] = useState(initialReview.semesterTaken);
   const [year, setYear] = useState(initialReview.acadYearTaken);
-  const [submitText, setSubmitText] = useState("Submit");
-  const [submitColor, setSubmitColor] = useState(submitBlue);
   const userId = useSelector((state) => state.auth.user?._id);
 
   useEffect(() => {
@@ -62,6 +60,16 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
       fetchRatings(ratingIds, setRatings, setDifficulty);
     }
   }, []);
+
+  useEffect(() => {
+    if (reviewByUser) {
+      setText(reviewByUser.text);
+      // setDifficulty()
+      // setRatings()
+      setSemester(reviewByUser.semesterTaken);
+      setYear(reviewByUser.acadYearTaken);
+    }
+  }, [reviewByUser]);
 
   const onSubmit = async () => {
     if (!validateForm()) {
@@ -108,19 +116,16 @@ const AddReviewModal: React.FC<AddReviewModalProps> = ({
 
   const closeModal = (isToClose) => {
     setModalVisibility(isToClose);
-    setSubmitColor(submitBlue);
-    setSubmitText("Submit");
   };
 
   return (
     <FormModal
       backgroundColor={reviewBlue}
-      submitColor={submitColor}
+      submitColor={submitBlue}
       title={`${reviewByUser ? "Edit" : "Add"} Review`}
       isModalVisible={isModalVisible}
       setModalVisibility={closeModal}
       onSubmit={onSubmit}
-      submitText={submitText}
     >
       <FormModalItem label="Module Code" type="text" value={code} />
       <FormModalItem

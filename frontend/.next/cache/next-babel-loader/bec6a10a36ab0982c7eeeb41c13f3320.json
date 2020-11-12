@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { SEARCH_TERM } from \"../constants\";\nexport var fetchSchoolAction = function fetchSchoolAction(searchTerm) {\n  return {\n    type: SEARCH_TERM,\n    payload: searchTerm\n  };\n};","map":null,"metadata":{},"sourceType":"module"}
