@@ -1,6 +1,14 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
-import { Input, InputNumber, Rate, Select, AutoComplete, Tag } from "antd";
+import {
+  Input,
+  InputNumber,
+  Rate,
+  Select,
+  AutoComplete,
+  Tag,
+  Checkbox,
+} from "antd";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -26,6 +34,7 @@ interface FormModalItemProps {
   options?: any[];
   searchTerm?: string;
   setSearchTerm?: Dispatch<SetStateAction<any>>;
+  minNum?: number;
 }
 
 interface SearchOption {
@@ -41,6 +50,7 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
   options,
   searchTerm,
   setSearchTerm,
+  minNum,
 }) => {
   const [firstIsChecked, setFirstIsChecked] = useState(0);
   const [secondIsChecked, setSecondIsChecked] = useState(0);
@@ -104,6 +114,7 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
       style={styles.inputNumber}
       value={(value as unknown) as number}
       onChange={(e) => setValue(e as string)}
+      min={minNum}
     />
   );
 
@@ -118,47 +129,33 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
 
   const renderSemester = () => (
     <Select style={styles.inputNumber} onChange={setValue} defaultValue={value}>
-      <Option value={1}>1</Option>
-      <Option value={2}>2</Option>
-      <Option value={3}>3</Option>
+      {options ? (
+        options.map((option) => <Option value={option}>{option}</Option>)
+      ) : (
+        <>
+          <Option value={1}>1</Option>
+          <Option value={2}>2</Option>
+          <Option value={3}>3</Option>
+          <Option value={4}>4</Option>
+        </>
+      )}
     </Select>
   );
 
   const renderSemesters = () => (
     <div style={{ display: "flex", alignItems: "center", height: 34 }}>
-      <div>
-        <input
-          id="1"
-          type="checkbox"
-          value={firstIsChecked}
-          onChange={toggleCheckbox(1)}
-        />
-        <label style={styles.inputCheckboxLabel} htmlFor="1">
-          1
-        </label>
-      </div>
-      <div>
-        <input
-          id="2"
-          type="checkbox"
-          value={secondIsChecked}
-          onChange={toggleCheckbox(2)}
-        />
-        <label style={styles.inputCheckboxLabel} htmlFor="2">
-          2
-        </label>
-      </div>
-      <div>
-        <input
-          id="3"
-          type="checkbox"
-          value={secondIsChecked}
-          onChange={toggleCheckbox(3)}
-        />
-        <label style={styles.inputCheckboxLabel} htmlFor="3">
-          3
-        </label>
-      </div>
+      <Checkbox style={{ color: "white" }} onChange={() => setValue(1)}>
+        1
+      </Checkbox>
+      <Checkbox style={{ color: "white" }} onChange={() => setValue(2)}>
+        2
+      </Checkbox>
+      <Checkbox style={{ color: "white" }} onChange={() => setValue(3)}>
+        3
+      </Checkbox>
+      <Checkbox style={{ color: "white" }} onChange={() => setValue(4)}>
+        4
+      </Checkbox>
     </div>
   );
 
@@ -212,7 +209,9 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
       defaultValue={value as string}
       onSearch={(searchText) =>
         setSearchOptions(
-          options.filter((item) => item.value.toLowerCase().includes(searchText.toLowerCase()))
+          options.filter((item) =>
+            item.value.toLowerCase().includes(searchText.toLowerCase())
+          )
         )
       }
     />
@@ -257,20 +256,20 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
   };
 
   const renderInputType = {
-    "input": renderInput,
-    "textarea": renderTextArea,
-    "text": renderText,
-    "rate": renderRate,
-    "difficulty": renderDifficulty,
-    "number": renderNumber,
-    "year": renderYear,
-    "semester": renderSemester,
-    "semesters": renderSemesters,
-    "annualYear": renderAnnualYear,
-    "university": renderUniversity,
-    "autocomplete": renderAutoComplete,
-    "prereq": renderPrereq,
-  }
+    input: renderInput,
+    textarea: renderTextArea,
+    text: renderText,
+    rate: renderRate,
+    difficulty: renderDifficulty,
+    number: renderNumber,
+    year: renderYear,
+    semester: renderSemester,
+    semesters: renderSemesters,
+    annualYear: renderAnnualYear,
+    university: renderUniversity,
+    autocomplete: renderAutoComplete,
+    prereq: renderPrereq,
+  };
 
   return (
     <div style={styles.labelContainer}>
@@ -311,3 +310,50 @@ const styles = {
 };
 
 export default FormModalItem;
+
+{
+  /* <div>
+        <input
+          id="1"
+          type="checkbox"
+          value={firstIsChecked}
+          onChange={toggleCheckbox(1)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="1">
+          1
+        </label>
+      </div>
+      <div>
+        <input
+          id="2"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(2)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="2">
+          2
+        </label>
+      </div>
+      <div>
+        <input
+          id="3"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(3)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="3">
+          3
+        </label>
+      </div>
+      <div>
+        <input
+          id="4"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(4)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="4">
+          4
+        </label>
+      </div> */
+}

@@ -23,12 +23,8 @@ const searchModule = async (
     limit,
     schoolId,
     semester,
-    credit
+    credit,
   };
-
-  // if (schoolId) {
-  //   query.schoolId = schoolId;
-  // }
 
   const response = await axios.get(
     `${baseUrl}?${queryString.stringify(query)}`
@@ -40,7 +36,7 @@ interface NewModule {
   code: string;
   title: string;
   schoolId: string;
-  semester: number[];
+  semester?: number[];
   description: string;
   credit: number;
   workload: number;

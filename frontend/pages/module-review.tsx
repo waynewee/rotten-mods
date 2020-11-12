@@ -26,8 +26,6 @@ const compareNewest = (firstReview: Review, secondReview: Review): number => {
   return firstReviewCreatedAtDate < secondReviewCreatedAtDate ? 1 : -1;
 };
 
-const REVIEW_LIST_INTERVAL = 10;
-
 const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   initialModule,
   reviews,
@@ -155,7 +153,7 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
         )}
         <AddReviewModal
           code={module.code}
-          modId={module._id}
+          module={module}
           updateReviews={updateReviews}
           isModalVisible={isAddReviewModalVisible}
           setModalVisibility={setAddReviewModalVisibility}

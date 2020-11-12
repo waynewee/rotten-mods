@@ -1,12 +1,10 @@
-import { Modal, Button, Form, Input, Select } from "antd";
+import { Modal, Button, Form, Input, Select, InputNumber } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { User } from "../types";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { store } from "../redux/store";
-import { logInAction, logOutAction } from './../redux/actions/auth';
+import { logInAction, logOutAction } from "./../redux/actions/auth";
 import authService from "../utils/authentication";
-
-
 
 import { message } from "antd";
 import userApi from "../api/user";
@@ -14,20 +12,15 @@ import schoolApi from "../api/school";
 import courseApi from "../api/course";
 import { useRouter } from "next/router";
 
-
-
-
-
 interface EditProfileModalProps {
-  user: User,
-  toggleEditProfileModal: () => void
+  user: User;
+  toggleEditProfileModal: () => void;
 }
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({
   user,
   toggleEditProfileModal,
 }) => {
-
   const [inputSchoolValues, setSchoolInputValues] = useState([
     { schoolId: "", schoolName: "" },
   ]);
@@ -41,7 +34,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   }, []);
 
   const populateSchools = () => {
-    schoolApi.getAllSchools()
+    schoolApi
+      .getAllSchools()
       .then((response) => {
         const schoolsInDatabase = response.map((obj) => {
           const universityValue = { schoolId: "", schoolName: "" };
@@ -51,10 +45,11 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         });
         setSchoolInputValues(schoolsInDatabase);
       })
-      .catch(error => console.log(error));
-  }
+      .catch((error) => console.log(error));
+  };
   const populateCourses = () => {
-    courseApi.getAllCourses()
+    courseApi
+      .getAllCourses()
       .then((response) => {
         const coursesInDatabase = response.map((obj) => {
           const course = { courseId: "", courseName: "" };
@@ -64,49 +59,48 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         });
         setInputCourseValues(coursesInDatabase);
       })
-      .catch(error => console.log(error));
-  }
+      .catch((error) => console.log(error));
+  };
 
   const router = useRouter();
 
-
-
   const onFormFinish = (profileValues) => {
-    console.log("profile valus are");
-    console.log(profileValues);
     const newUserDetails = {
-      "name" : profileValues.fullname,
-      "email": user.email,
-      "password": user.password,
-      "currentYear": profileValues.newYearOfStudy,
-    }
+      name: profileValues.fullname,
+      email: user.email,
+      password: user.password,
+      currentYear: profileValues.newYearOfStudy,
+    };
 
     if (profileValues.newSchoolName) {
-      const newSchoolId = inputSchoolValues.find(element => element.schoolName == profileValues.newSchoolName).schoolId;
-      newUserDetails["schoolId"] = newSchoolId
+      const newSchoolId = inputSchoolValues.find(
+        (element) => element.schoolName == profileValues.newSchoolName
+      ).schoolId;
+      newUserDetails["schoolId"] = newSchoolId;
     }
     if (profileValues.newCourseName) {
-      const newCourseId = inputCourseValues.find(element => element.courseName == profileValues.newCourseName).courseId;
+      const newCourseId = inputCourseValues.find(
+        (element) => element.courseName == profileValues.newCourseName
+      ).courseId;
       newUserDetails["courseId"] = newCourseId;
     }
 
-  
-  
-
-
-    userApi.updateUser(newUserDetails, user._id)
+    userApi
+      .updateUser(newUserDetails, user._id)
       .then((response) => {
         toggleEditProfileModal();
-        authService.logIn({"emailaddress": newUserDetails.email, "password": newUserDetails.password})
+        authService.logIn({
+          emailaddress: newUserDetails.email,
+          password: newUserDetails.password,
+        });
         router.push({
           pathname: "/profile",
         });
         message.success(`Your profile has been updated successfully`);
-
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
   };
 
   return (
@@ -127,9 +121,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
           name="fullname"
           label="Full Name"
           initialValue={user.fullName}
-          rules={[
-            { required: true, message: "Please enter your full name!" },
-          ]}
+          rules={[{ required: true, message: "Please enter your full name!" }]}
         >
           <Input />
         </Form.Item>
@@ -141,11 +133,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
           rules={[
             {
               validator: (_, value) => {
-                console.log("the value is");
-                console.log(value);
-                if ((value < 1 || value > 8) && (value)) {
+                if ((value < 1 || value > 4) && value) {
                   return Promise.reject(
-                    "Your Year of Study should only be between 1 to 8"
+                    "Your Year of Study should only be between 1 to 4"
                   );
                 } else {
                   return Promise.resolve();
@@ -154,7 +144,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             },
           ]}
         >
-          <Input type="number"/>
+          <InputNumber max={4} min={1} style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
           name="newCourseName"
@@ -189,10 +179,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             style={styles.loginFormButton}
           >
             SAVE PROFILE
-           </Button>
+          </Button>
         </Form.Item>
       </Form>
-
     </Modal>
   );
 };
