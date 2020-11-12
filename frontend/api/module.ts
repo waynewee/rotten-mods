@@ -9,12 +9,26 @@ const getModule = async (id) => {
   return response.data;
 };
 
-const searchModule = async (searchTerm, limit = 10, page = 1) => {
+const searchModule = async (
+  searchTerm,
+  limit = 10,
+  page = 1,
+  schoolId = "",
+  semester = "",
+  credit = ""
+) => {
   const query = {
     searchTerm,
     page,
     limit,
+    schoolId,
+    semester,
+    credit
   };
+
+  // if (schoolId) {
+  //   query.schoolId = schoolId;
+  // }
 
   const response = await axios.get(
     `${baseUrl}?${queryString.stringify(query)}`

@@ -425,6 +425,13 @@ const FETCH_SCHOOLS = "FETCH_SCHOOLS";
 
 /***/ }),
 
+/***/ "Exp3":
+/***/ (function(module, exports) {
+
+module.exports = require("antd");
+
+/***/ }),
+
 /***/ "Lc87":
 /***/ (function(module, exports) {
 
@@ -756,6 +763,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_SearchModuleList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("WPNV");
 /* harmony import */ var _components_SeeMoreButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("3Pwz");
 /* harmony import */ var _styles_colors__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("xwfA");
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("Exp3");
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(antd__WEBPACK_IMPORTED_MODULE_8__);
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -767,9 +776,17 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
+const SEARCH_INTERVAL = 5;
+
 const Search = ({
   initialSearchResults = []
 }) => {
+  const allSchools = Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["useSelector"])(state => state.schools);
+  const schoolOfUser = Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["useSelector"])(state => state.auth.user.schoolName);
+  const schoolsAutocompleteOptions = allSchools.map(school => ({
+    value: school.name
+  }));
+  const searchTerm = Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["useSelector"])(state => state.search.searchTerm);
   const {
     0: searchResults,
     1: setSearchResults
@@ -777,25 +794,88 @@ const Search = ({
   const {
     0: numberOfResults,
     1: setNumberOfResults
-  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(11); // the presence of that 11th result is an indicator that there are more than 10 results
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(SEARCH_INTERVAL + 1); // the presence of that n + 1th result is an indicator that there are more than 10 results
 
-  const searchTerm = Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["useSelector"])(state => state.search.searchTerm);
+  const {
+    0: schoolFilter,
+    1: setSchoolFilter
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(schoolOfUser);
+  const {
+    0: schoolOptions,
+    1: setSchoolOptions
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(schoolsAutocompleteOptions);
+  const {
+    0: semestersFilter,
+    1: setSemestersFilter
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]);
+  const {
+    0: creditsFilter,
+    1: setCreditsFilter
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])("");
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-    setNumberOfResults(10);
-  }, [searchTerm]);
+    setNumberOfResults(SEARCH_INTERVAL + 1);
+  }, [searchTerm, schoolFilter, semestersFilter, creditsFilter]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    fetchSearchResults();
+  }, [schoolFilter, semestersFilter, creditsFilter]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    setSchoolFilter(schoolOfUser);
+  }, [schoolOfUser]);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
     setSearchResults(initialSearchResults);
   }, [initialSearchResults]);
 
-  const fetchMoreSearchResults = async () => {
-    const results = await _api_module__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].searchModule(searchTerm, numberOfResults + 10);
+  const fetchSearchResults = async () => {
+    var _allSchools$find;
+
+    const schoolNameFilter = (_allSchools$find = allSchools.find(school => school.name === schoolFilter)) === null || _allSchools$find === void 0 ? void 0 : _allSchools$find._id;
+    const results = await _api_module__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].searchModule(searchTerm, numberOfResults, 1, schoolNameFilter, semestersFilter.join("_"), creditsFilter);
     setSearchResults(results);
-    setNumberOfResults(numberOfResults + 10);
   };
 
-  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(_components_SectionTitle__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], {
-    title: `Search results for "${searchTerm}"`
-  }), __jsx(_components_SearchModuleList__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], {
+  const fetchMoreSearchResults = async () => {
+    const results = await _api_module__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].searchModule(searchTerm, numberOfResults + SEARCH_INTERVAL);
+    console.log(results);
+    setSearchResults(results);
+    setNumberOfResults(numberOfResults + SEARCH_INTERVAL);
+  };
+
+  const semesterOptions = [{
+    label: 1,
+    value: 1
+  }, {
+    label: 2,
+    value: 2
+  }, {
+    label: 3,
+    value: 3
+  }];
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("div", {
+    style: styles.header
+  }, __jsx("span", null, `Search results for "${searchTerm}"`), __jsx("div", {
+    style: styles.filterBar
+  }, __jsx("div", null, __jsx("span", null, "School:"), __jsx(antd__WEBPACK_IMPORTED_MODULE_8__["AutoComplete"], {
+    style: styles.autocomplete,
+    onSelect: setSchoolFilter,
+    options: schoolOptions,
+    value: schoolFilter,
+    onSearch: searchText => setSchoolOptions(schoolsAutocompleteOptions.filter(school => school.value.toLowerCase().includes(searchText.toLowerCase()))),
+    onChange: value => setSchoolFilter(value),
+    notFoundContent: "The school you are looking for isn't here. Perhaps you can add them to the app!"
+  })), __jsx("div", {
+    style: {
+      display: "flex"
+    }
+  }, __jsx("span", null, "Semester:"), __jsx("div", {
+    style: styles.checkboxes
+  }, __jsx(antd__WEBPACK_IMPORTED_MODULE_8__["Checkbox"].Group, {
+    options: semesterOptions,
+    onChange: setSemestersFilter
+  }))), __jsx("div", null, __jsx("span", null, "Credits:"), __jsx(antd__WEBPACK_IMPORTED_MODULE_8__["InputNumber"], {
+    max: 12,
+    onChange: value => setCreditsFilter(value),
+    style: styles.creditsInput
+  })))), __jsx(_components_SearchModuleList__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], {
     modules: searchResults.slice(0, numberOfResults - 1)
   }), searchResults.length == numberOfResults && __jsx(_components_SeeMoreButton__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], {
     fetchMoreData: fetchMoreSearchResults,
@@ -809,13 +889,50 @@ const Search = ({
   }), __jsx(_components_ModuleCompareModal__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], null));
 };
 
+const styles = {
+  header: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "8vh",
+    fontSize: "1.5em",
+    color: "#838383",
+    fontFamily: "Mukta",
+    paddingLeft: 20,
+    margin: "20px 0px"
+  },
+  filterBar: {
+    display: "flex",
+    justifyContent: "flex-end",
+    fontSize: 15,
+    alignItems: "center"
+  },
+  autocomplete: {
+    width: 300,
+    margin: "0px 10px",
+    position: "relative" // bottom: 2,
+
+  },
+  checkboxes: {
+    margin: "0px 10px",
+    position: "relative" // bottom: 2,
+
+  },
+  creditsInput: {
+    marginLeft: 10,
+    position: "relative" // bottom: 2,
+
+  }
+};
+
 Search.getInitialProps = async ({
   query
 }) => {
   const searchTerm = query.s;
 
   try {
-    const initialSearchResults = await _api_module__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].searchModule(searchTerm);
+    const initialSearchResults = await _api_module__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].searchModule(searchTerm, SEARCH_INTERVAL + 1);
     return {
       initialSearchResults
     };
@@ -897,12 +1014,18 @@ const getModule = async id => {
   return response.data;
 };
 
-const searchModule = async (searchTerm, limit = 10, page = 1) => {
+const searchModule = async (searchTerm, limit = 10, page = 1, schoolId = "", semester = "", credit = "") => {
   const query = {
     searchTerm,
     page,
-    limit
-  };
+    limit,
+    schoolId,
+    semester,
+    credit
+  }; // if (schoolId) {
+  //   query.schoolId = schoolId;
+  // }
+
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}?${query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(query)}`);
   return response.data;
 };

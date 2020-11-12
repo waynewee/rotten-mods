@@ -663,7 +663,9 @@ const FormModalItem = ({
     value: 1
   }, "1"), __jsx(Option, {
     value: 2
-  }, "2"));
+  }, "2"), __jsx(Option, {
+    value: 3
+  }, "3"));
 
   const renderSemesters = () => __jsx("div", {
     style: {
@@ -687,7 +689,15 @@ const FormModalItem = ({
   }), __jsx("label", {
     style: styles.inputCheckboxLabel,
     htmlFor: "2"
-  }, "2")));
+  }, "2")), __jsx("div", null, __jsx("input", {
+    id: "3",
+    type: "checkbox",
+    value: secondIsChecked,
+    onChange: toggleCheckbox(3)
+  }), __jsx("label", {
+    style: styles.inputCheckboxLabel,
+    htmlFor: "3"
+  }, "3")));
 
   const renderAnnualYear = () => {
     const today = new Date();
@@ -734,7 +744,7 @@ const FormModalItem = ({
     options: searchOptions,
     onSelect: setValue,
     defaultValue: value,
-    onSearch: searchText => setSearchOptions(options.filter(item => item.value.includes(searchText)))
+    onSearch: searchText => setSearchOptions(options.filter(item => item.value.toLowerCase().includes(searchText.toLowerCase())))
   });
 
   const renderPrereq = () => {
@@ -1829,7 +1839,6 @@ const AddModuleModal = ({
     0: university,
     1: setUniversity
   } = Object(external_react_["useState"])(schoolName);
-  console.log(university);
   const {
     0: credit,
     1: setCredit
@@ -4245,12 +4254,18 @@ const getModule = async id => {
   return response.data;
 };
 
-const searchModule = async (searchTerm, limit = 10, page = 1) => {
+const searchModule = async (searchTerm, limit = 10, page = 1, schoolId = "", semester = "", credit = "") => {
   const query = {
     searchTerm,
     page,
-    limit
-  };
+    limit,
+    schoolId,
+    semester,
+    credit
+  }; // if (schoolId) {
+  //   query.schoolId = schoolId;
+  // }
+
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}?${query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(query)}`);
   return response.data;
 };

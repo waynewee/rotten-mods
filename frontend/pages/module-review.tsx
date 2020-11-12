@@ -26,6 +26,8 @@ const compareNewest = (firstReview: Review, secondReview: Review): number => {
   return firstReviewCreatedAtDate < secondReviewCreatedAtDate ? 1 : -1;
 };
 
+const REVIEW_LIST_INTERVAL = 10;
+
 const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   initialModule,
   reviews,
@@ -40,7 +42,7 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
     false
   );
   const [ratingsByUser, setRatingsByUser] = useState(null);
-  const [currentSort, setCurrentSort] = useState("new");
+  const [currentSort, setCurrentSort] = useState("Latest");
 
   const userId = useSelector((state) => state.auth.user?._id);
   const reviewByUser = reviewsList.find((review) => review.userId === userId);
@@ -52,11 +54,11 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
 
   const updateReviews = async () => {
     const newReviews = await reviewApi.getReviewsOfModule(module._id);
-    if (currentSort === "new") {
+    if (currentSort === "Latest") {
       newReviews.sort(compareNewest);
-    } else if (currentSort === "old") {
+    } else if (currentSort === "Oldest") {
       newReviews.sort(compareOldest);
-    } else if (currentSort === "likes") {
+    } else if (currentSort === "Most Likes") {
       newReviews.sort(compareLikes);
     }
     setReviewsList(newReviews);
@@ -110,13 +112,19 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button onClick={() => sortReviews(compareNewest, "new")}>Newest</Button>
+        <Button onClick={() => sortReviews(compareNewest, "Latest")}>
+          Newest
+        </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button onClick={() => sortReviews(compareOldest, "old")}>Oldest</Button>
+        <Button onClick={() => sortReviews(compareOldest, "Oldest")}>
+          Oldest
+        </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button onClick={() => sortReviews(compareLikes, "likes")}>Most Likes</Button>
+        <Button onClick={() => sortReviews(compareLikes, "Most Likes")}>
+          Most Likes
+        </Button>
       </Menu.Item>
     </Menu>
   );
@@ -135,7 +143,7 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
           <Dropdown overlay={menu}>
             <div style={{ marginRight: 20 }}>
               <a style={{ color: "#595959", marginRight: 6, fontSize: 18 }}>
-                Sort
+                {currentSort}
               </a>
               <DownOutlined />
             </div>

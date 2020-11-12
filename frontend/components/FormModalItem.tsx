@@ -120,6 +120,7 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
     <Select style={styles.inputNumber} onChange={setValue} defaultValue={value}>
       <Option value={1}>1</Option>
       <Option value={2}>2</Option>
+      <Option value={3}>3</Option>
     </Select>
   );
 
@@ -145,6 +146,17 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
         />
         <label style={styles.inputCheckboxLabel} htmlFor="2">
           2
+        </label>
+      </div>
+      <div>
+        <input
+          id="3"
+          type="checkbox"
+          value={secondIsChecked}
+          onChange={toggleCheckbox(3)}
+        />
+        <label style={styles.inputCheckboxLabel} htmlFor="3">
+          3
         </label>
       </div>
     </div>
@@ -200,7 +212,7 @@ const FormModalItem: React.FC<FormModalItemProps> = ({
       defaultValue={value as string}
       onSearch={(searchText) =>
         setSearchOptions(
-          options.filter((item) => item.value.includes(searchText))
+          options.filter((item) => item.value.toLowerCase().includes(searchText.toLowerCase()))
         )
       }
     />

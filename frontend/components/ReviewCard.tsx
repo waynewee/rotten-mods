@@ -24,7 +24,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   updateReviews,
   showActions = true,
 }) => {
-  console.log("review", review);
   const [isCommentsModalVisible, setCommentsModalVisibility] = useState(false);
   const [isAddCommentModalVisible, setAddCommentModalVisibility] = useState(
     false
@@ -51,8 +50,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
   useEffect(() => {
     fetchComments();
-    checkIsLikedByUser();
   }, []);
+
+  useEffect(() => {
+    checkIsLikedByUser();
+  }, [userId]);
 
   useEffect(() => {
     fetchRatings(ratingIds, setStar, setDifficulty);

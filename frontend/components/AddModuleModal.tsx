@@ -23,7 +23,6 @@ const AddModuleModal: React.FC<ModalState> = ({
   const [description, setDescription] = useState("");
   const schoolName = useSelector((state) => state.auth.user.schoolName);
   const [university, setUniversity] = useState(schoolName);
-  console.log(university);
   const [credit, setCredit] = useState(4);
   const [semesters, setSemesters] = useState<[boolean, boolean]>([
     false,

@@ -415,7 +415,9 @@ const FormModalItem = ({
     value: 1
   }, "1"), __jsx(Option, {
     value: 2
-  }, "2"));
+  }, "2"), __jsx(Option, {
+    value: 3
+  }, "3"));
 
   const renderSemesters = () => __jsx("div", {
     style: {
@@ -439,7 +441,15 @@ const FormModalItem = ({
   }), __jsx("label", {
     style: styles.inputCheckboxLabel,
     htmlFor: "2"
-  }, "2")));
+  }, "2")), __jsx("div", null, __jsx("input", {
+    id: "3",
+    type: "checkbox",
+    value: secondIsChecked,
+    onChange: toggleCheckbox(3)
+  }), __jsx("label", {
+    style: styles.inputCheckboxLabel,
+    htmlFor: "3"
+  }, "3")));
 
   const renderAnnualYear = () => {
     const today = new Date();
@@ -486,7 +496,7 @@ const FormModalItem = ({
     options: searchOptions,
     onSelect: setValue,
     defaultValue: value,
-    onSearch: searchText => setSearchOptions(options.filter(item => item.value.includes(searchText)))
+    onSearch: searchText => setSearchOptions(options.filter(item => item.value.toLowerCase().includes(searchText.toLowerCase())))
   });
 
   const renderPrereq = () => {
@@ -1090,14 +1100,6 @@ const AddReviewModal = ({
     0: year,
     1: setYear
   } = Object(external_react_["useState"])(initialReview.acadYearTaken);
-  const {
-    0: submitText,
-    1: setSubmitText
-  } = Object(external_react_["useState"])("Submit");
-  const {
-    0: submitColor,
-    1: setSubmitColor
-  } = Object(external_react_["useState"])(colors["i" /* submitBlue */]);
   const userId = Object(external_react_redux_["useSelector"])(state => {
     var _state$auth$user;
 
@@ -1110,6 +1112,15 @@ const AddReviewModal = ({
       Object(helpers["a" /* fetchRatings */])(ratingIds, setRatings, setDifficulty);
     }
   }, []);
+  Object(external_react_["useEffect"])(() => {
+    if (reviewByUser) {
+      setText(reviewByUser.text); // setDifficulty()
+      // setRatings()
+
+      setSemester(reviewByUser.semesterTaken);
+      setYear(reviewByUser.acadYearTaken);
+    }
+  }, [reviewByUser]);
 
   const onSubmit = async () => {
     if (!validateForm()) {
@@ -1152,18 +1163,15 @@ const AddReviewModal = ({
 
   const closeModal = isToClose => {
     setModalVisibility(isToClose);
-    setSubmitColor(colors["i" /* submitBlue */]);
-    setSubmitText("Submit");
   };
 
   return __jsx(FormModal["a" /* default */], {
     backgroundColor: colors["h" /* reviewBlue */],
-    submitColor: submitColor,
+    submitColor: colors["i" /* submitBlue */],
     title: `${reviewByUser ? "Edit" : "Add"} Review`,
     isModalVisible: isModalVisible,
     setModalVisibility: closeModal,
-    onSubmit: onSubmit,
-    submitText: submitText
+    onSubmit: onSubmit
   }, __jsx(FormModalItem["a" /* default */], {
     label: "Module Code",
     type: "text",
@@ -1899,6 +1907,8 @@ const compareNewest = (firstReview, secondReview) => {
   return firstReviewCreatedAtDate < secondReviewCreatedAtDate ? 1 : -1;
 };
 
+const REVIEW_LIST_INTERVAL = 10;
+
 const ModuleReviewPage = ({
   initialModule,
   reviews
@@ -1930,7 +1940,7 @@ const ModuleReviewPage = ({
   const {
     0: currentSort,
     1: setCurrentSort
-  } = Object(external_react_["useState"])("new");
+  } = Object(external_react_["useState"])("Latest");
   const userId = Object(external_react_redux_["useSelector"])(state => {
     var _state$auth$user;
 
@@ -1945,11 +1955,11 @@ const ModuleReviewPage = ({
   const updateReviews = async () => {
     const newReviews = await review["a" /* default */].getReviewsOfModule(module._id);
 
-    if (currentSort === "new") {
+    if (currentSort === "Latest") {
       newReviews.sort(compareNewest);
-    } else if (currentSort === "old") {
+    } else if (currentSort === "Oldest") {
       newReviews.sort(compareOldest);
-    } else if (currentSort === "likes") {
+    } else if (currentSort === "Most Likes") {
       newReviews.sort(compareLikes);
     }
 
@@ -1999,11 +2009,11 @@ const ModuleReviewPage = ({
   };
 
   const menu = module_review_jsx(external_antd_["Menu"], null, module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareNewest, "new")
+    onClick: () => sortReviews(compareNewest, "Latest")
   }, "Newest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareOldest, "old")
+    onClick: () => sortReviews(compareOldest, "Oldest")
   }, "Oldest")), module_review_jsx(external_antd_["Menu"].Item, null, module_review_jsx(Button["a" /* default */], {
-    onClick: () => sortReviews(compareLikes, "likes")
+    onClick: () => sortReviews(compareLikes, "Most Likes")
   }, "Most Likes")));
 
   const renderPage = () => {
@@ -2028,7 +2038,7 @@ const ModuleReviewPage = ({
         marginRight: 6,
         fontSize: 18
       }
-    }, "Sort"), module_review_jsx(icons_["DownOutlined"], null)))), module_review_jsx(ReviewList["a" /* default */], {
+    }, currentSort), module_review_jsx(icons_["DownOutlined"], null)))), module_review_jsx(ReviewList["a" /* default */], {
       updateReviews: updateReviews,
       reviews: reviewsList
     }), reviewsList.length >= 10 && module_review_jsx(SeeMoreButton["a" /* default */], {
@@ -2365,12 +2375,18 @@ const getModule = async id => {
   return response.data;
 };
 
-const searchModule = async (searchTerm, limit = 10, page = 1) => {
+const searchModule = async (searchTerm, limit = 10, page = 1, schoolId = "", semester = "", credit = "") => {
   const query = {
     searchTerm,
     page,
-    limit
-  };
+    limit,
+    schoolId,
+    semester,
+    credit
+  }; // if (schoolId) {
+  //   query.schoolId = schoolId;
+  // }
+
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${baseUrl}?${query_string__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(query)}`);
   return response.data;
 };
@@ -2985,7 +3001,6 @@ const ReviewCard = ({
 }) => {
   var _reaction$like$count, _reaction$like;
 
-  console.log("review", review);
   const {
     0: isCommentsModalVisible,
     1: setCommentsModalVisibility
@@ -3029,8 +3044,10 @@ const ReviewCard = ({
   const like = (_reaction$like$count = reaction === null || reaction === void 0 ? void 0 : (_reaction$like = reaction.like) === null || _reaction$like === void 0 ? void 0 : _reaction$like.count) !== null && _reaction$like$count !== void 0 ? _reaction$like$count : 0;
   Object(external_react_["useEffect"])(() => {
     fetchComments();
-    checkIsLikedByUser();
   }, []);
+  Object(external_react_["useEffect"])(() => {
+    checkIsLikedByUser();
+  }, [userId]);
   Object(external_react_["useEffect"])(() => {
     Object(helpers["a" /* fetchRatings */])(ratingIds, setStar, setDifficulty);
   }, [ratingIds]);
