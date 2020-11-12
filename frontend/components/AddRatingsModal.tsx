@@ -12,6 +12,7 @@ interface AddRatingsModalProps extends ModalState {
   modId: string;
   ratingsByUser?: { value: number; _id: string };
   updateModule: () => void;
+  checkIsRatedByUser: () => void;
 }
 
 const AddRatingsModal: React.FC<AddRatingsModalProps> = ({
@@ -21,6 +22,7 @@ const AddRatingsModal: React.FC<AddRatingsModalProps> = ({
   isModalVisible,
   setModalVisibility,
   updateModule,
+  checkIsRatedByUser,
 }) => {
   const userId = useSelector((state) => state.auth.user?._id);
   const [ratings, setRatings] = useState(ratingsByUser?.value ?? 3);
@@ -53,6 +55,7 @@ const AddRatingsModal: React.FC<AddRatingsModalProps> = ({
       await reviewApi.addRating(ratings, "star", userId, modId, "mod");
     }
 
+    checkIsRatedByUser();
     updateModule();
     setModalVisibility(false);
   };

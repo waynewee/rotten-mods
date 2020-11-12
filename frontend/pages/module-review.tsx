@@ -162,6 +162,7 @@ const ModuleReviewPage: NextPage<ModuleReviewProps> = ({
           setModalVisibility={setAddRatingsModalVisibility}
           ratingsByUser={ratingsByUser}
           updateModule={updateModule}
+          checkIsRatedByUser={checkIsRatedByUser}
         />
       </>
     ) : (
