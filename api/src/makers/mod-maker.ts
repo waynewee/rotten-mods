@@ -5,7 +5,8 @@ import {
   validateAcadYear,
   validateDuplicateMod,
   validateSchoolId, 
-  validateSemester
+  validateSemester,
+  validateSemesters
 } from '../validators'
 
 export default async function makeMod(modInfo: any){
@@ -37,7 +38,7 @@ async function validate(modInfo: any){
 
   requireParam(code, 'code')
   requireParam(title, 'title')
-  validateSemester(semester)
+  validateSemesters(semester)
   validateAcadYear(acadYear)
   await validateSchoolId(schoolId)
 
